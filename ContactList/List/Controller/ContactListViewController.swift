@@ -12,19 +12,20 @@ class ContactListViewController: UIViewController {
     
     // MARK: - constants
     private let searchTextField = UITextField()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         // вызов функций
         searchSetup()
     }
-
+    
     private func searchSetup() {
         view.addSubview(searchTextField)
         // скругление поисковой строки
-        searchTextField.borderStyle = .roundedRect
-        searchTextField.backgroundColor = .white
+       // searchTextField.borderStyle = .roundedRect
+        searchTextField.layer.cornerRadius = 16
+        //searchTextField.backgroundColor = .white
         // cоздание иконки лупы
         let seacrhIcon = UIImageView(image: UIImage(named: "search"))
         // размер иконки
@@ -37,13 +38,13 @@ class ContactListViewController: UIViewController {
         searchTextField.attributedPlaceholder = NSAttributedString(string: "Введи имя, тег, почту ...", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.76, green: 0.76, blue: 0.78, alpha: 1)])
         // constraits
         searchTextField.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(56)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(343)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.equalToSuperview().offset(16) // Примерное смещение слева
+            make.trailing.equalToSuperview().offset(-16)
             make.height.equalTo(40)
         }
-
+        
     }
-
+    
 }
 
