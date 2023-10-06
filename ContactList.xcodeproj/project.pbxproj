@@ -13,6 +13,8 @@
 		6E0257F62ACC2AA8000EA6D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E0257F52ACC2AA8000EA6D9 /* Assets.xcassets */; };
 		6E0257F92ACC2AA8000EA6D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E0257F72ACC2AA8000EA6D9 /* LaunchScreen.storyboard */; };
 		6E9CBBEB2ACD716700B2629D /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9CBBEA2ACD716700B2629D /* Contact.swift */; };
+		6E9CBBED2ACEFAF500B2629D /* Department.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9CBBEC2ACEFAF500B2629D /* Department.swift */; };
+		6E9CBBEF2ACFEFF000B2629D /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9CBBEE2ACFEFF000B2629D /* CustomTextField.swift */; };
 		FF8DB56B61A634C790FE6B9A /* Pods_ContactList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83A40711035507E60F03613E /* Pods_ContactList.framework */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +28,8 @@
 		6E0257F82ACC2AA8000EA6D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6E0257FA2ACC2AA8000EA6D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6E9CBBEA2ACD716700B2629D /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		6E9CBBEC2ACEFAF500B2629D /* Department.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Department.swift; sourceTree = "<group>"; };
+		6E9CBBEE2ACFEFF000B2629D /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		83A40711035507E60F03613E /* Pods_ContactList.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ContactList.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E242DD9F77C093638CF3BCDF /* Pods-ContactList.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactList.debug.xcconfig"; path = "Target Support Files/Pods-ContactList/Pods-ContactList.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -95,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				6E9CBBEA2ACD716700B2629D /* Contact.swift */,
+				6E9CBBEC2ACEFAF500B2629D /* Department.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -102,6 +107,7 @@
 		6E9CBBE92ACD713F00B2629D /* View */ = {
 			isa = PBXGroup;
 			children = (
+				6E9CBBEE2ACFEFF000B2629D /* CustomTextField.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -239,6 +245,8 @@
 			files = (
 				6E9CBBEB2ACD716700B2629D /* Contact.swift in Sources */,
 				6E0257F12ACC2AA7000EA6D9 /* ContactListViewController.swift in Sources */,
+				6E9CBBEF2ACFEFF000B2629D /* CustomTextField.swift in Sources */,
+				6E9CBBED2ACEFAF500B2629D /* Department.swift in Sources */,
 				6E0257ED2ACC2AA7000EA6D9 /* AppDelegate.swift in Sources */,
 				6E0257EF2ACC2AA7000EA6D9 /* SceneDelegate.swift in Sources */,
 			);
