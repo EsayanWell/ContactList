@@ -22,7 +22,6 @@ class ContactListViewController: UIViewController {
         // вызов функций
         searchSetup()
     }
-    
     // MARK: - SearchSetup
     
     private func searchSetup() {
