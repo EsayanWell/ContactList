@@ -12,7 +12,7 @@ class ContactListViewController: UIViewController {
     
     // MARK: - Constants
     private let searchBar = UISearchBar()
-    private let departmentTavbleView = UITableView()
+    private let departmentTableView = UITableView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +25,7 @@ class ContactListViewController: UIViewController {
     // MARK: - SearchSetup
     
     private func searchSetup() {
+        view.addSubview(searchBar)
         // cтиль внешнего вида полосы поиска
         searchBar.searchBarStyle = .minimal
         // задаю placeholder и цвет текста из Figma
@@ -42,12 +43,18 @@ class ContactListViewController: UIViewController {
         searchBar.setImage(searchIcon, for: .search, state: .normal)
         // создание иконки "опции" из Figma
         let filterIcon = UIImage(named: "option")
-        searchBar.showsBookmarkButton = true
         searchBar.setImage(filterIcon, for: .bookmark, state: .normal)
         // изменение кнопки "удалить" из Figma
         let clearIcon = UIImage(named: "clear")
         searchBar.setImage(clearIcon, for: .clear, state: .normal)
-        view.addSubview(searchBar)
+        // изменение кнопки "cancel" на "отмена" из Figma
+        // Настраиваем внешний вид кнопки отмены
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = "Отмена"
+        // Настраиваем цвет кнопки отмена
+        let cancelButtonAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1),
+            .font: UIFont.systemFont(ofSize: 16)]
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelButtonAttributes, for: .normal)
         
         // настройка расположения на экране
         searchBar.snp.makeConstraints { make in
@@ -70,13 +77,12 @@ extension ContactListViewController: UISearchBarDelegate {
         searchBar.showsBookmarkButton = false
         searchBar.placeholder = ""
     }
-
+    
     // функция, реагирующая на окончание ввода данных
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = true
-        //searchBar.setImage(UIImage(named: "searchLight"), for: .search, state: .normal)
     }
-     
+    
     // функция, реагирующая на нажатие кнопки "отмена"
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = false
@@ -85,9 +91,9 @@ extension ContactListViewController: UISearchBarDelegate {
         searchBar.placeholder = "Введи имя, тег, почту ..."
     }
     
-    // функция, которая повторно запускает параметры поисковой строки при повторном нажатии
+    // функция, которая запускается при изменении текста
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchBar.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)
+        searchBar.showsCancelButton = true
     }
-    
 }
