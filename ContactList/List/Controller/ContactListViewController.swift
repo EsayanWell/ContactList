@@ -11,7 +11,7 @@ import SnapKit
 class ContactListViewController: UIViewController {
     
     // MARK: - Constants
-    private let horizontalMenuCollectionView = DepartmentCollectionView()
+    private let horizontalMenuCollectionView = DepartmentMenuCollectionView()
     private let departmentSeacrhBar = CustomSearchBar()
     
     override func viewDidLoad() {

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class DepartmentCollectionView: UICollectionView {
+class DepartmentMenuCollectionView: UICollectionView {
     
     // MARK: - Constants
     private let identifire = "DepartmentCell"
@@ -22,7 +22,7 @@ class DepartmentCollectionView: UICollectionView {
         configureCollectionView()
         setCollectionViewDelegates()
         departments = fetchData()
-
+        
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -31,10 +31,13 @@ class DepartmentCollectionView: UICollectionView {
     // MARK: - Configure TableView
     private func configureCollectionView() {
         departmentLayout.scrollDirection = .horizontal
+        // изменение размера ячейки в зависимости от введенного текста
         departmentLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         self.backgroundColor = .white
         self.register(DepartmentCell.self, forCellWithReuseIdentifier: identifire)
         self.showsHorizontalScrollIndicator = false
+        //self.isScrollEnabled = true
+        //self.isPagingEnabled = true
     }
     
     // функция с установкой подписки на delegates
@@ -45,7 +48,7 @@ class DepartmentCollectionView: UICollectionView {
 }
 
 // MARK: - Extensions for DepartmentCollectionView
-extension DepartmentCollectionView : UICollectionViewDelegate, UICollectionViewDataSource {
+extension DepartmentMenuCollectionView : UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return departments.count
@@ -56,17 +59,21 @@ extension DepartmentCollectionView : UICollectionViewDelegate, UICollectionViewD
         let department = departments[indexPath.row]
         cell.set(department: department)
         return cell
+        
     }
     
-//    // UICollectionViewDelegate method
-//       func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//           selectedIndexPath = indexPath
-//           updateSliderView()
-//           collectionView.reloadData()
-//       }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // Получите выбранную ячейку
+        if let cell = self.cellForItem(at: indexPath) as? DepartmentCell {
+            // Измените цвет текста UILabel
+            cell.departmentName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
+        }
+    }
+
+    
 }
 
-extension DepartmentCollectionView{
+extension DepartmentMenuCollectionView{
     
     // функция не принимает аргументов и возвращает массив типа Expense (структура в модели)
     func fetchData() -> [Department] {

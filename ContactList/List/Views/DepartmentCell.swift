@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 class DepartmentCell: UICollectionViewCell {
-    private let departmentName = UILabel()
+    let departmentName = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,6 +41,15 @@ class DepartmentCell: UICollectionViewCell {
         departmentName.snp.makeConstraints { make in
             // прибивает все 4 стороны
             make.edges.equalToSuperview()
+        }
+    }
+    func selectItem() {
+        // Получите выбранную ячейку
+        // Установите цвет текста UILabel в зависимости от выбранной ячейки
+        if self.isSelected {
+            departmentName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
+        } else {
+            departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
         }
     }
 }
