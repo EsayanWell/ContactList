@@ -14,6 +14,8 @@ class DepartmentCollectionView: UICollectionView {
     private let identifire = "DepartmentCell"
     private var departments: [Department] = []
     private let departmentLayout = UICollectionViewFlowLayout()
+    private var departmentSliderView = UIView()
+    
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: departmentLayout)
@@ -55,6 +57,13 @@ extension DepartmentCollectionView : UICollectionViewDelegate, UICollectionViewD
         cell.set(department: department)
         return cell
     }
+    
+//    // UICollectionViewDelegate method
+//       func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//           selectedIndexPath = indexPath
+//           updateSliderView()
+//           collectionView.reloadData()
+//       }
 }
 
 extension DepartmentCollectionView{

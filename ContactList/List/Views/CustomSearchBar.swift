@@ -7,8 +7,6 @@
 
 import Foundation
 import UIKit
-import SnapKit
-
 
 class CustomSearchBar: UISearchBar {
     
@@ -33,14 +31,16 @@ class CustomSearchBar: UISearchBar {
         self.searchTextField.clipsToBounds = true
         // цвет текстового поля из Figma
         self.searchTextField.backgroundColor = UIColor(cgColor: CGColor(red: 0.969, green: 0.969, blue: 0.973, alpha: 1))
+        // подписка на delegate
         self.delegate = self
-        self.showsBookmarkButton = false
         // изменение иконки "лупы" из Figma
         let searchIcon = UIImage(named: "searchLight")
         self.setImage(searchIcon, for: .search, state: .normal)
         // создание иконки "опции" из Figma
         let filterIcon = UIImage(named: "option")
         self.setImage(filterIcon, for: .bookmark, state: .normal)
+        // свойства, которое делает кнопку "фильтрация" из Figma видимой
+        self.showsBookmarkButton = true
         // изменение кнопки "удалить" из Figma
         let clearIcon = UIImage(named: "clear")
         self.setImage(clearIcon, for: .clear, state: .normal)
@@ -51,6 +51,7 @@ class CustomSearchBar: UISearchBar {
         let cancelButtonAttributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1),
             .font: UIFont.systemFont(ofSize: 16)]
+        // настройка кнопки отмена
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelButtonAttributes, for: .normal)
     }
 }
@@ -64,6 +65,10 @@ extension CustomSearchBar: UISearchBarDelegate {
         self.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)
         self.showsBookmarkButton = false
         self.placeholder = ""
+        // изменение цвета курсора на заданный из Figma
+        if let textField = searchBar.value(forKey: "searchField") as? UITextField {
+                   textField.tintColor = UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1)
+               }
     }
     
     // функция, реагирующая на окончание ввода данных
