@@ -14,11 +14,11 @@ class DepartmentMenuCollectionView: UICollectionView {
     private let identifire = "DepartmentCell"
     private var departments: [Department] = []
     private let departmentLayout = UICollectionViewFlowLayout()
-    private var departmentSliderView = UIView()
+    var selectedIndexPath: IndexPath? // Индекс выбранной ячейки
     
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(frame: frame, collectionViewLayout: departmentLayout)
+        super.init(frame: .zero, collectionViewLayout: departmentLayout)
         configureCollectionView()
         setCollectionViewDelegates()
         departments = fetchData()
@@ -33,6 +33,8 @@ class DepartmentMenuCollectionView: UICollectionView {
         departmentLayout.scrollDirection = .horizontal
         // изменение размера ячейки в зависимости от введенного текста
         departmentLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        departmentLayout.minimumLineSpacing = 24
+        //self.isPagingEnabled = true
         self.backgroundColor = .white
         self.register(DepartmentCell.self, forCellWithReuseIdentifier: identifire)
         self.showsHorizontalScrollIndicator = false
@@ -50,27 +52,43 @@ class DepartmentMenuCollectionView: UICollectionView {
 // MARK: - Extensions for DepartmentCollectionView
 extension DepartmentMenuCollectionView : UICollectionViewDelegate, UICollectionViewDataSource {
     
+    // кол-во элементов в секции
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return departments.count
     }
     
+    // MARK: - Cell setup
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifire, for: indexPath) as! DepartmentCell
         let department = departments[indexPath.row]
         cell.set(department: department)
+        
+        if selectedIndexPath == indexPath {
+            // Если текущая ячейка выбрана, установите желаемый цвет шрифта
+            cell.departmentName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
+            cell.selectedCell.isHidden = false
+        } else {
+            // Если ячейка не выбрана, верните её в исходное состояние
+            // если не спрятать cell, будут выделяться несколько ячеек
+            cell.departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
+            cell.selectedCell.isHidden = true
+        }
         return cell
         
     }
     
+    // Настройка выбранной ячейки
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // Получите выбранную ячейку
-        if let cell = self.cellForItem(at: indexPath) as? DepartmentCell {
-            // Измените цвет текста UILabel
-            cell.departmentName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
+        // Снимите выделение с предыдущей выбранной ячейки
+        if let previousSelectedIndexPath = selectedIndexPath {
+            let previousCell = collectionView.cellForItem(at: previousSelectedIndexPath) as! DepartmentCell
+            previousCell.departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1) // Исходный цвет шрифта
+            previousCell.selectedCell.isHidden = true
         }
+        // Установите выбранной ячейке индекс и обновите её
+        selectedIndexPath = indexPath
+        collectionView.reloadItems(at: [indexPath])
     }
-
-    
 }
 
 extension DepartmentMenuCollectionView{

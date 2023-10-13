@@ -40,7 +40,7 @@ class ContactListViewController: UIViewController {
         }
         horizontalMenuCollectionView.snp.makeConstraints { make in
             make.top.equalTo(departmentSeacrhBar.snp.bottom).offset(8)
-            make.leading.equalToSuperview().offset(16)
+            make.leading.equalToSuperview().offset(28)
             make.trailing.equalToSuperview()
             make.height.equalTo(36)
         }

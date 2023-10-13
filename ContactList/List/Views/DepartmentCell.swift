@@ -9,20 +9,33 @@ import UIKit
 import SnapKit
 
 class DepartmentCell: UICollectionViewCell {
-    let departmentName = UILabel()
+     let departmentName = UILabel()
+     let selectedCell = UIView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        // add to view
-        addSubview(departmentName)
         
         // MARK: - sets
+        setupViews()
+        setupCell()
         configureDepartmentLabel()
         setConstraits()
+        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupViews() {
+        addSubview(departmentName)
+        addSubview(selectedCell)
+    }
+    
+    func setupCell() {
+        // цвет полоски
+        selectedCell.backgroundColor = UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1)
+        selectedCell.isHidden = true
     }
     
     // функция выполняет задачу обновления интерфейсных элементов на экране информацией из объекта Expense, переданного в качестве параметра
@@ -30,6 +43,7 @@ class DepartmentCell: UICollectionViewCell {
         departmentName.text = department.title
     }
     
+    // настройка Label
     func configureDepartmentLabel() {
         // цвет и шрифт из Figma
         departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
@@ -42,14 +56,13 @@ class DepartmentCell: UICollectionViewCell {
             // прибивает все 4 стороны
             make.edges.equalToSuperview()
         }
-    }
-    func selectItem() {
-        // Получите выбранную ячейку
-        // Установите цвет текста UILabel в зависимости от выбранной ячейки
-        if self.isSelected {
-            departmentName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
-        } else {
-            departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
+        selectedCell.snp.makeConstraints { make in
+            make.top.equalTo(departmentName.snp.bottom).inset(0.4)
+            make.leading.equalTo(departmentName).inset(-12)
+            make.trailing.equalTo(departmentName).offset(12)
+            make.height.equalTo(2)
         }
     }
 }
+
+
