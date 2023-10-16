@@ -9,5 +9,5 @@ import Foundation
 import UIKit
 
 struct Department {
-    let depTitile: String
+    let title: String
 }
