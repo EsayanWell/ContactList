@@ -9,8 +9,8 @@ import UIKit
 import SnapKit
 
 class DepartmentCell: UICollectionViewCell {
-     let departmentName = UILabel()
-     let selectedCell = UIView()
+    let departmentName = UILabel()
+    let selectedCell = UIView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,7 +20,6 @@ class DepartmentCell: UICollectionViewCell {
         setupCell()
         configureDepartmentLabel()
         setConstraits()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -43,7 +42,7 @@ class DepartmentCell: UICollectionViewCell {
         departmentName.text = department.title
     }
     
-    // настройка Label
+    // MARK: - configureDepartmentLabel
     func configureDepartmentLabel() {
         // цвет и шрифт из Figma
         departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
@@ -54,15 +53,14 @@ class DepartmentCell: UICollectionViewCell {
     func setConstraits() {
         departmentName.snp.makeConstraints { make in
             // прибивает все 4 стороны
-            make.edges.equalToSuperview()
+            make.top.trailing.bottom.equalToSuperview()
+            make.leading.equalToSuperview().offset(16)
         }
         selectedCell.snp.makeConstraints { make in
-            make.top.equalTo(departmentName.snp.bottom).inset(0.4)
-            make.leading.equalTo(departmentName).inset(-12)
-            make.trailing.equalTo(departmentName).offset(12)
+            make.top.equalTo(departmentName.snp.bottom)
+            make.leading.equalTo(departmentName).offset(-4)
+            make.trailing.equalTo(departmentName).offset(4)
             make.height.equalTo(2)
         }
     }
 }
-
-

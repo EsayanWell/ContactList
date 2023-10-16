@@ -11,7 +11,7 @@ import SnapKit
 class ContactListViewController: UIViewController {
     
     // MARK: - Constants
-    private let horizontalMenuCollectionView = DepartmentMenuCollectionView()
+    private let departmentMenuCollectionView = HorizontalMenuCollectionView()
     private let departmentSeacrhBar = CustomSearchBar()
     
     override func viewDidLoad() {
@@ -26,7 +26,7 @@ class ContactListViewController: UIViewController {
     // MARK: - setupViews
     private func setupViews() {
         view.backgroundColor = .white
-        view.addSubview(horizontalMenuCollectionView)
+        view.addSubview(departmentMenuCollectionView)
         view.addSubview(departmentSeacrhBar)
     }
     
@@ -38,9 +38,9 @@ class ContactListViewController: UIViewController {
             make.trailing.equalToSuperview().offset(-16)
             make.height.equalTo(40)
         }
-        horizontalMenuCollectionView.snp.makeConstraints { make in
+        departmentMenuCollectionView.snp.makeConstraints { make in
             make.top.equalTo(departmentSeacrhBar.snp.bottom).offset(8)
-            make.leading.equalToSuperview().offset(28)
+            make.leading.equalTo(departmentSeacrhBar.snp.leading).offset(-8)
             make.trailing.equalToSuperview()
             make.height.equalTo(36)
         }

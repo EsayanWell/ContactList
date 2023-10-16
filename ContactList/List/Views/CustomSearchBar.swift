@@ -67,8 +67,8 @@ extension CustomSearchBar: UISearchBarDelegate {
         self.placeholder = ""
         // изменение цвета курсора на заданный из Figma
         if let textField = searchBar.value(forKey: "searchField") as? UITextField {
-                   textField.tintColor = UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1)
-               }
+            textField.tintColor = UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1)
+        }
     }
     
     // функция, реагирующая на окончание ввода данных
