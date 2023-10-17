@@ -35,10 +35,10 @@ class HorizontalMenuCollectionView: UICollectionView {
         // изменение размера ячейки в зависимости от введенного текста
         departmentLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         // расстояние между ячейками горизонтальной таблицы (department)
-        departmentLayout.minimumInteritemSpacing = 12
         self.backgroundColor = .white
         self.register(DepartmentCell.self, forCellWithReuseIdentifier: identifier)
         self.showsHorizontalScrollIndicator = false
+
     }
     
     // функция с установкой подписки на delegates
@@ -59,7 +59,7 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
     // настройка ячеек таблицы
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? DepartmentCell else {
-            return UICollectionViewCell()
+            return DepartmentCell()
         }
         let department = departments[indexPath.row]
         cell.set(department: department)
@@ -94,6 +94,16 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
 }
+
+//extension HorizontalMenuCollectionView: UICollectionViewDelegateFlowLayout {
+//    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        let cellWidth: CGFloat = .zero // Ширина ячейки равна ширине коллекции (можно настроить по своему усмотрению)
+//        let cellHeight: CGFloat = 36 // Задайте желаемую высоту ячейки
+//
+//        return CGSize(width: cellWidth, height: cellHeight)
+//    }
+//}
 
 extension HorizontalMenuCollectionView{
     

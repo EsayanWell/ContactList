@@ -9,9 +9,8 @@ import Foundation
 import UIKit
 
 struct Contact {
-    let image: UIImage
+    let image: UIImage!
     let name: String
     let department: String
-    let kind: String
     let nickname: String
 }
