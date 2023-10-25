@@ -19,6 +19,7 @@
 		6E98D7B82AD6EBE300F36017 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E98D7B72AD6EBE300F36017 /* CustomSearchBar.swift */; };
 		6E9CBBEB2ACD716700B2629D /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9CBBEA2ACD716700B2629D /* Contact.swift */; };
 		6E9CBBED2ACEFAF500B2629D /* Department.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9CBBEC2ACEFAF500B2629D /* Department.swift */; };
+		6ED2F12A2AE8121B00C275C4 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED2F1292AE8121B00C275C4 /* APIManager.swift */; };
 		FF8DB56B61A634C790FE6B9A /* Pods_ContactList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83A40711035507E60F03613E /* Pods_ContactList.framework */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +39,7 @@
 		6E98D7B72AD6EBE300F36017 /* CustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
 		6E9CBBEA2ACD716700B2629D /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		6E9CBBEC2ACEFAF500B2629D /* Department.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Department.swift; sourceTree = "<group>"; };
+		6ED2F1292AE8121B00C275C4 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		83A40711035507E60F03613E /* Pods_ContactList.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ContactList.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E242DD9F77C093638CF3BCDF /* Pods-ContactList.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactList.debug.xcconfig"; path = "Target Support Files/Pods-ContactList/Pods-ContactList.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -117,6 +119,7 @@
 			children = (
 				6E9CBBEA2ACD716700B2629D /* Contact.swift */,
 				6E9CBBEC2ACEFAF500B2629D /* Department.swift */,
+				6ED2F1292AE8121B00C275C4 /* APIManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 				6E9CBBEB2ACD716700B2629D /* Contact.swift in Sources */,
 				6E0257F12ACC2AA7000EA6D9 /* ContactListViewController.swift in Sources */,
 				6E98D7B42AD6DAD500F36017 /* HorizontalMenuCollectionView.swift in Sources */,
+				6ED2F12A2AE8121B00C275C4 /* APIManager.swift in Sources */,
 				6E98D7B82AD6EBE300F36017 /* CustomSearchBar.swift in Sources */,
 				6E3AFBFE2AD4037E004A5CAA /* DepartmentCell.swift in Sources */,
 				6E9CBBED2ACEFAF500B2629D /* Department.swift in Sources */,

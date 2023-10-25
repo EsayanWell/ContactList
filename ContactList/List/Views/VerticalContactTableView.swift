@@ -14,13 +14,14 @@ class VerticalContactTableView: UITableView {
     // MARK: - Constants
     private var contactTableView = UITableView()
     private let identifier = "ContactCell"
-    private var contactArray: [Contact] = []
+    private let apiManager = APIManager()
+    private var contacts: [Contact] = []
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: .zero, style: .plain)
         configureTableView()
         setCollectionViewDelegates()
-        contactArray = fetchData()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -40,6 +41,20 @@ class VerticalContactTableView: UITableView {
         self.delegate = self
         self.dataSource = self
     }
+    
+    // MARK: - Data from API
+    func fetchContactData() {
+        APIManager.shared.fetchUserData {[weak self] contacts, error in
+            if let contacts = contacts {
+                self?.contacts = contacts
+                DispatchQueue.main.async {
+                    self?.contactTableView.reloadData()
+                }
+            } else if let error = error {
+                print("Ошибка при загрузке данных: \(error)")
+            }
+        }
+    }
 }
 
 // MARK: - extensions for VerticalContactTableView
@@ -47,24 +62,24 @@ extension VerticalContactTableView: UITableViewDelegate, UITableViewDataSource {
     
     // функция для отображения количества строк на экране
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return contactArray.count
+        return contacts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ContactCell
-        let contacts = contactArray[indexPath.row]
-        cell.set(contactArray: contacts)
+        let contact = contacts[indexPath.row]
+        cell.profileFirstName.text = contact.firstName
+        cell.profileLastName.text = contact.lastName
+        cell.profilePosition.text = contact.position
+        cell.profileUserTag.text = contact.userTag
         
+        // Загрузка изображения из URL (это можно сделать асинхронно)
+//        if let imageURL = URL(string: contact.avatarURL) {
+//            if let data = try? Data(contentsOf: imageURL) {
+//                cell.pro.image = UIImage(data: data)
+//            }
+//        }
         return cell
-    }
-}
-
-extension VerticalContactTableView{
-    
-    // функция не принимает аргументов и возвращает массив типа Department (структура в модели)
-    func fetchData() -> [Contact] {
-        let contact1  = Contact(image: UIImage(named: "photo"), name: "Vladimir Esayan", department: "iOS", nickname: "es")
-        return [contact1]
     }
 }

@@ -8,9 +8,22 @@
 import Foundation
 import UIKit
 
-struct Contact {
-    let image: UIImage!
-    let name: String
-    let department: String
-    let nickname: String
+
+// MARK: - Contact
+struct ContactData: Codable {
+    let items: [Contact]
+}
+
+// MARK: - Item
+struct Contact: Codable {
+    let id: String
+    let avatarURL: String
+    let firstName, lastName, userTag, department: String
+    let position, birthday, phone: String
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case avatarURL = "avatarUrl"
+        case firstName, lastName, userTag, department, position, birthday, phone
+    }
 }
