@@ -9,12 +9,12 @@ import Foundation
 import UIKit
 
 
-// MARK: - Contact
+// MARK: - ContactData
 struct ContactData: Codable {
     let items: [Contact]
 }
 
-// MARK: - Item
+// MARK: - Contact
 struct Contact: Codable {
     let id: String
     let avatarURL: String

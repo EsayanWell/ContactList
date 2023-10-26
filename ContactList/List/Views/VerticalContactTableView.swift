@@ -21,7 +21,6 @@ class VerticalContactTableView: UITableView {
         super.init(frame: .zero, style: .plain)
         configureTableView()
         setCollectionViewDelegates()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -44,12 +43,17 @@ class VerticalContactTableView: UITableView {
     
     // MARK: - Data from API
     func fetchContactData() {
+        // [weak self] - Это захват самого объекта self с использованием слабой ссылки, чтобы избежать утечек памяти (retain cycles), связанных с замыканием. Это важно, чтобы избежать утечек памяти при работе с замыканиями и делегатами.
         APIManager.shared.fetchUserData {[weak self] contacts, error in
+            // проверка, чтобы убедиться, что данные о контактах были успешно получены. Если contacts не равно nil, это означает, что данные были успешно получены.
             if let contacts = contacts {
+                // Если данные были успешно получены, они присваиваются свойству contacts текущего объекта
                 self?.contacts = contacts
+                //  этот блок кода выполняется на главной очереди (главном потоке), и он обновляет интерфейс пользователя
                 DispatchQueue.main.async {
                     self?.contactTableView.reloadData()
                 }
+                // если вместо данных в contacts есть ошибка, тогда в этом блоке кода выводится сообщение об ошибке.
             } else if let error = error {
                 print("Ошибка при загрузке данных: \(error)")
             }
