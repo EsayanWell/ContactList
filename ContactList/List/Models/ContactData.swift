@@ -11,11 +11,11 @@ import UIKit
 
 // MARK: - ContactData
 struct ContactData: Codable {
-    let items: [Contact]
+    let items: [Item]
 }
 
-// MARK: - Contact
-struct Contact: Codable {
+// MARK: - Item
+struct Item: Codable {
     let id: String
     let avatarURL: String
     let firstName, lastName, userTag, department: String
