@@ -48,15 +48,13 @@ class VerticalContactTableView: UITableView {
         // [weak self] - Это захват самого объекта self с использованием слабой ссылки, чтобы избежать утечек памяти (retain cycles), связанных с замыканием. Это важно, чтобы избежать утечек памяти при работе с замыканиями и делегатами.
         // вызываю метод для получения данных с API
         apiManager.fetchUserData { [weak self] contactData, error  in
-           
+            
             DispatchQueue.main.async {
                 guard let self else { return }
                 // проверка, чтобы убедиться, что данные о контактах были успешно получены. Если contacts не равно nil, это означает, что данные были успешно получены.
                 self.contacts = contactData!
                 self.contactTableView.reloadData()
-
-        }
-          
+            }
         }
     }
 }
@@ -73,11 +71,7 @@ extension VerticalContactTableView: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ContactCell
         let contact = contacts[indexPath.row]
-       // cell.configure(item: contact)
-
-
-        // Загрузка изображения из URL (это можно сделать асинхронно)
-
+        // cell.configure(item: contact)
         return cell
     }
 }
