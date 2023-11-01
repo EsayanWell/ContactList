@@ -21,25 +21,36 @@ struct APIManager {
         guard let apiURL = URL(string: urlString) else {
             fatalError("error")
         }
+        // создаем запрос и устанавливаем метод (GET)
+        var request = URLRequest(url: apiURL)
+        request.httpMethod = "GET"
+        
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("code=200, dynamic=true", forHTTPHeaderField: "Prefer" )
+        
         // инициализируем сессию (shared означает, что используется общая сессия)
         let session = URLSession.shared
         // Создается задача сетевого запроса с использованием apiURL. Код, в фигурных скобках, представляет замыкание, которое будет выполнено по завершении запроса. Оно получает три параметра: data (данные, полученные в ответ на запрос), response (ответ на запрос) и error (ошибка, если она возникла)
-        let task = session.dataTask(with: apiURL) { data, response, error in
+        let task = session.dataTask(with: request) { data, response, error  in
             // обработка полученных данных
             // проверяется, что данные (data) получены без ошибок. Если данные присутствуют и нет ошибки, код продолжает выполнение. В противном случае, он завершается без выполнения дополнительных действий.
-            if let data = data {
-                self.parseJson(withData: data)
+            guard let safeData = data else { return }
+            
+            do {
+                // декодирование
+                // try - попытайся декодировать из данных
+                let contactData = try JSONDecoder().decode(Query.self, from: safeData)
+                print("Success decoding")
+                
+            } catch let decodeError {
+                print("Decoding error: \(decodeError)")
             }
-            // Внутри блока do-catch данные (data) декодируются в массив объектов типа Contact с использованием JSONDecoder. Если декодирование прошло успешно, массив контактов передается в замыкание completion с nil в качестве ошибки, если декодирование не удалось (например, из-за некорректного формата данных) выдается ошибка
         }
+        // запуск сессии
         task.resume()
     }
-    func parseJson(withData data: Data ) {
-        let decoder = JSONDecoder()
-        do {
-            let contactData = try decoder.decode(ContactData.self, from: data)
-        } catch let error as NSError {
-            print(error.localizedDescription)
-        }
-    }
 }
+
+
+
+

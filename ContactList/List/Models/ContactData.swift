@@ -9,13 +9,10 @@ import Foundation
 import UIKit
 
 
-// MARK: - ContactData
-struct ContactData: Codable {
-    let items: [Item]
-}
+
 
 // MARK: - Item
-struct Item: Codable {
+struct ContactData: Codable {
     let id: String
     let avatarURL: String
     let firstName, lastName, userTag, department: String
@@ -26,4 +23,9 @@ struct Item: Codable {
         case avatarURL = "avatarUrl"
         case firstName, lastName, userTag, department, position, birthday, phone
     }
+}
+
+// MARK: - ContactData
+struct Query: Codable {
+    let items: [ContactData]
 }
