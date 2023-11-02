@@ -11,7 +11,7 @@ import SnapKit
 
 class ContactCell: UITableViewCell {
     
-     //let profilePhoto = UIImageView()
+     let profilePhoto = UIImageView()
      let profileFirstName = UILabel()
      let profileLastName = UILabel()
      let profilePosition = UILabel()
@@ -20,7 +20,7 @@ class ContactCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         // MARK: - sets
-        //configureProfilePhoto()
+        configureProfilePhoto()
         configureProfileFirstName()
         configureProfileLastName()
         configurProfilePosition()
@@ -35,7 +35,7 @@ class ContactCell: UITableViewCell {
     }
     
     private func setupViews() {
-       // addSubview(profilePhoto)
+        addSubview(profilePhoto)
         addSubview(profileFirstName)
         addSubview(profileLastName)
         addSubview(profilePosition)
@@ -44,21 +44,23 @@ class ContactCell: UITableViewCell {
     }
     
     // функция выполняет задачу обновления интерфейсных элементов на экране информацией из объекта Contact, переданного в качестве параметра
-//    func set(contacts: Contact) {
-//        //profilePhoto.image = contacts.avatarURL
-//        profileFirstName.text = contacts.firstName
-//        profileLastName.text = contacts.lastName
-//        profilePosition.text = contacts.position
-//        profileUserTag.text = contacts.userTag
-//    }
+    func configure(contacts: ContactData) {
+        
+       // profilePhoto.image = loadImage(fromURL: contacts.avatarURL)
+        profileFirstName.text = contacts.firstName
+        profileLastName.text = contacts.lastName
+        profilePosition.text = contacts.position
+        profileUserTag.text = contacts.userTag
+        
+    }
     
     // MARK : - Configures
     
-//    func configureProfilePhoto() {
-//        profilePhoto.layer.cornerRadius = 36
-//        profilePhoto.clipsToBounds = true
-//        profilePhoto.contentMode = .scaleAspectFill
-//    }
+    func configureProfilePhoto() {
+        profilePhoto.layer.cornerRadius = 36
+        profilePhoto.clipsToBounds = true
+        profilePhoto.contentMode = .scaleAspectFill
+    }
     
     // настройки надписи firstName
     func configureProfileFirstName() {
@@ -94,12 +96,12 @@ class ContactCell: UITableViewCell {
     
     // MARK: - setConstraits
     private func setConstraits() {
-//        profilePhoto.snp.makeConstraints { make in
-//            make.top.equalToSuperview().offset(6)
-//            make.bottom.equalToSuperview().offset(-6)
-//            make.leading.equalToSuperview()
-//            make.height.width.equalTo(72)
-//        }
+        profilePhoto.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(6)
+            make.bottom.equalToSuperview().offset(-6)
+            make.leading.equalToSuperview()
+            make.height.width.equalTo(72)
+        }
         
         profileFirstName.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(12)

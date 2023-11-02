@@ -31,8 +31,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         view.addSubview(departmentSeacrhBar)
         view.addSubview(departmentContactList)
     }
-    
-    //
+
     private func setupSearchBar() {
         departmentSeacrhBar.delegate = self
     }
@@ -40,12 +39,11 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
         let rootVC = SortingViewController()
         let sortVC = UINavigationController(rootViewController: rootVC)
-        //метод, который отображает второй экран полностью(не как карту)
+        //метод, который отображает второй экран полностью
         sortVC.modalPresentationStyle = .fullScreen
         present(sortVC, animated: true)
       }
 
-    
     // MARK: - setConstraits
     private func setConstraits() {
         departmentSeacrhBar.snp.makeConstraints { make in

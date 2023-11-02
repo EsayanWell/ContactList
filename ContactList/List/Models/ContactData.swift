@@ -8,9 +8,6 @@
 import Foundation
 import UIKit
 
-
-
-
 // MARK: - Item
 struct ContactData: Codable {
     let id: String
