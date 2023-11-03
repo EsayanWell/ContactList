@@ -12,7 +12,6 @@ import SnapKit
 class VerticalContactTableView: UITableView {
     
     // MARK: - Constants
-    private var contactTableView = UITableView()
     private let identifier = "ContactCell"
     private var contacts = [ContactData]()
     
@@ -33,6 +32,7 @@ class VerticalContactTableView: UITableView {
         self.showsVerticalScrollIndicator = false
         self.backgroundColor = .white
         self.register(ContactCell.self, forCellReuseIdentifier: identifier)
+        self.separatorStyle = .none
     }
     
     // функция с установкой подписки на delegates
@@ -44,14 +44,16 @@ class VerticalContactTableView: UITableView {
     // MARK: - Data from API
     func fetchContactData() {
         APIManager.shared.fetchUserData { result in
-            switch result {
-            case .success(let decodedContacts):
-                print("Success")
-                
-                self.contacts = decodedContacts
-                
-            case .failure(let networkError):
-                print("Failure: \(networkError)")
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let decodedContacts):
+                    print("Success")
+                    self.contacts = decodedContacts
+                    self.reloadData()
+                    
+                case .failure(let networkError):
+                    print("Failure: \(networkError)")
+                }
             }
         }
     }
@@ -70,13 +72,6 @@ extension VerticalContactTableView: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ContactCell
         let contact = contacts[indexPath.row]
         cell.configure(contacts: contact)
-        
-        //        if let imageURL = URL(string: contact.avatarURL),
-        //           let imageData = try? Data(contentsOf: imageURL),
-        //           case let image == UIImage(data: imageData) {
-        //            cell.profilePhoto.image = image
-        //        }
-        
         return cell
     }
 }

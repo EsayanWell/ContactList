@@ -11,12 +11,12 @@ import SnapKit
 
 class ContactCell: UITableViewCell {
     
-     let profilePhoto = UIImageView()
-     let profileFirstName = UILabel()
-     let profileLastName = UILabel()
-     let profilePosition = UILabel()
-     let profileUserTag = UILabel()
-        
+    var profilePhoto = UIImageView()
+    let profileFirstName = UILabel()
+    let profileLastName = UILabel()
+    let profilePosition = UILabel()
+    let profileUserTag = UILabel()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         // MARK: - sets
@@ -40,18 +40,30 @@ class ContactCell: UITableViewCell {
         addSubview(profileLastName)
         addSubview(profilePosition)
         addSubview(profileUserTag)
-        backgroundColor = .blue
+        backgroundColor = .white
     }
     
     // функция выполняет задачу обновления интерфейсных элементов на экране информацией из объекта Contact, переданного в качестве параметра
     func configure(contacts: ContactData) {
         
-       // profilePhoto.image = loadImage(fromURL: contacts.avatarURL)
+        // profilePhoto.image = loadImage(fromURL: contacts.avatarURL)
         profileFirstName.text = contacts.firstName
         profileLastName.text = contacts.lastName
         profilePosition.text = contacts.position
         profileUserTag.text = contacts.userTag
+        
+        // Загрузка фотографии из URL
+        DispatchQueue.main.async {
+            guard case let stringURL = contacts.avatarURL,
+                  let imageURL = URL(string: stringURL),
+                  let imageData = try? Data(contentsOf: imageURL)
+            else {
+                return
+            }
+            self.profilePhoto.image = UIImage(data: imageData)
+        }
     }
+    
     
     // MARK : - Configures
     
@@ -104,7 +116,7 @@ class ContactCell: UITableViewCell {
         
         profileFirstName.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(12)
-            make.leading.equalToSuperview().offset(160)
+            make.leading.equalTo(profilePhoto.snp.trailing).offset(16)
             make.height.equalTo(20)
         }
         
@@ -117,7 +129,7 @@ class ContactCell: UITableViewCell {
         profilePosition.snp.makeConstraints { make in
             make.top.equalTo(profileFirstName.snp.bottom).offset(3)
             make.leading.equalTo(profileFirstName.snp.leading)
-            make.height.equalTo(16)
+            //make.height.equalTo(16)
         }
         profileUserTag.snp.makeConstraints { make in
             make.bottom.equalTo(profileFirstName.snp.bottom)
