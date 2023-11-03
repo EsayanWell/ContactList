@@ -46,21 +46,28 @@ class ContactCell: UITableViewCell {
     // функция выполняет задачу обновления интерфейсных элементов на экране информацией из объекта Contact, переданного в качестве параметра
     func configure(contacts: ContactData) {
         
-        // profilePhoto.image = loadImage(fromURL: contacts.avatarURL)
         profileFirstName.text = contacts.firstName
         profileLastName.text = contacts.lastName
         profilePosition.text = contacts.position
         profileUserTag.text = contacts.userTag
         
-        // Загрузка фотографии из URL
-        DispatchQueue.main.async {
-            guard case let stringURL = contacts.avatarURL,
-                  let imageURL = URL(string: stringURL),
-                  let imageData = try? Data(contentsOf: imageURL)
-            else {
-                return
+        // Загрузка фотографии из URL через URLSession
+        if let imageURL = URL(string: contacts.avatarURL) {
+            let session = URLSession.shared
+            let task = session.dataTask(with: imageURL) { (data, response, error) in
+                if let error = error {
+                    print("Ошибка при загрузке данных: \(error)")
+                    return
+                }
+                if let data = data {
+                    if let image = UIImage(data: data) {
+                        DispatchQueue.main.async {
+                            self.profilePhoto.image = image
+                        }
+                    }
+                }
             }
-            self.profilePhoto.image = UIImage(data: imageData)
+            task.resume()
         }
     }
     
@@ -71,6 +78,7 @@ class ContactCell: UITableViewCell {
         profilePhoto.layer.cornerRadius = 36
         profilePhoto.clipsToBounds = true
         profilePhoto.contentMode = .scaleAspectFill
+        profilePhoto.contentMode = .center
     }
     
     // настройки надписи firstName
