@@ -51,7 +51,6 @@ class ContactCell: UITableViewCell {
         profileLastName.text = contacts.lastName
         profilePosition.text = contacts.position
         profileUserTag.text = contacts.userTag
-     
     }
     
     // MARK : - Configures
