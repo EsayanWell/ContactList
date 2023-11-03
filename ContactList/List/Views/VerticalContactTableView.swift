@@ -14,13 +14,13 @@ class VerticalContactTableView: UITableView {
     // MARK: - Constants
     private var contactTableView = UITableView()
     private let identifier = "ContactCell"
-    private var contacts: [ContactData] = []
+    private var contacts = [ContactData]()
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: .zero, style: .plain)
         configureTableView()
         setTableViewDelegates()
-      //  fetchContactData()
+        fetchContactData()
     }
     
     required init?(coder: NSCoder) {
@@ -43,13 +43,20 @@ class VerticalContactTableView: UITableView {
     
     // MARK: - Data from API
     func fetchContactData() {
-        APIManager.fetchUserData { [weak self] values in
-            guard let self else { return }
-            self.contacts = values
-            self.contactTableView.reloadData()
+        APIManager.shared.fetchUserData { result in
+            switch result {
+            case .success(let decodedContacts):
+                print("Success")
+                
+                self.contacts = decodedContacts
+                
+            case .failure(let networkError):
+                print("Failure: \(networkError)")
+            }
         }
     }
 }
+
 
 // MARK: - extensions for VerticalContactTableView
 extension VerticalContactTableView: UITableViewDelegate, UITableViewDataSource {
@@ -63,6 +70,13 @@ extension VerticalContactTableView: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ContactCell
         let contact = contacts[indexPath.row]
         cell.configure(contacts: contact)
+        
+        //        if let imageURL = URL(string: contact.avatarURL),
+        //           let imageData = try? Data(contentsOf: imageURL),
+        //           case let image == UIImage(data: imageData) {
+        //            cell.profilePhoto.image = image
+        //        }
+        
         return cell
     }
 }
