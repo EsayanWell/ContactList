@@ -78,7 +78,6 @@ class ContactCell: UITableViewCell {
         profilePhoto.layer.cornerRadius = 36
         profilePhoto.clipsToBounds = true
         profilePhoto.contentMode = .scaleAspectFill
-        profilePhoto.contentMode = .center
     }
     
     // настройки надписи firstName

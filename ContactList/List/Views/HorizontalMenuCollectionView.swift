@@ -38,6 +38,7 @@ class HorizontalMenuCollectionView: UICollectionView {
         self.backgroundColor = .white
         self.register(DepartmentCell.self, forCellWithReuseIdentifier: identifier)
         self.showsHorizontalScrollIndicator = false
+        
     }
     
     // функция с установкой подписки на delegates

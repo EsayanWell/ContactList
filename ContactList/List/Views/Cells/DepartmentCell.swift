@@ -52,9 +52,9 @@ class DepartmentCell: UICollectionViewCell {
     // MARK: - constraits
     func setConstraits() {
         departmentName.snp.makeConstraints { make in
-            // прибивает все 4 стороны
             make.top.trailing.equalToSuperview()
             make.leading.equalToSuperview().offset(16)
+            make.bottom.equalTo(selectedCell.snp.top)
         }
         
         selectedCell.snp.makeConstraints { make in

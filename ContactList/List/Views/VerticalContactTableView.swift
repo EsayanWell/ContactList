@@ -28,7 +28,6 @@ class VerticalContactTableView: UITableView {
     
     // MARK: - contactTableView setup
     private func configureTableView() {
-        self.rowHeight = 80
         self.showsVerticalScrollIndicator = false
         self.backgroundColor = .white
         self.register(ContactCell.self, forCellReuseIdentifier: identifier)
