@@ -31,10 +31,6 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         view.addSubview(departmentSeacrhBar)
         view.addSubview(departmentContactList)
     }
-
-    private func setupSearchBar() {
-        departmentSeacrhBar.delegate = self
-    }
     
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
         let rootVC = SortingViewController()
