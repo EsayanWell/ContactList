@@ -8,9 +8,7 @@
 import UIKit
 import SnapKit
 
-
 class ContactCell: UITableViewCell {
-    
     var profilePhoto = UIImageView()
     let profileFirstName = UILabel()
     let profileLastName = UILabel()
@@ -27,7 +25,6 @@ class ContactCell: UITableViewCell {
         configurProfileUserTag()
         setupViews()
         setConstraits()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -45,12 +42,10 @@ class ContactCell: UITableViewCell {
     
     // функция выполняет задачу обновления интерфейсных элементов на экране информацией из объекта Contact, переданного в качестве параметра
     func configure(contacts: ContactData) {
-        
         profileFirstName.text = contacts.firstName
         profileLastName.text = contacts.lastName
         profilePosition.text = contacts.position
         profileUserTag.text = contacts.userTag
-        
         // Загрузка фотографии из URL через URLSession
         if let imageURL = URL(string: contacts.avatarURL) {
             let session = URLSession.shared
@@ -71,9 +66,8 @@ class ContactCell: UITableViewCell {
         }
     }
     
-    
     // MARK : - Configures
-    
+    // настройка фото профиля
     func configureProfilePhoto() {
         profilePhoto.layer.cornerRadius = 36
         profilePhoto.clipsToBounds = true

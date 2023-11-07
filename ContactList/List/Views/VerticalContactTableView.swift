@@ -49,7 +49,6 @@ class VerticalContactTableView: UITableView {
                     print("Success")
                     self.contacts = decodedContacts
                     self.reloadData()
-                    
                 case .failure(let networkError):
                     print("Failure: \(networkError)")
                 }
@@ -57,7 +56,6 @@ class VerticalContactTableView: UITableView {
         }
     }
 }
-
 
 // MARK: - extensions for VerticalContactTableView
 extension VerticalContactTableView: UITableViewDelegate, UITableViewDataSource {

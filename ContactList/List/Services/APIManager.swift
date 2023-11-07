@@ -7,7 +7,7 @@
 
 import Foundation
 
-// ошибки
+// MARK: - Errors
 enum NetworkError: Error {
     case noData
     case serverError
@@ -16,7 +16,7 @@ enum NetworkError: Error {
 // MARK: - APIManager class
 // класс для управления сетевыми запросами
 final class APIManager {
-    
+    // singleton
     static let shared = APIManager()
     
     func fetchUserData(completion: @escaping(Result<[ContactData], NetworkError>) -> Void) {
@@ -39,34 +39,34 @@ final class APIManager {
         // инициализируем сессию (shared означает, что используется общая сессия)
         let session = URLSession.shared
         // Создается задача сетевого запроса с использованием apiURL. Код, в фигурных скобках, представляет замыкание, которое будет выполнено по завершении запроса. Оно получает три параметра: data (данные, полученные в ответ на запрос), response (ответ на запрос) и error (ошибка, если она возникла)
-        
         URLSession.shared.dataTask(with: request) { data, response, error  in
-            if error != nil {
+            // если ошибка произошла во время запроса (error == nil значит, что запрос прошел без ошибок)
+            guard error == nil else {
                 print("Error in session is not nil")
                 completion(.failure(.noData))
-            } else {
-                // we've got data
-                let httpResponse = response as? HTTPURLResponse
-                print("status code: \(httpResponse?.statusCode ?? 0)")
-                
-                if httpResponse?.statusCode == 500 {
-                    completion(.failure(.serverError))
-                } else {
-                    // обработка полученных данных
-                    // проверяется, что данные (data) получены без ошибок. Если данные присутствуют и нет ошибки, код продолжает выполнение. В противном случае, он завершается без выполнения дополнительных действий.
-                    guard let safeData = data else { return }
-                    
-                    do {
-                        // декодирование try - попытайся декодировать из данных
-                        let decodedQuery = try JSONDecoder().decode(Query.self, from: safeData)
-                        print("Success decoding")
-                        completion(.success(decodedQuery.items))
-                    } catch let decodeError {
-                        print("Decoding error: \(decodeError)")
-                        completion(.failure(.decodingError))
-                    }
-                }
+                return
             }
-        } .resume()
+            // получаем статус код
+            let httpResponse = response as? HTTPURLResponse
+            print("status code: \(httpResponse?.statusCode ?? 0)")
+            // если статус код 500
+            guard httpResponse?.statusCode != 500 else {
+                completion(.failure(.serverError))
+                return
+            }
+            // обработка полученных данных
+            // проверяется, что данные (data) получены без ошибок. Если данные присутствуют и нет ошибки, код продолжает выполнение. В противном случае, он завершается без выполнения дополнительных действий.
+            guard let safeData = data else { return }
+            // декодирование с возможностью перехватывания ошибок
+            do {
+                // декодирование try - попытайся декодировать из данных
+                let decodedQuery = try JSONDecoder().decode(Query.self, from: safeData)
+                print("Success decoding")
+                completion(.success(decodedQuery.items))
+            } catch let decodeError {
+                print("Decoding error: \(decodeError)")
+                completion(.failure(.decodingError))
+            }
+        }.resume()
     }
 }

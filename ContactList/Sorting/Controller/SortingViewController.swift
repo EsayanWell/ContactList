@@ -20,7 +20,6 @@ class SortingViewController: UIViewController {
     }
     
     // segmentControl setup
-    
     func segmentControllSetup() {
         sortSegmentControl.selectedSegmentIndex = 0
         view.addSubview(sortSegmentControl)
