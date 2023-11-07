@@ -130,7 +130,6 @@ class ContactCell: UITableViewCell {
         profilePosition.snp.makeConstraints { make in
             make.top.equalTo(profileFirstName.snp.bottom).offset(3)
             make.leading.equalTo(profileFirstName.snp.leading)
-            //make.height.equalTo(16)
         }
         profileUserTag.snp.makeConstraints { make in
             make.bottom.equalTo(profileFirstName.snp.bottom)
