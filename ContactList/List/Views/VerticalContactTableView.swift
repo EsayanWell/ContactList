@@ -14,7 +14,7 @@ class VerticalContactTableView: UITableView {
     // MARK: - Constants
     private let identifier = "ContactCell"
     private var contacts = [ContactData]()
-    private let APIRefershControl = UIRefreshControl()
+    private let dataRefreshControl = UIRefreshControl()
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: .zero, style: .plain)
@@ -44,8 +44,8 @@ class VerticalContactTableView: UITableView {
     
     // MARK: - setup pull to refresh
     private func pullToRefreshSetup() {
-        APIRefershControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
-        self.addSubview(APIRefershControl)
+        dataRefreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+        self.addSubview(dataRefreshControl)
     }
     
     // MARK: - Re-fetch API data
@@ -64,7 +64,7 @@ class VerticalContactTableView: UITableView {
                 case .success(let decodedContacts):
                     print("Success")
                     self.contacts = decodedContacts
-                    self.APIRefershControl.endRefreshing()
+                    self.dataRefreshControl.endRefreshing()
                     self.reloadData()
                 case .failure(let networkError):
                     print("Failure: \(networkError)")
