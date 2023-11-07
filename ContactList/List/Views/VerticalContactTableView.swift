@@ -14,12 +14,14 @@ class VerticalContactTableView: UITableView {
     // MARK: - Constants
     private let identifier = "ContactCell"
     private var contacts = [ContactData]()
+    private let dataRefreshControl = UIRefreshControl()
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: .zero, style: .plain)
         configureTableView()
         setTableViewDelegates()
         fetchContactData()
+        pullToRefreshSetup()
     }
     
     required init?(coder: NSCoder) {
@@ -40,14 +42,29 @@ class VerticalContactTableView: UITableView {
         self.dataSource = self
     }
     
+    // MARK: - setup pull to refresh
+    private func pullToRefreshSetup() {
+        dataRefreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+        self.addSubview(dataRefreshControl)
+    }
+    
+    // MARK: - Re-fetch API data
+    @objc private func didPullToRefresh() {
+        print("Start refresh")
+        fetchContactData()
+    }
+    
     // MARK: - Data from API
     func fetchContactData() {
+        print("Fetching data")
+        
         APIManager.shared.fetchUserData { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let decodedContacts):
                     print("Success")
                     self.contacts = decodedContacts
+                    self.dataRefreshControl.endRefreshing()
                     self.reloadData()
                 case .failure(let networkError):
                     print("Failure: \(networkError)")

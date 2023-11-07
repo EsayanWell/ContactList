@@ -36,8 +36,6 @@ final class APIManager {
         //request.setValue("code=200, example=success", forHTTPHeaderField: "Prefer" )
         //request.setValue("code=500, example=error-500", forHTTPHeaderField: "Prefer" )
         
-        // инициализируем сессию (shared означает, что используется общая сессия)
-        let session = URLSession.shared
         // Создается задача сетевого запроса с использованием apiURL. Код, в фигурных скобках, представляет замыкание, которое будет выполнено по завершении запроса. Оно получает три параметра: data (данные, полученные в ответ на запрос), response (ответ на запрос) и error (ошибка, если она возникла)
         URLSession.shared.dataTask(with: request) { data, response, error  in
             // если ошибка произошла во время запроса (error == nil значит, что запрос прошел без ошибок)
