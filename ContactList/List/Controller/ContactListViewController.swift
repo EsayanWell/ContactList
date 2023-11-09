@@ -14,6 +14,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
     private let departmentMenuCollectionView = HorizontalMenuCollectionView()
     private let departmentSeacrhBar = CustomSearchBar()
     private let departmentContactList = VerticalContactTableView()
+    private let errorReload = ErrorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +23,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         // вызов функций
         setupViews()
         setConstraits()
+        configureErrorReload()
     }
     
     // MARK: - setupViews
@@ -30,15 +32,25 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         view.addSubview(departmentMenuCollectionView)
         view.addSubview(departmentSeacrhBar)
         view.addSubview(departmentContactList)
+        view.addSubview(errorReload)
     }
     
-    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
-        let rootVC = SortingViewController()
-        let sortVC = UINavigationController(rootViewController: rootVC)
-        //метод, который отображает второй экран полностью
-        sortVC.modalPresentationStyle = .fullScreen
-        present(sortVC, animated: true)
-      }
+    private func configureErrorReload() {
+        // Проверяем наличие данных с сервера
+        if ((departmentContactList.indexPathForSelectedRow?.isEmpty) != nil) {
+            // Если данных нет, создаем и добавляем кастомную view
+            errorReload.isHidden = false
+            departmentSeacrhBar.isHidden = true
+            departmentMenuCollectionView.isHidden = true
+            departmentContactList.isHidden = true
+        } else {
+            // Если данные есть, удаляем кастомную view (если она была добавлена ранее)
+            errorReload.isHidden = true
+            departmentSeacrhBar.isHidden = false
+            departmentMenuCollectionView.isHidden = false
+            departmentContactList.isHidden = false
+        }
+    }
 
     // MARK: - setConstraits
     private func setConstraits() {
@@ -59,6 +71,10 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
             make.bottom.equalToSuperview()
+        }
+        errorReload.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(303)
+            make.bottom.leading.trailing.equalToSuperview()
         }
     }
 }

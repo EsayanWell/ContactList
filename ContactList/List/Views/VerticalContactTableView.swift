@@ -15,6 +15,7 @@ class VerticalContactTableView: UITableView {
     private let identifier = "ContactCell"
     private var contacts = [ContactData]()
     private let dataRefreshControl = UIRefreshControl()
+    private let errorAlertController = UIAlertController()
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: .zero, style: .plain)
@@ -53,7 +54,7 @@ class VerticalContactTableView: UITableView {
         print("Start refresh")
         fetchContactData()
     }
-    
+        
     // MARK: - Data from API
     func fetchContactData() {
         print("Fetching data")

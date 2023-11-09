@@ -26,6 +26,7 @@ class DepartmentCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Configures
     private func setupViews() {
         addSubview(departmentName)
         addSubview(selectedCell)
@@ -42,7 +43,6 @@ class DepartmentCell: UICollectionViewCell {
         departmentName.text = department.title
     }
     
-    // MARK: - configureDepartmentLabel
     func configureDepartmentLabel() {
         // цвет и шрифт из Figma
         departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
