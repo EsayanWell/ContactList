@@ -123,7 +123,7 @@ class ContactCell: UITableViewCell {
         
         profileLastName.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(12)
-            make.leading.equalTo(profileFirstName.snp.trailing)
+            make.leading.equalTo(profileFirstName.snp.trailing).offset(4)
             make.height.equalTo(20)
         }
         

@@ -22,7 +22,7 @@ final class APIManager {
     func fetchUserData(completion: @escaping(Result<[ContactData], NetworkError>) -> Void) {
         print("try to fetch")
         // строка, которая содержит URL-адрес, по которому будет отправлен сетевой запрос
-        let urlString = "https://stoplight.o/mocks/kode-education/trainee-test/25143926/users"
+        let urlString = "https://stoplight.io/mocks/kode-education/trainee-test/25143926/users"
         // создаем URL и проверяем на ошибку
         guard let apiURL = URL(string: urlString) else {
             fatalError("error")
