@@ -25,7 +25,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         navigationController?.setNavigationBarHidden(true, animated: true)
         // вызов функций
         setupViews()
-        hiddenErrorReload()
+        errorViewToggleVisibility(isHidden: false)
         fetchContactData()
         pullToRefreshSetup()
         errorReloadSetup()
@@ -84,16 +84,14 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
     }
     
     // метод, который срабатывает в зависимости от того, спрятана ли errorView
-    private func hiddenErrorReload() {
-        if errorReload.isHidden == false {
-            departmentSeacrhBar.isHidden = true
-            departmentMenuCollectionView.isHidden = true
-            departmentContactList.isHidden = true
+    private func errorViewToggleVisibility(isHidden: Bool) {
+        departmentSeacrhBar.isHidden = isHidden
+        departmentMenuCollectionView.isHidden = isHidden
+        departmentContactList.isHidden = isHidden
+        
+        if isHidden {
             print("Данных в таблице нет")
         } else {
-            departmentSeacrhBar.isHidden = false
-            departmentMenuCollectionView.isHidden = false
-            departmentContactList.isHidden = false
             print("Данные в таблице есть: \(contacts.count)")
         }
     }
@@ -111,7 +109,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
     }
     
     // MARK: - Data from API
-    public func fetchContactData() {
+    private func fetchContactData() {
         print("Fetching data")
         
         APIManager.shared.fetchUserData { result in
@@ -123,11 +121,11 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
                     self.dataRefreshControl.endRefreshing()
                     self.departmentContactList.reloadData()
                     self.errorReload.isHidden = true
-                    self.hiddenErrorReload()
+                    self.errorViewToggleVisibility(isHidden: false)
                 case .failure(let networkError):
                     print("Failure: \(networkError)")
                     self.errorReload.isHidden = false
-                    self.hiddenErrorReload()
+                    self.errorViewToggleVisibility(isHidden: true)
                 }
             }
         }

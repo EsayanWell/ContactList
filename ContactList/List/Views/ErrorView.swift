@@ -64,7 +64,7 @@ class ErrorView: UIView {
         errorDecriptionLabel.textAlignment = .center
     }
     
-    internal func configureRequestButton() {
+    private func configureRequestButton() {
         tryRequestButton.setTitle("Попробовать снова", for: .normal)
         tryRequestButton.backgroundColor = .white
         tryRequestButton.titleLabel?.font = UIFont(name: "Inter-SemiBold", size: 16)
