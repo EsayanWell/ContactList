@@ -25,11 +25,8 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         navigationController?.setNavigationBarHidden(true, animated: true)
         // вызов функций
         setupViews()
-        setConstraits()
-        notHiddenErrorReload()
         hiddenErrorReload()
         configureTableView()
-        setTableViewDelegates()
         fetchContactData()
         pullToRefreshSetup()
     }
@@ -41,79 +38,8 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         view.addSubview(departmentSeacrhBar)
         view.addSubview(departmentContactList)
         view.addSubview(errorReload)
-    }
-    
-    private func notHiddenErrorReload() {
-        errorReload.isHidden = false
-        departmentSeacrhBar.isHidden = true
-        departmentMenuCollectionView.isHidden = true
-        departmentContactList.isHidden = true
-        print("Данные в таблице нет")
-    }
-    private func hiddenErrorReload() {
-        // Если данные есть, удаляем кастомную view (если она была добавлена ранее)
-        errorReload.isHidden = true
-        departmentSeacrhBar.isHidden = false
-        departmentMenuCollectionView.isHidden = false
-        departmentContactList.isHidden = false
-        print("Данные в таблице есть \(contacts.count)")
-    }
-    
-    
-    // MARK: - contactTableView setup
-    private func configureTableView() {
-        departmentContactList.showsVerticalScrollIndicator = false
-        departmentContactList.backgroundColor = .white
-        departmentContactList.register(ContactCell.self, forCellReuseIdentifier: identifier)
-        departmentContactList.separatorStyle = .none
-    }
-    
-    // функция с установкой подписки на delegates
-    func setTableViewDelegates() {
-        departmentContactList.delegate = self
-        departmentContactList.dataSource = self
-    }
-    
-    // MARK: - setup pull to refresh
-    private func pullToRefreshSetup() {
-        dataRefreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
-        departmentContactList.addSubview(dataRefreshControl)
-    }
-    
-    // MARK: - Re-fetch API data
-    @objc private func didPullToRefresh() {
-        print("Start refresh")
-        fetchContactData()
-    }
-    
-    
-    // MARK: - Data from API
-    func fetchContactData() {
-        print("Fetching data")
         
-        APIManager.shared.fetchUserData { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let decodedContacts):
-                    print("Success")
-                    self.contacts = decodedContacts
-                    self.dataRefreshControl.endRefreshing()
-                    self.departmentContactList.reloadData()
-                    self.hiddenErrorReload()
-                case .failure(let networkError):
-                    print("Failure: \(networkError)")
-                    self.errorReload.isHidden = false
-                    self.departmentSeacrhBar.isHidden = true
-                    self.departmentMenuCollectionView.isHidden = true
-                    self.departmentContactList.isHidden = true
-                    self.notHiddenErrorReload()
-                }
-            }
-        }
-    }
-    
-    // MARK: - setConstraits
-    private func setConstraits() {
+        // MARK: - make constraits
         departmentSeacrhBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.equalToSuperview().offset(8)
@@ -135,6 +61,66 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         errorReload.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(303)
             make.bottom.leading.trailing.equalToSuperview()
+        }
+    }
+    
+    // метод, который срабатывает в зависимости от того, спрятана ли errorView
+    private func hiddenErrorReload() {
+        if errorReload.isHidden == false {
+            departmentSeacrhBar.isHidden = true
+            departmentMenuCollectionView.isHidden = true
+            departmentContactList.isHidden = true
+            print("Данных в таблице нет")
+        } else {
+            departmentSeacrhBar.isHidden = false
+            departmentMenuCollectionView.isHidden = false
+            departmentContactList.isHidden = false
+            print("Данные в таблице есть: \(contacts.count)")
+        }
+    }
+    
+    // MARK: - contactTableView setup
+    private func configureTableView() {
+        departmentContactList.showsVerticalScrollIndicator = false
+        departmentContactList.backgroundColor = .white
+        departmentContactList.register(ContactCell.self, forCellReuseIdentifier: identifier)
+        departmentContactList.separatorStyle = .none
+        departmentContactList.delegate = self
+        departmentContactList.dataSource = self
+    }
+    
+    // MARK: - setup pull to refresh
+    private func pullToRefreshSetup() {
+        dataRefreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+        departmentContactList.addSubview(dataRefreshControl)
+    }
+    
+    // MARK: - Re-fetch API data
+    @objc private func didPullToRefresh() {
+        print("Start refresh")
+        fetchContactData()
+    }
+    
+    // MARK: - Data from API
+    func fetchContactData() {
+        print("Fetching data")
+        
+        APIManager.shared.fetchUserData { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let decodedContacts):
+                    print("Success")
+                    self.contacts = decodedContacts
+                    self.dataRefreshControl.endRefreshing()
+                    self.departmentContactList.reloadData()
+                    self.errorReload.isHidden = true
+                    self.hiddenErrorReload()
+                case .failure(let networkError):
+                    print("Failure: \(networkError)")
+                    self.errorReload.isHidden = false
+                    self.hiddenErrorReload()
+                }
+            }
         }
     }
 }

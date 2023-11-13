@@ -24,7 +24,6 @@ class ErrorView: UIView {
         configureErrorTitleLabel()
         configureDescriptionLabel()
         configureRequestButton()
-        sendRequest()
         setConstraits()
     }
     
@@ -71,10 +70,10 @@ class ErrorView: UIView {
         tryRequestButton.titleLabel?.font = UIFont(name: "Inter-SemiBold", size: 16)
         tryRequestButton.setTitleColor(UIColor.systemGray4, for: .highlighted)
         tryRequestButton.setTitleColor(UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1), for: .normal)
-        tryRequestButton.addTarget(self, action: #selector(sendRequest), for: .touchUpInside)
+        tryRequestButton.addTarget(self, action: #selector(updateRequest), for: .touchUpInside)
     }
     
-    @objc func sendRequest() {
+    @objc func updateRequest() {
         print("Try to send request again")
     }
     
