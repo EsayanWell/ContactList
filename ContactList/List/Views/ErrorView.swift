@@ -15,7 +15,7 @@ class ErrorView: UIView {
     private let errorImage = UIImageView()
     private let errorTitleLabel = UILabel()
     private let errorDecriptionLabel = UILabel()
-    private let tryRequestButton = UIButton()
+    internal let tryRequestButton = UIButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -64,17 +64,12 @@ class ErrorView: UIView {
         errorDecriptionLabel.textAlignment = .center
     }
     
-    private func configureRequestButton() {
+    internal func configureRequestButton() {
         tryRequestButton.setTitle("Попробовать снова", for: .normal)
         tryRequestButton.backgroundColor = .white
         tryRequestButton.titleLabel?.font = UIFont(name: "Inter-SemiBold", size: 16)
         tryRequestButton.setTitleColor(UIColor.systemGray4, for: .highlighted)
         tryRequestButton.setTitleColor(UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1), for: .normal)
-        tryRequestButton.addTarget(self, action: #selector(updateRequest), for: .touchUpInside)
-    }
-    
-    @objc func updateRequest() {
-        print("Try to send request again")
     }
     
     // MARK: - setConstraits

@@ -4,7 +4,7 @@
 //
 //  Created by Владимир Есаян on 03.10.2023.
 //
-
+import Foundation
 import UIKit
 import SnapKit
 
@@ -26,18 +26,27 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         // вызов функций
         setupViews()
         hiddenErrorReload()
-        configureTableView()
         fetchContactData()
         pullToRefreshSetup()
+        errorReloadSetup()
     }
     
     // MARK: - setupViews
     private func setupViews() {
         view.backgroundColor = .white
+        // addSubviews
         view.addSubview(departmentMenuCollectionView)
         view.addSubview(departmentSeacrhBar)
         view.addSubview(departmentContactList)
         view.addSubview(errorReload)
+        
+        // MARK: - contactTableView setup
+        departmentContactList.showsVerticalScrollIndicator = false
+        departmentContactList.backgroundColor = .white
+        departmentContactList.register(ContactCell.self, forCellReuseIdentifier: identifier)
+        departmentContactList.separatorStyle = .none
+        departmentContactList.delegate = self
+        departmentContactList.dataSource = self
         
         // MARK: - make constraits
         departmentSeacrhBar.snp.makeConstraints { make in
@@ -64,6 +73,16 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         }
     }
     
+    // MARK: - errorReloadSetup
+    private func errorReloadSetup(){
+        errorReload.tryRequestButton.addTarget(self, action: #selector(updateRequest), for: .touchUpInside)
+    }
+    
+    @objc func updateRequest() {
+        print("Try to send request again")
+        fetchContactData()
+    }
+    
     // метод, который срабатывает в зависимости от того, спрятана ли errorView
     private func hiddenErrorReload() {
         if errorReload.isHidden == false {
@@ -79,16 +98,6 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         }
     }
     
-    // MARK: - contactTableView setup
-    private func configureTableView() {
-        departmentContactList.showsVerticalScrollIndicator = false
-        departmentContactList.backgroundColor = .white
-        departmentContactList.register(ContactCell.self, forCellReuseIdentifier: identifier)
-        departmentContactList.separatorStyle = .none
-        departmentContactList.delegate = self
-        departmentContactList.dataSource = self
-    }
-    
     // MARK: - setup pull to refresh
     private func pullToRefreshSetup() {
         dataRefreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
@@ -102,7 +111,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
     }
     
     // MARK: - Data from API
-    func fetchContactData() {
+    public func fetchContactData() {
         print("Fetching data")
         
         APIManager.shared.fetchUserData { result in
