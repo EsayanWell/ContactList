@@ -18,12 +18,12 @@ class ContactCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         // MARK: - sets
+        setupViews()
         configureProfilePhoto()
         configureProfileFirstName()
         configureProfileLastName()
         configurProfilePosition()
         configurProfileUserTag()
-        setupViews()
         setConstraits()
     }
     
@@ -123,14 +123,13 @@ class ContactCell: UITableViewCell {
         
         profileLastName.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(12)
-            make.leading.equalTo(profileFirstName.snp.trailing)
+            make.leading.equalTo(profileFirstName.snp.trailing).offset(4)
             make.height.equalTo(20)
         }
         
         profilePosition.snp.makeConstraints { make in
             make.top.equalTo(profileFirstName.snp.bottom).offset(3)
             make.leading.equalTo(profileFirstName.snp.leading)
-            //make.height.equalTo(16)
         }
         profileUserTag.snp.makeConstraints { make in
             make.bottom.equalTo(profileFirstName.snp.bottom)
