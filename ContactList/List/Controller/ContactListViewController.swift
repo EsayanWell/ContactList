@@ -17,6 +17,8 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
     private let errorReload = ErrorView()
     private let identifier = "ContactCell"
     private var contacts = [ContactData]()
+    private var filteredContacts = [ContactData]()
+   // var selectedDepartment: String = "Все"
     private let dataRefreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -29,6 +31,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         fetchContactData()
         pullToRefreshSetup()
         errorReloadSetup()
+        //filteredDataByDepartment(department: "Все")
     }
     
     // MARK: - setupViews
@@ -72,6 +75,18 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
             make.bottom.leading.trailing.equalToSuperview()
         }
     }
+    
+//    // MARK: - filtered data
+//    private func filteredDataByDepartment(department: String) {
+//        switch selectedDepartment {
+//        case "Все":
+//            filteredContacts = contacts
+//        case "Android", "iOS","Дизайн", "Менеджмент", "QA", "Бэк-офис", "Frontend", "HR", "PR", "Backend", "Техподдержка", "Аналитика"  :
+//            filteredContacts = contacts.filter { $0.department == selectedDepartment }
+//        default:
+//            filteredContacts = []
+//        }
+//    }
     
     // MARK: - errorReloadSetup
     private func errorReloadSetup(){
