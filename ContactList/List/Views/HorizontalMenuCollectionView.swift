@@ -8,6 +8,11 @@
 import Foundation
 import UIKit
 
+// протокол, который будет оповещать ваш UITableView о необходимости обновления данных
+protocol FilterDelegate: AnyObject {
+    func didSelectFilter(_ filter: String)
+}
+
 class HorizontalMenuCollectionView: UICollectionView {
     
     // MARK: - Constants
@@ -16,12 +21,15 @@ class HorizontalMenuCollectionView: UICollectionView {
     private let departmentLayout = UICollectionViewFlowLayout()
     // Индекс выбранной ячейки
     private var selectedIndexPath: IndexPath?
+    // добавляем делегат в наш класс
+    weak var filterDelegate: FilterDelegate?
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: departmentLayout)
         configureCollectionView()
         setCollectionViewDelegates()
         departments = fetchData()
+        departmentMenuCollectionView.filterDelegate = ContactListViewController
     }
     
     required init?(coder: NSCoder) {
@@ -38,7 +46,6 @@ class HorizontalMenuCollectionView: UICollectionView {
         self.backgroundColor = .white
         self.register(DepartmentCell.self, forCellWithReuseIdentifier: identifier)
         self.showsHorizontalScrollIndicator = false
-        
     }
     
     // функция с установкой подписки на delegates
@@ -92,6 +99,11 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
         collectionView.reloadItems(at: [indexPath])
         // метод для выравнивания выбранной ячейки
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        let selectedFilter = departments[indexPath.item]
+        // вызов делегата при выборе ячейки
+        let selectedFilterName = selectedFilter.title
+        filterDelegate?.didSelectFilter(selectedFilterName)
+        
     }
 }
 

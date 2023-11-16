@@ -18,7 +18,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
     private let identifier = "ContactCell"
     private var contacts = [ContactData]()
     private var filteredContacts = [ContactData]()
-   // var selectedDepartment: String = "Все"
+    private var selectedDepartment: String = "Все"
     private let dataRefreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -42,6 +42,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         view.addSubview(departmentSeacrhBar)
         view.addSubview(departmentContactList)
         view.addSubview(errorReload)
+    
         
         // MARK: - contactTableView setup
         departmentContactList.showsVerticalScrollIndicator = false
@@ -76,17 +77,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         }
     }
     
-//    // MARK: - filtered data
-//    private func filteredDataByDepartment(department: String) {
-//        switch selectedDepartment {
-//        case "Все":
-//            filteredContacts = contacts
-//        case "Android", "iOS","Дизайн", "Менеджмент", "QA", "Бэк-офис", "Frontend", "HR", "PR", "Backend", "Техподдержка", "Аналитика"  :
-//            filteredContacts = contacts.filter { $0.department == selectedDepartment }
-//        default:
-//            filteredContacts = []
-//        }
-//    }
+
     
     // MARK: - errorReloadSetup
     private func errorReloadSetup(){
@@ -132,7 +123,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
                 switch result {
                 case .success(let decodedContacts):
                     print("Success")
-                    self.contacts = decodedContacts
+                    self.filteredContacts = decodedContacts
                     self.dataRefreshControl.endRefreshing()
                     self.departmentContactList.reloadData()
                     self.errorReload.isHidden = true
@@ -148,17 +139,29 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
 }
 
 // MARK: - extensions for VerticalContactTableView
-extension ContactListViewController: UITableViewDelegate, UITableViewDataSource {
+extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate {
     
     // функция для отображения количества строк на экране
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return contacts.count
+        return filteredContacts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ContactCell
-        let contact = contacts[indexPath.row]
+        let contact = filteredContacts[indexPath.row]
         cell.configure(contacts: contact)
         return cell
+    }
+    
+    // MARK: - filtered data
+    internal func didSelectFilter(_ filter: String) {
+        switch selectedDepartment {
+        case "Все":
+            filteredContacts = contacts
+        case "Android", "iOS","Дизайн", "Менеджмент", "QA", "Бэк-офис", "Frontend", "HR", "PR", "Backend", "Техподдержка", "Аналитика"  :
+            filteredContacts = contacts.filter { $0.department == selectedDepartment }
+        default:
+            filteredContacts = []
+        }
     }
 }
