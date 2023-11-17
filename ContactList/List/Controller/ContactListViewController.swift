@@ -32,6 +32,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         pullToRefreshSetup()
         errorReloadSetup()
         //filteredDataByDepartment(department: "Все")
+        departmentMenuCollectionView.filterDelegate = self
     }
     
     // MARK: - setupViews
@@ -154,14 +155,22 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     }
     
     // MARK: - filtered data
-    internal func didSelectFilter(_ filter: String) {
+    internal func didSelectFilter(at indexPath: IndexPath) {
         switch selectedDepartment {
         case "Все":
             filteredContacts = contacts
+            print("Выбран фильтра Все")
         case "Android", "iOS","Дизайн", "Менеджмент", "QA", "Бэк-офис", "Frontend", "HR", "PR", "Backend", "Техподдержка", "Аналитика"  :
             filteredContacts = contacts.filter { $0.department == selectedDepartment }
+            print("Выбран фильтр")
         default:
             filteredContacts = []
+        }
+        
+        if filteredContacts.isEmpty {
+            departmentContactList.isHidden = true
+        } else {
+            departmentContactList.reloadData()
         }
     }
 }

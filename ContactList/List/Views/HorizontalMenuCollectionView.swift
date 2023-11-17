@@ -10,7 +10,7 @@ import UIKit
 
 // протокол, который будет оповещать ваш UITableView о необходимости обновления данных
 protocol FilterDelegate: AnyObject {
-    func didSelectFilter(_ filter: String)
+    func didSelectFilter(at indexPath: IndexPath)
 }
 
 class HorizontalMenuCollectionView: UICollectionView {
@@ -29,7 +29,6 @@ class HorizontalMenuCollectionView: UICollectionView {
         configureCollectionView()
         setCollectionViewDelegates()
         departments = fetchData()
-        departmentMenuCollectionView.filterDelegate = ContactListViewController
     }
     
     required init?(coder: NSCoder) {
@@ -102,7 +101,7 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
         let selectedFilter = departments[indexPath.item]
         // вызов делегата при выборе ячейки
         let selectedFilterName = selectedFilter.title
-        filterDelegate?.didSelectFilter(selectedFilterName)
+        filterDelegate?.didSelectFilter(at: indexPath)
         
     }
 }
