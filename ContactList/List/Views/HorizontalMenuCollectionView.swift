@@ -21,6 +21,7 @@ class HorizontalMenuCollectionView: UICollectionView {
     private let departmentLayout = UICollectionViewFlowLayout()
     // Индекс выбранной ячейки
     private var selectedIndexPath: IndexPath?
+    
     // добавляем делегат в наш класс
     weak var filterDelegate: FilterDelegate?
     
@@ -45,6 +46,11 @@ class HorizontalMenuCollectionView: UICollectionView {
         self.backgroundColor = .white
         self.register(DepartmentCell.self, forCellWithReuseIdentifier: identifier)
         self.showsHorizontalScrollIndicator = false
+        // Выбираем индекс ячейки по умолчанию (например, первая ячейка)
+       // let defaultIndexPath = IndexPath(item: 0, section: 0)
+        // Выбираем ячейку по умолчанию
+      //  self.selectItem(at: defaultIndexPath, animated: false, scrollPosition: .centeredHorizontally)
+
     }
     
     // функция с установкой подписки на delegates
