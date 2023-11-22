@@ -8,22 +8,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-// Определение перечисления для департаментов
-enum Departments: String {
-    case all = "Все"
-    case android = "Android"
-    case iOS = "iOS"
-    case design = "Дизайн"
-    case management = "Менеджмент"
-    case qa = "QA"
-    case back_office = "Бэк-офис"
-    case frontend = "Frontend"
-    case hr = "HR"
-    case pr = "PR"
-    case backend = "Backend"
-    case support = "Техподдержка"
-    case analytics = "Аналитика"
-}
+
 
 class ContactListViewController: UIViewController, UISearchBarDelegate {
     
@@ -48,11 +33,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         fetchContactData()
         pullToRefreshSetup()
         errorReloadSetup()
-        //filteredDataByDepartment(department: "Все")
         departmentMenuCollectionView.filterDelegate = self
-        
-       
-
     }
     
     // MARK: - setupViews
@@ -63,7 +44,6 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         view.addSubview(departmentSeacrhBar)
         view.addSubview(departmentContactList)
         view.addSubview(errorReload)
-        
         
         // MARK: - contactTableView setup
         departmentContactList.showsVerticalScrollIndicator = false
@@ -98,8 +78,6 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         }
     }
     
-    
-    
     // MARK: - errorReloadSetup
     private func errorReloadSetup(){
         errorReload.tryRequestButton.addTarget(self, action: #selector(updateRequest), for: .touchUpInside)
@@ -119,7 +97,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         if isHidden {
             print("Данных в таблице нет")
         } else {
-            print("Данные в таблице есть: \(filteredContacts.count)")
+            print("Данные в таблице есть: \(contacts.count)")
         }
     }
     
@@ -144,7 +122,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
                 switch result {
                 case .success(let decodedContacts):
                     print("Success")
-                    self.filteredContacts = decodedContacts
+                    self.contacts = decodedContacts
                     self.dataRefreshControl.endRefreshing()
                     self.departmentContactList.reloadData()
                     self.errorReload.isHidden = true
@@ -176,14 +154,15 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // MARK: - filtered data
     internal func didSelectFilter(at indexPath: IndexPath) {
+        
         if selectedDepartment == .all {
             filteredContacts = contacts
             print("Выбран фильтр Все")
         } else {
-            filteredContacts = contacts.filter { $0.department == selectedDepartment.rawValue }
+            filteredContacts = contacts.filter { $0.department == selectedDepartment }
             print("Выбран фильтр \(selectedDepartment)")
         }
-        
+
         if filteredContacts.isEmpty {
             departmentContactList.isHidden = true
             print("Нет данных по выбранному фильтру")

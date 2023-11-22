@@ -21,9 +21,8 @@ class HorizontalMenuCollectionView: UICollectionView {
     private let departmentLayout = UICollectionViewFlowLayout()
     // Индекс выбранной ячейки
     private var selectedIndexPath: IndexPath?
-    
     // добавляем делегат в наш класс
-    weak var filterDelegate: FilterDelegate?
+    internal weak var filterDelegate: FilterDelegate?
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: departmentLayout)
@@ -50,7 +49,6 @@ class HorizontalMenuCollectionView: UICollectionView {
        // let defaultIndexPath = IndexPath(item: 0, section: 0)
         // Выбираем ячейку по умолчанию
       //  self.selectItem(at: defaultIndexPath, animated: false, scrollPosition: .centeredHorizontally)
-
     }
     
     // функция с установкой подписки на delegates
@@ -104,11 +102,10 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
         collectionView.reloadItems(at: [indexPath])
         // метод для выравнивания выбранной ячейки
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        let selectedFilter = departments[indexPath.item]
         // вызов делегата при выборе ячейки
+        let selectedFilter = departments[indexPath.item]
         let selectedFilterName = selectedFilter.title
         filterDelegate?.didSelectFilter(at: indexPath)
-        
     }
 }
 

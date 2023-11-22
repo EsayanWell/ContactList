@@ -59,7 +59,7 @@ final class APIManager {
             do {
                 // декодирование try - попытайся декодировать из данных
                 let decodedQuery = try JSONDecoder().decode(Query.self, from: safeData)
-                print("Success decoding")
+                print("Success decoding \(decodedQuery.items)")
                 completion(.success(decodedQuery.items))
             } catch let decodeError {
                 print("Decoding error: \(decodeError)")
