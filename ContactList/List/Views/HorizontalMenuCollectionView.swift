@@ -116,21 +116,6 @@ extension HorizontalMenuCollectionView{
     
     // функция не принимает аргументов и возвращает массив типа Departments (структура в модели)
     func receiveData() -> [Departments] {
-       
-        let allDepartments  = Departments.all
-        let androidDep  = Departments.android
-        let iosDep  = Departments.iOS
-        let designDep  = Departments.design
-        let managementDep  = Departments.management
-        let qaDep  = Departments.qa
-        let backOfficeDep  = Departments.backOffice
-        let frontendDep  = Departments.frontend
-        let hrDep  = Departments.hr
-        let prDep = Departments.pr
-        let backendDep = Departments.backend
-        let supportDep = Departments.support
-        let analyticsDep = Departments.analytics
-        
         return Departments.allCases
     }
 }
