@@ -105,6 +105,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
     private func pullToRefreshSetup() {
         dataRefreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
         departmentContactList.addSubview(dataRefreshControl)
+        departmentContactList.reloadData()
     }
     
     // MARK: - Re-fetch API data
@@ -170,6 +171,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             print("Нет данных по выбранному фильтру")
         } else {
             departmentContactList.reloadData()
+            departmentContactList.isHidden = false
             print("Данные по выбранному фильтру есть")
         }
     }

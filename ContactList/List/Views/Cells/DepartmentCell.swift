@@ -39,7 +39,7 @@ class DepartmentCell: UICollectionViewCell {
     }
     
     // функция выполняет задачу обновления интерфейсных элементов на экране информацией из объекта Expense, переданного в качестве параметра
-    func set(department: Department) {
+    func set(department: Departments) {
         departmentName.text = department.title
     }
     

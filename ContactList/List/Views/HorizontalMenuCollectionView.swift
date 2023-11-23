@@ -17,7 +17,7 @@ class HorizontalMenuCollectionView: UICollectionView {
     
     // MARK: - Constants
     private let identifier = "DepartmentCell"
-    private var departments: [Department] = []
+    private var departments: [Departments] = []
     private let departmentLayout = UICollectionViewFlowLayout()
     // Индекс выбранной ячейки
     private var selectedIndexPath: IndexPath?
@@ -46,9 +46,9 @@ class HorizontalMenuCollectionView: UICollectionView {
         self.register(DepartmentCell.self, forCellWithReuseIdentifier: identifier)
         self.showsHorizontalScrollIndicator = false
         // Выбираем индекс ячейки по умолчанию (например, первая ячейка)
-       // let defaultIndexPath = IndexPath(item: 0, section: 0)
+        // let defaultIndexPath = IndexPath(item: 0, section: 0)
         // Выбираем ячейку по умолчанию
-      //  self.selectItem(at: defaultIndexPath, animated: false, scrollPosition: .centeredHorizontally)
+         self.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .centeredHorizontally)
     }
     
     // функция с установкой подписки на delegates
@@ -103,30 +103,33 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
         // метод для выравнивания выбранной ячейки
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         // вызов делегата при выборе ячейки
-        let selectedFilter = departments[indexPath.item]
-        let selectedFilterName = selectedFilter.title
-        filterDelegate?.didSelectFilter(at: indexPath, selectedData: .all)
+        if let selectedIndexPath = selectedIndexPath {
+            let selectedFilter = departments[selectedIndexPath.item]
+            filterDelegate?.didSelectFilter(at: selectedIndexPath, selectedData: selectedFilter)
+        } else {
+            print("Delegate not called")
+        }
     }
 }
 
 extension HorizontalMenuCollectionView{
     
-    // функция не принимает аргументов и возвращает массив типа Department (структура в модели)
-    func fetchData() -> [Department] {
-        let department1  = Department(title: "Все")
-        let department2  = Department(title: "Android")
-        let department3  = Department(title: "iOS")
-        let department4  = Department(title: "Дизайн")
-        let department5  = Department(title: "Менеджмент")
-        let department6  = Department(title: "QA")
-        let department7  = Department(title: "Бэк-офис")
-        let department8  = Department(title: "Frontend")
-        let department9  = Department(title: "HR")
-        let department10 = Department(title: "PR")
-        let department11 = Department(title: "Backend")
-        let department12 = Department(title: "Техподдержка")
-        let department13 = Department(title: "Аналитика")
+    // функция не принимает аргументов и возвращает массив типа Departments (структура в модели)
+    func fetchData() -> [Departments] {
+        let allDepartments  = Departments.all
+        let androidDep  = Departments.android
+        let iosDep  = Departments.iOS
+        let designDep  = Departments.design
+        let managementDep  = Departments.management
+        let qaDep  = Departments.qa
+        let backOfficeDep  = Departments.backOffice
+        let frontendDep  = Departments.frontend
+        let hrDep  = Departments.hr
+        let prDep = Departments.pr
+        let backendDep = Departments.backend
+        let supportDep = Departments.support
+        let analyticsDep = Departments.analytics
         
-        return [department1, department2, department3, department4, department5, department6, department7, department8, department9, department10, department11, department12, department13]
+        return [allDepartments, androidDep, iosDep, designDep, managementDep, qaDep, backOfficeDep, frontendDep, hrDep, prDep, backendDep, supportDep, analyticsDep]
     }
 }
