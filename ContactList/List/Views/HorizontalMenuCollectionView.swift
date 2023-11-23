@@ -48,7 +48,7 @@ class HorizontalMenuCollectionView: UICollectionView {
         // Выбираем индекс ячейки по умолчанию (например, первая ячейка)
         // let defaultIndexPath = IndexPath(item: 0, section: 0)
         // Выбираем ячейку по умолчанию
-         self.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .centeredHorizontally)
+        // self.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .centeredHorizontally)
     }
     
     // функция с установкой подписки на delegates
