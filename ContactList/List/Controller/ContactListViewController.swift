@@ -8,6 +8,8 @@ import Foundation
 import UIKit
 import SnapKit
 
+
+
 class ContactListViewController: UIViewController, UISearchBarDelegate {
     
     // MARK: - Constants
@@ -17,7 +19,9 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
     private let errorReload = ErrorView()
     private let identifier = "ContactCell"
     private var contacts = [ContactData]()
+    private var filteredContacts = [ContactData]()
     private let dataRefreshControl = UIRefreshControl()
+    private var selectedDepartment: Departments = .all
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +33,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         fetchContactData()
         pullToRefreshSetup()
         errorReloadSetup()
+        departmentMenuCollectionView.filterDelegate = self
     }
     
     // MARK: - setupViews
@@ -100,6 +105,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
     private func pullToRefreshSetup() {
         dataRefreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
         departmentContactList.addSubview(dataRefreshControl)
+        departmentContactList.reloadData()
     }
     
     // MARK: - Re-fetch API data
@@ -133,17 +139,40 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
 }
 
 // MARK: - extensions for VerticalContactTableView
-extension ContactListViewController: UITableViewDelegate, UITableViewDataSource {
+extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate {
     
     // функция для отображения количества строк на экране
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return contacts.count
+        return filteredContacts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ContactCell
-        let contact = contacts[indexPath.row]
+        let contact = filteredContacts[indexPath.row]
         cell.configure(contacts: contact)
         return cell
+    }
+    
+    // MARK: - filtered data
+    func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
+        
+        selectedDepartment = selectedData
+        // фильтрация данных, отображаемых на экране
+        if selectedDepartment == .all {
+            filteredContacts = contacts
+            print("Выбран фильтр Все")
+        } else {
+            filteredContacts = contacts.filter { $0.department == selectedDepartment }
+            print("Выбран фильтр \(selectedDepartment)")
+        }
+
+        if filteredContacts.isEmpty {
+            departmentContactList.isHidden = true
+            print("Нет данных по выбранному фильтру")
+        } else {
+            departmentContactList.reloadData()
+            departmentContactList.isHidden = false
+            print("Данные по выбранному фильтру есть")
+        }
     }
 }

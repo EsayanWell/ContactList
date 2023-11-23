@@ -15,7 +15,7 @@ class ErrorView: UIView {
     private let errorImage = UIImageView()
     private let errorTitleLabel = UILabel()
     private let errorDecriptionLabel = UILabel()
-    internal let tryRequestButton = UIButton()
+    let tryRequestButton = UIButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
