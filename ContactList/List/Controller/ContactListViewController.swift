@@ -154,16 +154,16 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     }
     
     // MARK: - filtered data
-    internal func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
+    func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
         
         selectedDepartment = selectedData
-        
-        if selectedData == .all {
+        // фильтрация данных, отображаемых на экране
+        if selectedDepartment == .all {
             filteredContacts = contacts
             print("Выбран фильтр Все")
         } else {
-            filteredContacts = contacts.filter { $0.department == selectedData }
-            print("Выбран фильтр \(selectedData)")
+            filteredContacts = contacts.filter { $0.department == selectedDepartment }
+            print("Выбран фильтр \(selectedDepartment)")
         }
 
         if filteredContacts.isEmpty {

@@ -22,13 +22,13 @@ class HorizontalMenuCollectionView: UICollectionView {
     // Индекс выбранной ячейки
     private var selectedIndexPath: IndexPath?
     // добавляем делегат в наш класс
-    internal weak var filterDelegate: FilterDelegate?
+    weak var filterDelegate: FilterDelegate?
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: departmentLayout)
         configureCollectionView()
         setCollectionViewDelegates()
-        departments = fetchData()
+        departments = receiveData()
     }
     
     required init?(coder: NSCoder) {
@@ -115,7 +115,8 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
 extension HorizontalMenuCollectionView{
     
     // функция не принимает аргументов и возвращает массив типа Departments (структура в модели)
-    func fetchData() -> [Departments] {
+    func receiveData() -> [Departments] {
+       
         let allDepartments  = Departments.all
         let androidDep  = Departments.android
         let iosDep  = Departments.iOS
@@ -130,6 +131,6 @@ extension HorizontalMenuCollectionView{
         let supportDep = Departments.support
         let analyticsDep = Departments.analytics
         
-        return [allDepartments, androidDep, iosDep, designDep, managementDep, qaDep, backOfficeDep, frontendDep, hrDep, prDep, backendDep, supportDep, analyticsDep]
+        return Departments.allCases
     }
 }

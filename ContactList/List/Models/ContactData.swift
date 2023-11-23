@@ -29,7 +29,8 @@ struct Query: Codable {
 }
 
 // Определение перечисления для департаментов
-enum Departments: String, CodingKey, Codable {
+// CaseIterable - это протокол, который обеспечивает типам возможность создания коллекции своих кейсов 
+enum Departments: String, CodingKey, Codable, CaseIterable {
     case all
     case android
     case iOS
