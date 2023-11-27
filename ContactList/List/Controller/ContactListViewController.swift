@@ -15,11 +15,10 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
     // MARK: - Constants
     private let departmentMenuCollectionView = HorizontalMenuCollectionView()
     private let departmentSeacrhBar = CustomSearchBar()
-    private let departmentContactList = UITableView()
+    private let departmentContactList = VerticalContactTableView()
     private let errorReload = ErrorView()
     private let identifier = "ContactCell"
-    private var contacts = [ContactData]()
-    private var filteredContacts = [ContactData]()
+    // pull-to-refresh
     private let dataRefreshControl = UIRefreshControl()
     private var selectedDepartment: Departments = .all
     
@@ -44,14 +43,6 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         view.addSubview(departmentSeacrhBar)
         view.addSubview(departmentContactList)
         view.addSubview(errorReload)
-        
-        // MARK: - contactTableView setup
-        departmentContactList.showsVerticalScrollIndicator = false
-        departmentContactList.backgroundColor = .white
-        departmentContactList.register(ContactCell.self, forCellReuseIdentifier: identifier)
-        departmentContactList.separatorStyle = .none
-        departmentContactList.delegate = self
-        departmentContactList.dataSource = self
         
         // MARK: - make constraits
         departmentSeacrhBar.snp.makeConstraints { make in
@@ -88,6 +79,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         fetchContactData()
     }
     
+    // MARK: - errorViewToggleVisibility
     // метод, который срабатывает в зависимости от того, спрятана ли errorView
     private func errorViewToggleVisibility(isHidden: Bool) {
         departmentSeacrhBar.isHidden = isHidden
@@ -97,7 +89,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         if isHidden {
             print("Данных в таблице нет")
         } else {
-            print("Данные в таблице есть: \(contacts.count)")
+            print("Данные в таблице есть: \(departmentContactList.contacts.count)")
         }
     }
     
@@ -107,15 +99,16 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         departmentContactList.addSubview(dataRefreshControl)
         departmentContactList.reloadData()
     }
-    
+
     // MARK: - Re-fetch API data
     @objc private func didPullToRefresh() {
         print("Start refresh")
         fetchContactData()
+        dataRefreshControl.endRefreshing()
     }
-    
+
     // MARK: - Data from API
-    private func fetchContactData() {
+    func fetchContactData() {
         print("Fetching data")
         
         APIManager.shared.fetchUserData { result in
@@ -123,7 +116,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
                 switch result {
                 case .success(let decodedContacts):
                     print("Success")
-                    self.contacts = decodedContacts
+                    self.departmentContactList.contacts = decodedContacts
                     self.dataRefreshControl.endRefreshing()
                     self.departmentContactList.reloadData()
                     self.errorReload.isHidden = true
@@ -139,34 +132,22 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
 }
 
 // MARK: - extensions for VerticalContactTableView
-extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate {
+extension ContactListViewController: FilterDelegate {
     
-    // функция для отображения количества строк на экране
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredContacts.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ContactCell
-        let contact = filteredContacts[indexPath.row]
-        cell.configure(contacts: contact)
-        return cell
-    }
-    
-    // MARK: - filtered data
+    // MARK: - filtered data delegate
     func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
         
         selectedDepartment = selectedData
         // фильтрация данных, отображаемых на экране
         if selectedDepartment == .all {
-            filteredContacts = contacts
+            departmentContactList.filteredContacts = departmentContactList.contacts
             print("Выбран фильтр Все")
         } else {
-            filteredContacts = contacts.filter { $0.department == selectedDepartment }
+            departmentContactList.filteredContacts = departmentContactList.contacts.filter { $0.department == selectedDepartment }
             print("Выбран фильтр \(selectedDepartment)")
         }
 
-        if filteredContacts.isEmpty {
+        if  departmentContactList.filteredContacts.isEmpty {
             departmentContactList.isHidden = true
             print("Нет данных по выбранному фильтру")
         } else {
