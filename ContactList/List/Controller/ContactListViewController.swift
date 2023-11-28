@@ -10,13 +10,14 @@ import SnapKit
 
 
 
-class ContactListViewController: UIViewController, UISearchBarDelegate {
+class ContactListViewController: UIViewController {
     
     // MARK: - Constants
     private let departmentMenuCollectionView = HorizontalMenuCollectionView()
     private let departmentSeacrhBar = CustomSearchBar()
     private let departmentContactList = VerticalContactTableView()
-    private let errorReload = ErrorView()
+    private let errorReload = ErrorLoadView()
+    private var errorSearch = ErrorSearchView()
     private let identifier = "ContactCell"
     // pull-to-refresh
     private let dataRefreshControl = UIRefreshControl()
@@ -32,7 +33,11 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         fetchContactData()
         pullToRefreshSetup()
         errorReloadSetup()
+        // подписка на delegate
         departmentMenuCollectionView.filterDelegate = self
+        departmentSeacrhBar.delegate = self
+        errorSearch.isHidden = true
+        
     }
     
     // MARK: - setupViews
@@ -43,6 +48,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         view.addSubview(departmentSeacrhBar)
         view.addSubview(departmentContactList)
         view.addSubview(errorReload)
+        view.addSubview(errorSearch)
         
         // MARK: - make constraits
         departmentSeacrhBar.snp.makeConstraints { make in
@@ -67,9 +73,14 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
             make.top.equalToSuperview().offset(303)
             make.bottom.leading.trailing.equalToSuperview()
         }
+        errorSearch.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(220)
+            make.bottom.leading.trailing.equalToSuperview()
+        }
     }
     
     // MARK: - errorReloadSetup
+    // ошибка загрузки
     private func errorReloadSetup(){
         errorReload.tryRequestButton.addTarget(self, action: #selector(updateRequest), for: .touchUpInside)
     }
@@ -99,14 +110,14 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         departmentContactList.addSubview(dataRefreshControl)
         departmentContactList.reloadData()
     }
-
+    
     // MARK: - Re-fetch API data
     @objc private func didPullToRefresh() {
         print("Start refresh")
         fetchContactData()
         dataRefreshControl.endRefreshing()
     }
-
+    
     // MARK: - Data from API
     func fetchContactData() {
         print("Fetching data")
@@ -121,10 +132,12 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
                     self.departmentContactList.reloadData()
                     self.errorReload.isHidden = true
                     self.errorViewToggleVisibility(isHidden: false)
+                    //self.errorSearch.isHidden = true
                 case .failure(let networkError):
                     print("Failure: \(networkError)")
                     self.errorReload.isHidden = false
                     self.errorViewToggleVisibility(isHidden: true)
+                    //self.errorSearch.isHidden = true
                 }
             }
         }
@@ -132,7 +145,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
 }
 
 // MARK: - extensions for VerticalContactTableView
-extension ContactListViewController: FilterDelegate {
+extension ContactListViewController: FilterDelegate, UISearchBarDelegate {
     
     // MARK: - filtered data delegate
     func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
@@ -146,7 +159,7 @@ extension ContactListViewController: FilterDelegate {
             departmentContactList.filteredContacts = departmentContactList.contacts.filter { $0.department == selectedDepartment }
             print("Выбран фильтр \(selectedDepartment)")
         }
-
+        
         if  departmentContactList.filteredContacts.isEmpty {
             departmentContactList.isHidden = true
             print("Нет данных по выбранному фильтру")
@@ -154,6 +167,30 @@ extension ContactListViewController: FilterDelegate {
             departmentContactList.reloadData()
             departmentContactList.isHidden = false
             print("Данные по выбранному фильтру есть")
+            errorSearch.isHidden = true
+        }
+    }
+    
+    // MARK: - UISearchBarDelegate
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        departmentContactList.filteredContacts = departmentContactList.contacts.filter { contact in
+            // Проверка на соответствие поисковому тексту
+            return contact.firstName.contains(searchText) ||
+            contact.lastName.contains(searchText) ||
+            contact.userTag.contains(searchText) ||
+            contact.phone.contains(searchText)
+        }
+        // Обновление таблицы с отфильтрованными результатами
+        departmentContactList.reloadData()
+        // проверка наличия отфильтрованных данных
+        let isSearchEmpty = departmentSeacrhBar.searchTextField.state.isEmpty
+        let isContactListEmpty = departmentContactList.filteredContacts.isEmpty
+
+        if isContactListEmpty || !isSearchEmpty {
+            print("Поиск не дал результатов")
+            errorSearch.isHidden = false
+        } else {
+            errorSearch.isHidden = true
         }
     }
 }

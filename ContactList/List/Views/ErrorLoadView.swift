@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 // MARK: - create customViewController
-class ErrorView: UIView {
+class ErrorLoadView: UIView {
     // MARK: - Constants
     private let errorImage = UIImageView()
     private let errorTitleLabel = UILabel()

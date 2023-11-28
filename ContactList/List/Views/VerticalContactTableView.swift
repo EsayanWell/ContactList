@@ -56,5 +56,5 @@ extension VerticalContactTableView: UITableViewDelegate, UITableViewDataSource {
         let contact = filteredContacts[indexPath.row]
         cell.configure(contacts: contact)
         return cell
-    }
+    }    
 }
