@@ -32,7 +32,7 @@ class CustomSearchBar: UISearchBar {
         // цвет текстового поля из Figma
         self.searchTextField.backgroundColor = UIColor(cgColor: CGColor(red: 0.969, green: 0.969, blue: 0.973, alpha: 1))
         // подписка на delegate
-        self.delegate = self
+        //self.delegate = self
         // изменение иконки "лупы" из Figma
         let searchIcon = UIImage(named: "searchLight")
         self.setImage(searchIcon, for: .search, state: .normal)
@@ -53,40 +53,5 @@ class CustomSearchBar: UISearchBar {
             .font: UIFont.systemFont(ofSize: 16)]
         // настройка кнопки отмена
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelButtonAttributes, for: .normal)
-    }
-}
-
-// MARK: - Extension for CustomSearchBar
-extension CustomSearchBar: UISearchBarDelegate {
-    
-    // функция, реагирующая на начало ввода данных
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        self.showsCancelButton = true
-        self.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)
-        self.showsBookmarkButton = false
-        self.placeholder = ""
-        // изменение цвета курсора на заданный из Figma
-        if let textField = searchBar.value(forKey: "searchField") as? UITextField {
-            textField.tintColor = UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1)
-        }
-    }
-    
-    // функция, реагирующая на окончание ввода данных
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        self.showsCancelButton = true
-    }
-    
-    // функция, реагирующая на нажатие кнопки "отмена"
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        self.showsCancelButton = false
-        self.setImage(UIImage(named: "searchLight"), for: .search, state: .normal)
-        self.showsBookmarkButton = true
-        self.placeholder = "Введи имя, тег, почту ..."
-    }
-    
-    // функция, которая запускается при изменении текста
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        self.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)
-        self.showsCancelButton = true
     }
 }

@@ -15,9 +15,9 @@ class ContactListViewController: UIViewController {
     // MARK: - Constants
     private let departmentMenuCollectionView = HorizontalMenuCollectionView()
     private let departmentSeacrhBar = CustomSearchBar()
-    private let departmentContactList = VerticalContactTableView()
+    let departmentContactList = VerticalContactTableView()
     private let errorReload = ErrorLoadView()
-    private var errorSearch = ErrorSearchView()
+    var errorSearch = ErrorSearchView()
     private let identifier = "ContactCell"
     // pull-to-refresh
     private let dataRefreshControl = UIRefreshControl()
@@ -132,19 +132,17 @@ class ContactListViewController: UIViewController {
                     self.departmentContactList.reloadData()
                     self.errorReload.isHidden = true
                     self.errorViewToggleVisibility(isHidden: false)
-                    //self.errorSearch.isHidden = true
                 case .failure(let networkError):
                     print("Failure: \(networkError)")
                     self.errorReload.isHidden = false
                     self.errorViewToggleVisibility(isHidden: true)
-                    //self.errorSearch.isHidden = true
                 }
             }
         }
     }
 }
 
-// MARK: - extensions for VerticalContactTableView
+// MARK: - extensions for VerticalContactTableView and DepartmentSeacrhBar
 extension ContactListViewController: FilterDelegate, UISearchBarDelegate {
     
     // MARK: - filtered data delegate
@@ -185,12 +183,39 @@ extension ContactListViewController: FilterDelegate, UISearchBarDelegate {
         // проверка наличия отфильтрованных данных
         let isSearchEmpty = departmentSeacrhBar.searchTextField.state.isEmpty
         let isContactListEmpty = departmentContactList.filteredContacts.isEmpty
-
+        
         if isContactListEmpty || !isSearchEmpty {
             print("Поиск не дал результатов")
             errorSearch.isHidden = false
         } else {
             errorSearch.isHidden = true
         }
+        departmentSeacrhBar.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)
+        departmentSeacrhBar.showsCancelButton = true
+    }
+    
+    // функция, реагирующая на начало ввода данных
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        departmentSeacrhBar.showsCancelButton = true
+        departmentSeacrhBar.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)
+        departmentSeacrhBar.showsBookmarkButton = false
+        departmentSeacrhBar.placeholder = ""
+        // изменение цвета курсора на заданный из Figma
+        if let textField = searchBar.value(forKey: "searchField") as? UITextField {
+            textField.tintColor = UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1)
+        }
+    }
+    
+    // функция, реагирующая на окончание ввода данных
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        departmentSeacrhBar.showsCancelButton = true
+    }
+    
+    // функция, реагирующая на нажатие кнопки "отмена"
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        departmentSeacrhBar.showsCancelButton = false
+        departmentSeacrhBar.setImage(UIImage(named: "searchLight"), for: .search, state: .normal)
+        departmentSeacrhBar.showsBookmarkButton = true
+        departmentSeacrhBar.placeholder = "Введи имя, тег, почту ..."
     }
 }

@@ -46,9 +46,10 @@ class HorizontalMenuCollectionView: UICollectionView {
         self.register(DepartmentCell.self, forCellWithReuseIdentifier: identifier)
         self.showsHorizontalScrollIndicator = false
         // Выбираем индекс ячейки по умолчанию (например, первая ячейка)
-        // let defaultIndexPath = IndexPath(item: 0, section: 0)
-        // Выбираем ячейку по умолчанию
-        // self.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .centeredHorizontally)
+//        let defaultIndexPath = IndexPath(item: 0, section: 0)
+//        // Выбираем ячейку по умолчанию
+//        self.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .centeredHorizontally)
+//        self.allowsSelection = true
     }
     
     // функция с установкой подписки на delegates
@@ -89,6 +90,11 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
     
     // Настройка выбранной ячейки
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let defaultIndexPath = IndexPath(item: 0, section: 0)
+        // Выбираем ячейку по умолчанию
+        self.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .centeredHorizontally)
+        self.allowsSelection = true
         
         // Снять выделение с предыдущей выбранной ячейки, если она существует
         if let previousSelectedIndexPath = selectedIndexPath,
