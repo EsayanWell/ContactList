@@ -8,19 +8,23 @@ import Foundation
 import UIKit
 import SnapKit
 
-
+// протокол для передачи данных между контроллером и customSearchBar
+protocol CustomSearchBarDelegate: AnyObject {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String)
+}
 
 class ContactListViewController: UIViewController {
     
     // MARK: - Constants
     private let departmentMenuCollectionView = HorizontalMenuCollectionView()
     private let departmentSeacrhBar = CustomSearchBar()
-    let departmentContactList = VerticalContactTableView()
-    private let errorReload = ErrorLoadView()
-    var errorSearch = ErrorSearchView()
-    private let identifier = "ContactCell"
-    // pull-to-refresh
+    private var contacts = [ContactData]()
     private let dataRefreshControl = UIRefreshControl()
+    private var filteredContacts = [ContactData]()
+    private let departmentContactList = VerticalContactTableView()
+    private let errorReload = ErrorLoadView()
+    private var errorSearch = ErrorSeacrhView()
+    private let identifier = "ContactCell"
     private var selectedDepartment: Departments = .all
     
     override func viewDidLoad() {
@@ -35,7 +39,8 @@ class ContactListViewController: UIViewController {
         errorReloadSetup()
         // подписка на delegate
         departmentMenuCollectionView.filterDelegate = self
-        departmentSeacrhBar.delegate = self
+        // устанавливаем в качестве делегата
+        departmentSeacrhBar.searchDelegate = self
         errorSearch.isHidden = true
         
     }
@@ -49,6 +54,10 @@ class ContactListViewController: UIViewController {
         view.addSubview(departmentContactList)
         view.addSubview(errorReload)
         view.addSubview(errorSearch)
+        
+        // setup UITableView
+        departmentContactList.delegate = self
+        departmentContactList.dataSource = self
         
         // MARK: - make constraits
         departmentSeacrhBar.snp.makeConstraints { make in
@@ -100,7 +109,7 @@ class ContactListViewController: UIViewController {
         if isHidden {
             print("Данных в таблице нет")
         } else {
-            print("Данные в таблице есть: \(departmentContactList.contacts.count)")
+            print("Данные в таблице есть: \(contacts.count)")
         }
     }
     
@@ -127,7 +136,7 @@ class ContactListViewController: UIViewController {
                 switch result {
                 case .success(let decodedContacts):
                     print("Success")
-                    self.departmentContactList.contacts = decodedContacts
+                    self.contacts = decodedContacts
                     self.dataRefreshControl.endRefreshing()
                     self.departmentContactList.reloadData()
                     self.errorReload.isHidden = true
@@ -143,7 +152,20 @@ class ContactListViewController: UIViewController {
 }
 
 // MARK: - extensions for VerticalContactTableView and DepartmentSeacrhBar
-extension ContactListViewController: FilterDelegate, UISearchBarDelegate {
+extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate, CustomSearchBarDelegate {
+    
+    // функция для отображения количества строк на экране
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return filteredContacts.count
+    }
+    
+    // настройка ячейки
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ContactCell
+        let contact = filteredContacts[indexPath.row]
+        cell.configure(contacts: contact)
+        return cell
+    }
     
     // MARK: - filtered data delegate
     func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
@@ -151,14 +173,14 @@ extension ContactListViewController: FilterDelegate, UISearchBarDelegate {
         selectedDepartment = selectedData
         // фильтрация данных, отображаемых на экране
         if selectedDepartment == .all {
-            departmentContactList.filteredContacts = departmentContactList.contacts
+            filteredContacts = contacts
             print("Выбран фильтр Все")
         } else {
-            departmentContactList.filteredContacts = departmentContactList.contacts.filter { $0.department == selectedDepartment }
+            filteredContacts = contacts.filter { $0.department == selectedDepartment }
             print("Выбран фильтр \(selectedDepartment)")
         }
         
-        if  departmentContactList.filteredContacts.isEmpty {
+        if  filteredContacts.isEmpty {
             departmentContactList.isHidden = true
             print("Нет данных по выбранному фильтру")
         } else {
@@ -169,9 +191,9 @@ extension ContactListViewController: FilterDelegate, UISearchBarDelegate {
         }
     }
     
-    // MARK: - UISearchBarDelegate
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        departmentContactList.filteredContacts = departmentContactList.contacts.filter { contact in
+        
+        filteredContacts = contacts.filter { contact in
             // Проверка на соответствие поисковому тексту
             return contact.firstName.contains(searchText) ||
             contact.lastName.contains(searchText) ||
@@ -182,40 +204,12 @@ extension ContactListViewController: FilterDelegate, UISearchBarDelegate {
         departmentContactList.reloadData()
         // проверка наличия отфильтрованных данных
         let isSearchEmpty = departmentSeacrhBar.searchTextField.state.isEmpty
-        let isContactListEmpty = departmentContactList.filteredContacts.isEmpty
-        
-        if isContactListEmpty || !isSearchEmpty {
-            print("Поиск не дал результатов")
-            errorSearch.isHidden = false
-        } else {
-            errorSearch.isHidden = true
-        }
+        let isContactListEmpty = filteredContacts.isEmpty
+        //если таблица пуста или строка ввода не пустая, то показать ошибку ввода
+        errorSearch.isHidden = isContactListEmpty || !isSearchEmpty ? false : true
+        // если не вставить сюда, то при повторном использовании строки не появляются
         departmentSeacrhBar.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)
         departmentSeacrhBar.showsCancelButton = true
-    }
-    
-    // функция, реагирующая на начало ввода данных
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        departmentSeacrhBar.showsCancelButton = true
-        departmentSeacrhBar.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)
-        departmentSeacrhBar.showsBookmarkButton = false
-        departmentSeacrhBar.placeholder = ""
-        // изменение цвета курсора на заданный из Figma
-        if let textField = searchBar.value(forKey: "searchField") as? UITextField {
-            textField.tintColor = UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1)
-        }
-    }
-    
-    // функция, реагирующая на окончание ввода данных
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        departmentSeacrhBar.showsCancelButton = true
-    }
-    
-    // функция, реагирующая на нажатие кнопки "отмена"
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        departmentSeacrhBar.showsCancelButton = false
-        departmentSeacrhBar.setImage(UIImage(named: "searchLight"), for: .search, state: .normal)
-        departmentSeacrhBar.showsBookmarkButton = true
-        departmentSeacrhBar.placeholder = "Введи имя, тег, почту ..."
     }
 }
+
