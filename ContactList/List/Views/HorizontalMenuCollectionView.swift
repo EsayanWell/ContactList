@@ -93,7 +93,7 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
             previousCell.departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
             previousCell.selectedCell.isHidden = true
         }
-        // Установить выбранной ячейке индекс и обновите её
+        // Установить выбранной ячейке индекс и обновить её
         selectedIndexPath = indexPath
         collectionView.reloadItems(at: [indexPath])
         // метод для выравнивания выбранной ячейки

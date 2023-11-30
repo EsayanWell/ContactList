@@ -207,9 +207,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         let isContactListEmpty = filteredContacts.isEmpty
         //если таблица пуста или строка ввода не пустая, то показать ошибку ввода
         errorSearch.isHidden = isContactListEmpty || !isSearchEmpty ? false : true
-        // если не вставить сюда, то при повторном использовании строки не появляются
-        departmentSeacrhBar.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)
-        departmentSeacrhBar.showsCancelButton = true
     }
 }
 
