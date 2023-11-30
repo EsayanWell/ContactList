@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6E0065F62AFB99F900803BD7 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0065F52AFB99F900803BD7 /* ErrorView.swift */; };
+		6E0065F62AFB99F900803BD7 /* ErrorLoadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0065F52AFB99F900803BD7 /* ErrorLoadView.swift */; };
 		6E0257ED2ACC2AA7000EA6D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0257EC2ACC2AA7000EA6D9 /* AppDelegate.swift */; };
 		6E0257EF2ACC2AA7000EA6D9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0257EE2ACC2AA7000EA6D9 /* SceneDelegate.swift */; };
 		6E0257F12ACC2AA7000EA6D9 /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0257F02ACC2AA7000EA6D9 /* ContactListViewController.swift */; };
@@ -17,6 +17,7 @@
 		6E5373412AF4DF73007ECCB6 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5373402AF4DF73007ECCB6 /* Errors.swift */; };
 		6E590B3C2ADD71D100010257 /* VerticalContactTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E590B3B2ADD71D100010257 /* VerticalContactTableView.swift */; };
 		6E590B3F2ADD772D00010257 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E590B3E2ADD772D00010257 /* ContactCell.swift */; };
+		6E6DB4152B18CB2300511EF5 /* ErrorSeacrhView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6DB4142B18CB2300511EF5 /* ErrorSeacrhView.swift */; };
 		6E98D7B42AD6DAD500F36017 /* HorizontalMenuCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E98D7B32AD6DAD500F36017 /* HorizontalMenuCollectionView.swift */; };
 		6E98D7B82AD6EBE300F36017 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E98D7B72AD6EBE300F36017 /* CustomSearchBar.swift */; };
 		6E9CBBEB2ACD716700B2629D /* ContactData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9CBBEA2ACD716700B2629D /* ContactData.swift */; };
@@ -27,7 +28,7 @@
 
 /* Begin PBXFileReference section */
 		157DA686439774663A24B0BA /* Pods-ContactList.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactList.release.xcconfig"; path = "Target Support Files/Pods-ContactList/Pods-ContactList.release.xcconfig"; sourceTree = "<group>"; };
-		6E0065F52AFB99F900803BD7 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
+		6E0065F52AFB99F900803BD7 /* ErrorLoadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorLoadView.swift; sourceTree = "<group>"; };
 		6E0257E92ACC2AA7000EA6D9 /* ContactList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContactList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E0257EC2ACC2AA7000EA6D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6E0257EE2ACC2AA7000EA6D9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -39,6 +40,7 @@
 		6E5373402AF4DF73007ECCB6 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		6E590B3B2ADD71D100010257 /* VerticalContactTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalContactTableView.swift; sourceTree = "<group>"; };
 		6E590B3E2ADD772D00010257 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
+		6E6DB4142B18CB2300511EF5 /* ErrorSeacrhView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorSeacrhView.swift; sourceTree = "<group>"; };
 		6E98D7B32AD6DAD500F36017 /* HorizontalMenuCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalMenuCollectionView.swift; sourceTree = "<group>"; };
 		6E98D7B72AD6EBE300F36017 /* CustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
 		6E9CBBEA2ACD716700B2629D /* ContactData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactData.swift; sourceTree = "<group>"; };
@@ -138,7 +140,8 @@
 		6E9CBBE92ACD713F00B2629D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				6E0065F52AFB99F900803BD7 /* ErrorView.swift */,
+				6E0065F52AFB99F900803BD7 /* ErrorLoadView.swift */,
+				6E6DB4142B18CB2300511EF5 /* ErrorSeacrhView.swift */,
 				6E5373402AF4DF73007ECCB6 /* Errors.swift */,
 				6E98D7B32AD6DAD500F36017 /* HorizontalMenuCollectionView.swift */,
 				6E590B3B2ADD71D100010257 /* VerticalContactTableView.swift */,
@@ -321,7 +324,8 @@
 				6E98D7B82AD6EBE300F36017 /* CustomSearchBar.swift in Sources */,
 				6E3AFBFE2AD4037E004A5CAA /* DepartmentCell.swift in Sources */,
 				6E0257ED2ACC2AA7000EA6D9 /* AppDelegate.swift in Sources */,
-				6E0065F62AFB99F900803BD7 /* ErrorView.swift in Sources */,
+				6E6DB4152B18CB2300511EF5 /* ErrorSeacrhView.swift in Sources */,
+				6E0065F62AFB99F900803BD7 /* ErrorLoadView.swift in Sources */,
 				6E590B3C2ADD71D100010257 /* VerticalContactTableView.swift in Sources */,
 				6E0257EF2ACC2AA7000EA6D9 /* SceneDelegate.swift in Sources */,
 				6ED2F12E2AEA5FE300C275C4 /* SortingViewController.swift in Sources */,

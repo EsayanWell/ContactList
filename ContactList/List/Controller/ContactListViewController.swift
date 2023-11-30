@@ -8,19 +8,23 @@ import Foundation
 import UIKit
 import SnapKit
 
+// протокол для передачи данных между контроллером и customSearchBar
+protocol CustomSearchBarDelegate: AnyObject {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String)
+}
 
-
-class ContactListViewController: UIViewController, UISearchBarDelegate {
+class ContactListViewController: UIViewController {
     
     // MARK: - Constants
     private let departmentMenuCollectionView = HorizontalMenuCollectionView()
     private let departmentSeacrhBar = CustomSearchBar()
-    private let departmentContactList = UITableView()
-    private let errorReload = ErrorView()
-    private let identifier = "ContactCell"
     private var contacts = [ContactData]()
-    private var filteredContacts = [ContactData]()
     private let dataRefreshControl = UIRefreshControl()
+    private var filteredContacts = [ContactData]()
+    private let departmentContactList = VerticalContactTableView()
+    private let errorReload = ErrorLoadView()
+    private var errorSearch = ErrorSeacrhView()
+    private let identifier = "ContactCell"
     private var selectedDepartment: Departments = .all
     
     override func viewDidLoad() {
@@ -33,7 +37,12 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         fetchContactData()
         pullToRefreshSetup()
         errorReloadSetup()
+        // подписка на delegate
         departmentMenuCollectionView.filterDelegate = self
+        // устанавливаем в качестве делегата
+        departmentSeacrhBar.searchDelegate = self
+        errorSearch.isHidden = true
+        
     }
     
     // MARK: - setupViews
@@ -44,12 +53,9 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         view.addSubview(departmentSeacrhBar)
         view.addSubview(departmentContactList)
         view.addSubview(errorReload)
+        view.addSubview(errorSearch)
         
-        // MARK: - contactTableView setup
-        departmentContactList.showsVerticalScrollIndicator = false
-        departmentContactList.backgroundColor = .white
-        departmentContactList.register(ContactCell.self, forCellReuseIdentifier: identifier)
-        departmentContactList.separatorStyle = .none
+        // setup UITableView
         departmentContactList.delegate = self
         departmentContactList.dataSource = self
         
@@ -76,9 +82,14 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
             make.top.equalToSuperview().offset(303)
             make.bottom.leading.trailing.equalToSuperview()
         }
+        errorSearch.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(220)
+            make.bottom.leading.trailing.equalToSuperview()
+        }
     }
     
     // MARK: - errorReloadSetup
+    // ошибка загрузки
     private func errorReloadSetup(){
         errorReload.tryRequestButton.addTarget(self, action: #selector(updateRequest), for: .touchUpInside)
     }
@@ -88,6 +99,7 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
         fetchContactData()
     }
     
+    // MARK: - errorViewToggleVisibility
     // метод, который срабатывает в зависимости от того, спрятана ли errorView
     private func errorViewToggleVisibility(isHidden: Bool) {
         departmentSeacrhBar.isHidden = isHidden
@@ -112,10 +124,11 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
     @objc private func didPullToRefresh() {
         print("Start refresh")
         fetchContactData()
+        dataRefreshControl.endRefreshing()
     }
     
     // MARK: - Data from API
-    private func fetchContactData() {
+    func fetchContactData() {
         print("Fetching data")
         
         APIManager.shared.fetchUserData { result in
@@ -138,14 +151,15 @@ class ContactListViewController: UIViewController, UISearchBarDelegate {
     }
 }
 
-// MARK: - extensions for VerticalContactTableView
-extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate {
+// MARK: - extensions for VerticalContactTableView and DepartmentSeacrhBar
+extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate, CustomSearchBarDelegate {
     
     // функция для отображения количества строк на экране
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredContacts.count
     }
     
+    // настройка ячейки
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ContactCell
         let contact = filteredContacts[indexPath.row]
@@ -153,7 +167,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         return cell
     }
     
-    // MARK: - filtered data
+    // MARK: - filtered data delegate
     func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
         
         selectedDepartment = selectedData
@@ -165,14 +179,34 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             filteredContacts = contacts.filter { $0.department == selectedDepartment }
             print("Выбран фильтр \(selectedDepartment)")
         }
-
-        if filteredContacts.isEmpty {
+        
+        if  filteredContacts.isEmpty {
             departmentContactList.isHidden = true
             print("Нет данных по выбранному фильтру")
         } else {
             departmentContactList.reloadData()
             departmentContactList.isHidden = false
             print("Данные по выбранному фильтру есть")
+            errorSearch.isHidden = true
         }
     }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        filteredContacts = contacts.filter { contact in
+            // Проверка на соответствие поисковому тексту
+            return contact.firstName.contains(searchText) ||
+            contact.lastName.contains(searchText) ||
+            contact.userTag.contains(searchText) ||
+            contact.phone.contains(searchText)
+        }
+        // Обновление таблицы с отфильтрованными результатами
+        departmentContactList.reloadData()
+        // проверка наличия отфильтрованных данных
+        let isSearchEmpty = departmentSeacrhBar.searchTextField.state.isEmpty
+        let isContactListEmpty = filteredContacts.isEmpty
+        //если таблица пуста или строка ввода не пустая, то показать ошибку ввода
+        errorSearch.isHidden = isContactListEmpty || !isSearchEmpty ? false : true
+    }
 }
+

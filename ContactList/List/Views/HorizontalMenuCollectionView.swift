@@ -45,10 +45,6 @@ class HorizontalMenuCollectionView: UICollectionView {
         self.backgroundColor = .white
         self.register(DepartmentCell.self, forCellWithReuseIdentifier: identifier)
         self.showsHorizontalScrollIndicator = false
-        // Выбираем индекс ячейки по умолчанию (например, первая ячейка)
-        // let defaultIndexPath = IndexPath(item: 0, section: 0)
-        // Выбираем ячейку по умолчанию
-         self.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .centeredHorizontally)
     }
     
     // функция с установкой подписки на delegates
@@ -97,7 +93,7 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
             previousCell.departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
             previousCell.selectedCell.isHidden = true
         }
-        // Установить выбранной ячейке индекс и обновите её
+        // Установить выбранной ячейке индекс и обновить её
         selectedIndexPath = indexPath
         collectionView.reloadItems(at: [indexPath])
         // метод для выравнивания выбранной ячейки

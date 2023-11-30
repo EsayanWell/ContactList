@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 
 class CustomSearchBar: UISearchBar {
+    // добавляем свойство делегата типа CustomSearchBarDelegate в CustomSearchBar
+    weak var searchDelegate: CustomSearchBarDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -56,8 +58,15 @@ class CustomSearchBar: UISearchBar {
     }
 }
 
-// MARK: - Extension for CustomSearchBar
 extension CustomSearchBar: UISearchBarDelegate {
+    // MARK: - UISearchBarDelegate
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchDelegate?.searchBar(searchBar, textDidChange: searchText)
+        // если не вставить сюда, то при повторном использовании строки не появляются
+        self.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)
+        self.showsCancelButton = true
+    }
     
     // функция, реагирующая на начало ввода данных
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -82,11 +91,5 @@ extension CustomSearchBar: UISearchBarDelegate {
         self.setImage(UIImage(named: "searchLight"), for: .search, state: .normal)
         self.showsBookmarkButton = true
         self.placeholder = "Введи имя, тег, почту ..."
-    }
-    
-    // функция, которая запускается при изменении текста
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        self.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)
-        self.showsCancelButton = true
     }
 }
