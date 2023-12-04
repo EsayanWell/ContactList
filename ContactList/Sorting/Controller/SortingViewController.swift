@@ -11,39 +11,55 @@ import SnapKit
 
 class SortingViewController: UIViewController {
     // создание радиокнопки
-    private let sortSegmentControl = UISegmentedControl(items: ["По алфавиту", "По дню рождения"])
+    private let alphabeticallySorting = RadioButtonView()
+    private let byBirthdaySorting = RadioButtonView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        segmentControllSetup()
-        setConstraits()
+        title = "Сортировка"
+        // меняем цвет текста заголовка
+        alphabeticallySortingSetup()
+        byBirthdaySortingSetup()
+        setConstraints()
+        view.addSubview(alphabeticallySorting)
+        view.addSubview(byBirthdaySorting)
     }
     
     // segmentControl setup
-    func segmentControllSetup() {
-        sortSegmentControl.selectedSegmentIndex = 0
-        view.addSubview(sortSegmentControl)
-        sortSegmentControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
-        
+    func alphabeticallySortingSetup() {
+        alphabeticallySorting.descriptionLabel.text = "По алфавиту"
+        //alphabeticallySorting.selectButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
     }
     
-    @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
-        // Получите индекс выбранной радиокнопки
-        let selectedIndex = sender.selectedSegmentIndex
-        // Здесь можно выполнить действия в зависимости от выбранной радиокнопки
-        // Например:
-        if selectedIndex == 0 {
-            // Выбрана первая радиокнопка
-        } else if selectedIndex == 1 {
-            // Выбрана вторая радиокнопка
-        } else if selectedIndex == 2 {
-            // Выбрана третья радиокнопка
+    // segmentControl setup
+    func byBirthdaySortingSetup() {
+        byBirthdaySorting.descriptionLabel.text = "По дню рождения"
+        //byBirthdaySorting.selectButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+    }
+    
+//    @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
+//        // Получите индекс выбранной радиокнопки
+//        let selectedIndex = sender.selectedSegmentIndex
+//        // Здесь можно выполнить действия в зависимости от выбранной радиокнопки
+//        // Например:
+//        if selectedIndex == 0 {
+//            // Выбрана первая радиокнопка
+//        } else if selectedIndex == 1 {
+//            // Выбрана вторая радиокнопка
+//        } else if selectedIndex == 2 {
+//            // Выбрана третья радиокнопка
+//        }
+//    }
+    
+    func setConstraints() {
+        alphabeticallySorting.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalToSuperview().offset(24)
+            make.height.equalTo(60)
         }
-    }
-    
-    func setConstraits() {
-        sortSegmentControl.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        byBirthdaySorting.snp.makeConstraints { make in
+            make.top.equalTo(alphabeticallySorting.snp.bottom)
+            make.leading.trailing.equalToSuperview().offset(24)
         }
     }
 }

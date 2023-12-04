@@ -55,6 +55,9 @@ class CustomSearchBar: UISearchBar {
             .font: UIFont.systemFont(ofSize: 16)]
         // настройка кнопки отмена
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelButtonAttributes, for: .normal)
+        
+        // настройка кнопки bookMark
+        
     }
 }
 
@@ -62,6 +65,7 @@ extension CustomSearchBar: UISearchBarDelegate {
     // MARK: - UISearchBarDelegate
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // вызов делегата 
         searchDelegate?.searchBar(searchBar, textDidChange: searchText)
         // если не вставить сюда, то при повторном использовании строки не появляются
         self.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)
@@ -91,5 +95,10 @@ extension CustomSearchBar: UISearchBarDelegate {
         self.setImage(UIImage(named: "searchLight"), for: .search, state: .normal)
         self.showsBookmarkButton = true
         self.placeholder = "Введи имя, тег, почту ..."
+    }
+    
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        // вызов делегата
+        searchDelegate?.searchBarBookmarkButtonClicked(searchBar)
     }
 }

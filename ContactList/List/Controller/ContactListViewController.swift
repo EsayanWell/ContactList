@@ -11,6 +11,7 @@ import SnapKit
 // протокол для передачи данных между контроллером и customSearchBar
 protocol CustomSearchBarDelegate: AnyObject {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String)
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar)
 }
 
 class ContactListViewController: UIViewController {
@@ -23,7 +24,7 @@ class ContactListViewController: UIViewController {
     private var filteredContacts = [ContactData]()
     private let departmentContactList = VerticalContactTableView()
     private let errorReload = ErrorLoadView()
-    private var errorSearch = ErrorSeacrhView()
+    private var errorSearch = ErrorSearchView()
     private let identifier = "ContactCell"
     private var selectedDepartment: Departments = .all
     
@@ -59,7 +60,8 @@ class ContactListViewController: UIViewController {
         departmentContactList.delegate = self
         departmentContactList.dataSource = self
         
-        // MARK: - make constraits
+        
+        // MARK: - make constraints
         departmentSearchBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.equalToSuperview().offset(8)
@@ -128,7 +130,7 @@ class ContactListViewController: UIViewController {
     }
     
     // MARK: - Data from API
-    func fetchContactData() {
+    private func fetchContactData() {
         print("Fetching data")
         
         APIManager.shared.fetchUserData { result in
@@ -191,6 +193,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         }
     }
     
+    // MARK: - contact filtering
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         filteredContacts = contacts.filter { contact in
@@ -207,6 +210,20 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         let isContactListEmpty = filteredContacts.isEmpty
         //если таблица пуста или строка ввода не пустая, то показать ошибку ввода
         errorSearch.isHidden = isContactListEmpty || !isSearchEmpty ? false : true
+    }
+    
+    // MARK: - searchBarBookmarkButtonClicked
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        // Открываем bottom sheet
+        let vc = SortingViewController()
+        let navVC = UINavigationController(rootViewController: vc)
+        
+        if let sheet = navVC.sheetPresentationController {
+            // размеры
+            sheet.detents = [.medium(), .large()]
+        }
+        navigationController?.present(navVC, animated: true)
+        print ("BookMark is clicked")
     }
 }
 
