@@ -17,7 +17,7 @@ class ContactListViewController: UIViewController {
     
     // MARK: - Constants
     private let departmentMenuCollectionView = HorizontalMenuCollectionView()
-    private let departmentSeacrhBar = CustomSearchBar()
+    private let departmentSearchBar = CustomSearchBar()
     private var contacts = [ContactData]()
     private let dataRefreshControl = UIRefreshControl()
     private var filteredContacts = [ContactData]()
@@ -40,7 +40,7 @@ class ContactListViewController: UIViewController {
         // подписка на delegate
         departmentMenuCollectionView.filterDelegate = self
         // устанавливаем в качестве делегата
-        departmentSeacrhBar.searchDelegate = self
+        departmentSearchBar.searchDelegate = self
         errorSearch.isHidden = true
         
     }
@@ -50,7 +50,7 @@ class ContactListViewController: UIViewController {
         view.backgroundColor = .white
         // addSubviews
         view.addSubview(departmentMenuCollectionView)
-        view.addSubview(departmentSeacrhBar)
+        view.addSubview(departmentSearchBar)
         view.addSubview(departmentContactList)
         view.addSubview(errorReload)
         view.addSubview(errorSearch)
@@ -60,14 +60,14 @@ class ContactListViewController: UIViewController {
         departmentContactList.dataSource = self
         
         // MARK: - make constraits
-        departmentSeacrhBar.snp.makeConstraints { make in
+        departmentSearchBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.equalToSuperview().offset(8)
             make.trailing.equalToSuperview().offset(-16)
             make.height.equalTo(40)
         }
         departmentMenuCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(departmentSeacrhBar.snp.bottom).offset(8)
+            make.top.equalTo(departmentSearchBar.snp.bottom).offset(8)
             make.leading.equalToSuperview().offset(12)
             make.trailing.equalToSuperview()
             make.height.equalTo(36)
@@ -102,7 +102,7 @@ class ContactListViewController: UIViewController {
     // MARK: - errorViewToggleVisibility
     // метод, который срабатывает в зависимости от того, спрятана ли errorView
     private func errorViewToggleVisibility(isHidden: Bool) {
-        departmentSeacrhBar.isHidden = isHidden
+        departmentSearchBar.isHidden = isHidden
         departmentMenuCollectionView.isHidden = isHidden
         departmentContactList.isHidden = isHidden
         
@@ -151,7 +151,7 @@ class ContactListViewController: UIViewController {
     }
 }
 
-// MARK: - extensions for VerticalContactTableView and DepartmentSeacrhBar
+// MARK: - extensions for VerticalContactTableView and DepartmentSearchBar
 extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate, CustomSearchBarDelegate {
     
     // функция для отображения количества строк на экране
@@ -203,7 +203,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         // Обновление таблицы с отфильтрованными результатами
         departmentContactList.reloadData()
         // проверка наличия отфильтрованных данных
-        let isSearchEmpty = departmentSeacrhBar.searchTextField.state.isEmpty
+        let isSearchEmpty = departmentSearchBar.searchTextField.state.isEmpty
         let isContactListEmpty = filteredContacts.isEmpty
         //если таблица пуста или строка ввода не пустая, то показать ошибку ввода
         errorSearch.isHidden = isContactListEmpty || !isSearchEmpty ? false : true

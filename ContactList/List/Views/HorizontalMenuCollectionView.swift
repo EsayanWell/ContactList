@@ -85,7 +85,6 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
     
     // Настройка выбранной ячейки
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         // Снять выделение с предыдущей выбранной ячейки, если она существует
         if let previousSelectedIndexPath = selectedIndexPath,
            let previousCell = collectionView.cellForItem(at: previousSelectedIndexPath) as? DepartmentCell
