@@ -40,10 +40,8 @@ class ContactListViewController: UIViewController {
         errorReloadSetup()
         // подписка на delegate
         departmentMenuCollectionView.filterDelegate = self
-        // устанавливаем в качестве делегата
         departmentSearchBar.searchDelegate = self
         errorSearch.isHidden = true
-        
     }
     
     // MARK: - setupViews
@@ -195,7 +193,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // MARK: - contact filtering
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
         filteredContacts = contacts.filter { contact in
             // Проверка на соответствие поисковому тексту
             return contact.firstName.contains(searchText) ||
