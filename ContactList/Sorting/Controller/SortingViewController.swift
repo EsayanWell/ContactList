@@ -10,40 +10,91 @@ import UIKit
 import SnapKit
 
 class SortingViewController: UIViewController {
-    // создание радиокнопки
-    private let sortSegmentControl = UISegmentedControl(items: ["По алфавиту", "По дню рождения"])
+    // MARK: - constants
+    private let alphabeticallySorting = RadioButtonView()
+    private let byBirthdaySorting = RadioButtonView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        segmentControllSetup()
-        setConstraits()
+        view.backgroundColor = .white
+        title = "Сортировка"
+        customizeNavigationBar()
+        alphabeticallySortingSetup()
+        byBirthdaySortingSetup()
+        backButtonSetup()
+        setConstraints()
     }
     
-    // segmentControl setup
-    func segmentControllSetup() {
-        sortSegmentControl.selectedSegmentIndex = 0
-        view.addSubview(sortSegmentControl)
-        sortSegmentControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
-        
+    // MARK: - Customize NavigationBar
+    func customizeNavigationBar() {
+        // Создаем объект шрифта
+        let customFont = UIFont(name: "Inter-SemiBold", size: 20) ?? UIFont.systemFont(ofSize: 20.0, weight: .medium)
+        // Создаем атрибуты текста с заданным шрифтом
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            .font: customFont,
+            .foregroundColor: UIColor.black
+        ]
+        // Устанавливаем атрибуты текста для заголовка навигационной панели
+        navigationController?.navigationBar.titleTextAttributes = textAttributes
     }
     
-    @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
-        // Получите индекс выбранной радиокнопки
-        let selectedIndex = sender.selectedSegmentIndex
-        // Здесь можно выполнить действия в зависимости от выбранной радиокнопки
-        // Например:
-        if selectedIndex == 0 {
-            // Выбрана первая радиокнопка
-        } else if selectedIndex == 1 {
-            // Выбрана вторая радиокнопка
-        } else if selectedIndex == 2 {
-            // Выбрана третья радиокнопка
+    // MARK: - alphabeticallySorting setup
+    func alphabeticallySortingSetup() {
+        view.addSubview(alphabeticallySorting)
+        alphabeticallySorting.descriptionLabel.text = "По алфавиту"
+        alphabeticallySorting.selectButton.isHighlighted = true
+        //alphabeticallySorting.selectButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+    }
+    
+    // MARK: - byBirthdaySorting setup
+    func byBirthdaySortingSetup() {
+        view.addSubview(byBirthdaySorting)
+        byBirthdaySorting.descriptionLabel.text = "По дню рождения"
+        //byBirthdaySorting.selectButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+    }
+    
+    // переход с сортировки на главный экран
+    func backButtonSetup() {
+        let backButton = UIBarButtonItem(image: UIImage(named: "Arrow"),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(dismissViewController))
+        backButton.tintColor = UIColor.black
+        navigationItem.leftBarButtonItem = backButton
+    }
+    
+    // обработчик нажатия на cтрелку
+    @objc private func dismissViewController() {
+        dismiss(animated: true)
+    }
+    
+    //    @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
+    //        // Получите индекс выбранной радиокнопки
+    //        let selectedIndex = sender.selectedSegmentIndex
+    //        // Здесь можно выполнить действия в зависимости от выбранной радиокнопки
+    //        // Например:
+    //        if selectedIndex == 0 {
+    //            // Выбрана первая радиокнопка
+    //        } else if selectedIndex == 1 {
+    //            // Выбрана вторая радиокнопка
+    //        } else if selectedIndex == 2 {
+    //            // Выбрана третья радиокнопка
+    //        }
+    //    }
+    
+    // MARK: - set constraints
+    func setConstraints() {
+        alphabeticallySorting.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(68)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
+            make.height.equalTo(60)
         }
-    }
-    
-    func setConstraits() {
-        sortSegmentControl.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        byBirthdaySorting.snp.makeConstraints { make in
+            make.top.equalTo(alphabeticallySorting.snp.bottom)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
+            make.height.equalTo(60)
         }
     }
 }

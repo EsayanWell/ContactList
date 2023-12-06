@@ -22,9 +22,9 @@ class ContactCell: UITableViewCell {
         configureProfilePhoto()
         configureProfileFirstName()
         configureProfileLastName()
-        configurProfilePosition()
-        configurProfileUserTag()
-        setConstraits()
+        configureProfilePosition()
+        configureProfileUserTag()
+        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -91,7 +91,7 @@ class ContactCell: UITableViewCell {
     }
     
     // настройки надписи Department
-    func configurProfilePosition() {
+    func configureProfilePosition() {
         // цвет текста
         profilePosition.textColor = UIColor(red: 0.333, green: 0.333, blue: 0.361, alpha: 1)
         // шрифт
@@ -99,15 +99,15 @@ class ContactCell: UITableViewCell {
     }
     
     // настройки надписи Email
-    func configurProfileUserTag() {
+    func configureProfileUserTag() {
         // цвет текста
         profileUserTag.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
         // шрифт
         profileUserTag.font = UIFont(name: "Inter-Medium", size: 14)
     }
     
-    // MARK: - setConstraits
-    private func setConstraits() {
+    // MARK: - setConstraints
+    private func setConstraints() {
         profilePhoto.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(6)
             make.bottom.equalToSuperview().offset(-6)

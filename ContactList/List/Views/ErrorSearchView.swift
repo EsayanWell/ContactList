@@ -10,11 +10,11 @@ import UIKit
 import SnapKit
 
 // MARK: - create customViewController
-class ErrorSeacrhView: UIView {
+class ErrorSearchView: UIView {
     // MARK: - Constants
     private let errorImage = UIImageView()
     private let errorTitleLabel = UILabel()
-    private let errorDecriptionLabel = UILabel()
+    private let errorDescriptionLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,7 +22,7 @@ class ErrorSeacrhView: UIView {
         configureErrorImage()
         configureErrorTitleLabel()
         configureDescriptionLabel()
-        setConstraits()
+        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -32,7 +32,7 @@ class ErrorSeacrhView: UIView {
     private func setupViews() {
         addSubview(errorImage)
         addSubview(errorTitleLabel)
-        addSubview(errorDecriptionLabel)
+        addSubview(errorDescriptionLabel)
         backgroundColor = .white
     }
     
@@ -53,16 +53,16 @@ class ErrorSeacrhView: UIView {
     }
     
     private func configureDescriptionLabel() {
-        errorDecriptionLabel.text = "Попробуй скорректировать запрос"
+        errorDescriptionLabel.text = "Попробуй скорректировать запрос"
         // цвет текста
-        errorDecriptionLabel.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
+        errorDescriptionLabel.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
         // шрифт
-        errorDecriptionLabel.font = UIFont(name: "Inter-Regular", size: 16)
-        errorDecriptionLabel.textAlignment = .center
+        errorDescriptionLabel.font = UIFont(name: "Inter-Regular", size: 16)
+        errorDescriptionLabel.textAlignment = .center
     }
         
-    // MARK: - setConstraits
-    private func setConstraits() {
+    // MARK: - setConstraints
+    private func setConstraints() {
         errorImage.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.centerX.equalToSuperview()
@@ -72,7 +72,7 @@ class ErrorSeacrhView: UIView {
             make.top.equalTo(errorImage.snp.bottom).offset(8)
             make.centerX.equalToSuperview()
         }
-        errorDecriptionLabel.snp.makeConstraints { make in
+        errorDescriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(errorTitleLabel.snp.bottom).offset(12)
             make.centerX.equalToSuperview()
         }

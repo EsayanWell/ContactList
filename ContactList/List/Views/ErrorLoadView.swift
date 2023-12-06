@@ -14,7 +14,7 @@ class ErrorLoadView: UIView {
     // MARK: - Constants
     private let errorImage = UIImageView()
     private let errorTitleLabel = UILabel()
-    private let errorDecriptionLabel = UILabel()
+    private let errorDescriptionLabel = UILabel()
     let tryRequestButton = UIButton()
     
     override init(frame: CGRect) {
@@ -24,7 +24,7 @@ class ErrorLoadView: UIView {
         configureErrorTitleLabel()
         configureDescriptionLabel()
         configureRequestButton()
-        setConstraits()
+        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -34,7 +34,7 @@ class ErrorLoadView: UIView {
     private func setupViews() {
         addSubview(errorImage)
         addSubview(errorTitleLabel)
-        addSubview(errorDecriptionLabel)
+        addSubview(errorDescriptionLabel)
         addSubview(tryRequestButton)
         backgroundColor = .white
     }
@@ -56,12 +56,12 @@ class ErrorLoadView: UIView {
     }
     
     private func configureDescriptionLabel() {
-        errorDecriptionLabel.text = "Постараемся быстро починить"
+        errorDescriptionLabel.text = "Постараемся быстро починить"
         // цвет текста
-        errorDecriptionLabel.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
+        errorDescriptionLabel.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
         // шрифт
-        errorDecriptionLabel.font = UIFont(name: "Inter-Regular", size: 16)
-        errorDecriptionLabel.textAlignment = .center
+        errorDescriptionLabel.font = UIFont(name: "Inter-Regular", size: 16)
+        errorDescriptionLabel.textAlignment = .center
     }
     
     private func configureRequestButton() {
@@ -72,8 +72,8 @@ class ErrorLoadView: UIView {
         tryRequestButton.setTitleColor(UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1), for: .normal)
     }
     
-    // MARK: - setConstraits
-    private func setConstraits() {
+    // MARK: - setConstraints
+    private func setConstraints() {
         errorImage.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.centerX.equalToSuperview()
@@ -83,12 +83,12 @@ class ErrorLoadView: UIView {
             make.top.equalTo(errorImage.snp.bottom).offset(8)
             make.centerX.equalToSuperview()
         }
-        errorDecriptionLabel.snp.makeConstraints { make in
+        errorDescriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(errorTitleLabel.snp.bottom).offset(12)
             make.centerX.equalToSuperview()
         }
         tryRequestButton.snp.makeConstraints { make in
-            make.top.equalTo(errorDecriptionLabel.snp.bottom).offset(12)
+            make.top.equalTo(errorDescriptionLabel.snp.bottom).offset(12)
             make.centerX.equalToSuperview()
             make.height.equalTo(20)
             make.width.equalTo(343)

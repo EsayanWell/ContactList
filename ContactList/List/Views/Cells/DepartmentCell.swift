@@ -19,7 +19,7 @@ class DepartmentCell: UICollectionViewCell {
         setupViews()
         setupCell()
         configureDepartmentLabel()
-        setConstraits()
+        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -49,8 +49,8 @@ class DepartmentCell: UICollectionViewCell {
         departmentName.font = UIFont(name: "Inter-Medium", size: 15)
     }
     
-    // MARK: - constraits
-    func setConstraits() {
+    // MARK: - constraints
+    func setConstraints() {
         departmentName.snp.makeConstraints { make in
             make.top.trailing.equalToSuperview()
             make.leading.equalToSuperview().offset(16)
