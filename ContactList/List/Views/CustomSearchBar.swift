@@ -55,9 +55,6 @@ class CustomSearchBar: UISearchBar {
             .font: UIFont.systemFont(ofSize: 16)]
         // настройка кнопки отмена
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelButtonAttributes, for: .normal)
-        
-        // настройка кнопки bookMark
-        
     }
 }
 
