@@ -8,11 +8,11 @@ import Foundation
 import UIKit
 import SnapKit
 
-// протокол для передачи данных между контроллером и customSearchBar
-protocol CustomSearchBarDelegate: AnyObject {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String)
-    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar)
-}
+
+////протокол для передачи данных между SortingViewController и ContactListViewController
+//protocol DataSortingDelegate: AnyObject{
+//    func sortingSetup(_ sortingType: SortingType)
+//}
 
 class ContactListViewController: UIViewController {
     
@@ -41,6 +41,8 @@ class ContactListViewController: UIViewController {
         // подписка на delegate
         departmentMenuCollectionView.filterDelegate = self
         departmentSearchBar.searchDelegate = self
+        let secondVC = SortingViewController()
+        secondVC.sortingDelegate = self
         errorSearch.isHidden = true
     }
     
@@ -152,8 +154,8 @@ class ContactListViewController: UIViewController {
 }
 
 // MARK: - Extensions for VerticalContactTableView and DepartmentSearchBar
-extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate, CustomSearchBarDelegate {
-    
+extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate, CustomSearchBarDelegate, DataSortingDelegate {
+ 
     // функция для отображения количества строк на экране
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredContacts.count
@@ -214,7 +216,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         // Открываем bottom sheet
         let vc = SortingViewController()
         let navVC = UINavigationController(rootViewController: vc)
-        
         if let sheet = navVC.sheetPresentationController {
             // размеры
             sheet.detents = [.medium(), .large()]
@@ -222,5 +223,15 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         navigationController?.present(navVC, animated: true)
         print ("BookMark is clicked")
     }
+    
+    // MARK: - Sorting data
+    func sortingSetup(_ sortingType: SortingType) {
+        // сортировка по алфавиту
+        filteredContacts.sort {$0.firstName < $1.firstName}
+        departmentContactList.reloadData()
+        print("sorting data")
+    }
 }
+
+
 

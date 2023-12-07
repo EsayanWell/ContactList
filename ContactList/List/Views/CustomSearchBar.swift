@@ -8,6 +8,12 @@
 import Foundation
 import UIKit
 
+// протокол для передачи данных между контроллером и customSearchBar
+protocol CustomSearchBarDelegate: AnyObject {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String)
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar)
+}
+
 class CustomSearchBar: UISearchBar {
     // добавляем свойство делегата типа CustomSearchBarDelegate в CustomSearchBar
     weak var searchDelegate: CustomSearchBarDelegate?

@@ -9,16 +9,23 @@ import Foundation
 import UIKit
 import SnapKit
 
+// enum сортировки
+enum SortingType {
+    case alphabetically
+    case byBirthday
+}
+
+//протокол для передачи данных между SortingViewController и ContactListViewController
+protocol DataSortingDelegate: AnyObject{
+    func sortingSetup(_ sortingType: SortingType)
+}
+
 class SortingViewController: UIViewController {
     // MARK: - Constants
     private let alphabeticallySorting = RadioButtonView()
     private let byBirthdaySorting = RadioButtonView()
-    // enum сортировки
-    enum SortingType {
-        case alphabetically
-        case byBirthday
-    }
-    
+    weak var sortingDelegate: DataSortingDelegate?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -45,17 +52,26 @@ class SortingViewController: UIViewController {
     
     // MARK: - Sorting setup
     func sortingSetup(_ sortingType: SortingType) {
+        // вызов делегата
+        sortingDelegate?.sortingSetup(sortingType)
         switch sortingType {
         case .alphabetically:
             view.addSubview(alphabeticallySorting)
             alphabeticallySorting.descriptionLabel.text = "По алфавиту"
             alphabeticallySorting.selectButton.isHighlighted = true
-            //alphabeticallySorting.selectButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+            // сортировка по алфавиту
+           // filteredContacts.sort {$0 < $1}
+            alphabeticallySorting.selectButton.addTarget(self, action: #selector(alphabeticallyButtonTapped), for: .touchUpInside)
         case .byBirthday:
             view.addSubview(byBirthdaySorting)
             byBirthdaySorting.descriptionLabel.text = "По дню рождения"
             //byBirthdaySorting.selectButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
         }
+    }
+    
+    // MARK: - Alphabetically button tapped
+    @objc func alphabeticallyButtonTapped() {
+        print("alphabeticallyButton tapped")
     }
     
     // MARK: - backButtonSetup

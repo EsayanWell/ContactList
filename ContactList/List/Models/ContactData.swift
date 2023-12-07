@@ -9,7 +9,11 @@ import Foundation
 import UIKit
 
 // MARK: - Item
-struct ContactData: Codable {
+struct ContactData: Codable, Comparable {
+    static func < (lhs: ContactData, rhs: ContactData) -> Bool {
+        return lhs.firstName == rhs.firstName
+    }
+    
     let id: String
     let avatarURL: String
     let firstName, lastName, userTag: String
