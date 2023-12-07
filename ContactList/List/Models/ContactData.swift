@@ -15,7 +15,7 @@ struct ContactData: Codable {
     let firstName, lastName, userTag: String
     let department: Departments
     let position, birthday, phone: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case avatarURL = "avatarUrl"
@@ -44,7 +44,7 @@ enum Departments: String, CodingKey, Codable, CaseIterable {
     case backend
     case support
     case analytics
-
+    
     var title: String {
         switch self {
         case .all:

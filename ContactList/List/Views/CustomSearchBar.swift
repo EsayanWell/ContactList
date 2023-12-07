@@ -60,7 +60,7 @@ class CustomSearchBar: UISearchBar {
 
 extension CustomSearchBar: UISearchBarDelegate {
     // MARK: - UISearchBarDelegate
-    
+    // функция, реагирующая на изменение текста в поисковой строке
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         // вызов делегата 
         searchDelegate?.searchBar(searchBar, textDidChange: searchText)
@@ -94,6 +94,7 @@ extension CustomSearchBar: UISearchBarDelegate {
         self.placeholder = "Введи имя, тег, почту ..."
     }
     
+    // функция, реагирующая на нажатие кнопки "Bookmark"
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
         // вызов делегата
         searchDelegate?.searchBarBookmarkButtonClicked(searchBar)

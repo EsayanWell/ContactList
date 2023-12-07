@@ -59,7 +59,7 @@ class ContactListViewController: UIViewController {
         departmentContactList.dataSource = self
         
         
-        // MARK: - make constraints
+        // MARK: - Set constraints
         departmentSearchBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.equalToSuperview().offset(8)
@@ -88,7 +88,7 @@ class ContactListViewController: UIViewController {
         }
     }
     
-    // MARK: - errorReloadSetup
+    // MARK: - Error reload Setup
     // ошибка загрузки
     private func errorReloadSetup(){
         errorReload.tryRequestButton.addTarget(self, action: #selector(updateRequest), for: .touchUpInside)
@@ -99,7 +99,7 @@ class ContactListViewController: UIViewController {
         fetchContactData()
     }
     
-    // MARK: - errorViewToggleVisibility
+    // MARK: - Error View visibility
     // метод, который срабатывает в зависимости от того, спрятана ли errorView
     private func errorViewToggleVisibility(isHidden: Bool) {
         departmentSearchBar.isHidden = isHidden
@@ -113,7 +113,7 @@ class ContactListViewController: UIViewController {
         }
     }
     
-    // MARK: - setup pull to refresh
+    // MARK: - Setup pull to refresh
     private func pullToRefreshSetup() {
         dataRefreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
         departmentContactList.addSubview(dataRefreshControl)
@@ -151,7 +151,7 @@ class ContactListViewController: UIViewController {
     }
 }
 
-// MARK: - extensions for VerticalContactTableView and DepartmentSearchBar
+// MARK: - Extensions for VerticalContactTableView and DepartmentSearchBar
 extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate, CustomSearchBarDelegate {
     
     // функция для отображения количества строк на экране
@@ -167,7 +167,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         return cell
     }
     
-    // MARK: - filtered data delegate
+    // MARK: - Filtered data delegate
     func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
         
         selectedDepartment = selectedData
@@ -191,7 +191,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         }
     }
     
-    // MARK: - contact filtering
+    // MARK: - Contact filtering
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredContacts = contacts.filter { contact in
             // Проверка на соответствие поисковому тексту

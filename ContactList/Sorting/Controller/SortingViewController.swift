@@ -10,17 +10,22 @@ import UIKit
 import SnapKit
 
 class SortingViewController: UIViewController {
-    // MARK: - constants
+    // MARK: - Constants
     private let alphabeticallySorting = RadioButtonView()
     private let byBirthdaySorting = RadioButtonView()
+    // enum сортировки
+    enum SortingType {
+        case alphabetically
+        case byBirthday
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         title = "Сортировка"
         customizeNavigationBar()
-        alphabeticallySortingSetup()
-        byBirthdaySortingSetup()
+        sortingSetup(.alphabetically)
+        sortingSetup(.byBirthday)
         backButtonSetup()
         setConstraints()
     }
@@ -38,22 +43,22 @@ class SortingViewController: UIViewController {
         navigationController?.navigationBar.titleTextAttributes = textAttributes
     }
     
-    // MARK: - alphabeticallySorting setup
-    func alphabeticallySortingSetup() {
-        view.addSubview(alphabeticallySorting)
-        alphabeticallySorting.descriptionLabel.text = "По алфавиту"
-        alphabeticallySorting.selectButton.isHighlighted = true
-        //alphabeticallySorting.selectButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+    // MARK: - Sorting setup
+    func sortingSetup(_ sortingType: SortingType) {
+        switch sortingType {
+        case .alphabetically:
+            view.addSubview(alphabeticallySorting)
+            alphabeticallySorting.descriptionLabel.text = "По алфавиту"
+            alphabeticallySorting.selectButton.isHighlighted = true
+            //alphabeticallySorting.selectButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+        case .byBirthday:
+            view.addSubview(byBirthdaySorting)
+            byBirthdaySorting.descriptionLabel.text = "По дню рождения"
+            //byBirthdaySorting.selectButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+        }
     }
     
-    // MARK: - byBirthdaySorting setup
-    func byBirthdaySortingSetup() {
-        view.addSubview(byBirthdaySorting)
-        byBirthdaySorting.descriptionLabel.text = "По дню рождения"
-        //byBirthdaySorting.selectButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
-    }
-    
-    // переход с сортировки на главный экран
+    // MARK: - backButtonSetup
     func backButtonSetup() {
         let backButton = UIBarButtonItem(image: UIImage(named: "Arrow"),
                                          style: .plain,
@@ -68,21 +73,7 @@ class SortingViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    //    @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
-    //        // Получите индекс выбранной радиокнопки
-    //        let selectedIndex = sender.selectedSegmentIndex
-    //        // Здесь можно выполнить действия в зависимости от выбранной радиокнопки
-    //        // Например:
-    //        if selectedIndex == 0 {
-    //            // Выбрана первая радиокнопка
-    //        } else if selectedIndex == 1 {
-    //            // Выбрана вторая радиокнопка
-    //        } else if selectedIndex == 2 {
-    //            // Выбрана третья радиокнопка
-    //        }
-    //    }
-    
-    // MARK: - set constraints
+    // MARK: - Set constraints
     func setConstraints() {
         alphabeticallySorting.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(68)
