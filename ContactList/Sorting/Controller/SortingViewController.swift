@@ -17,13 +17,14 @@ enum SortingType {
 
 //протокол для передачи данных между SortingViewController и ContactListViewController
 protocol DataSortingDelegate: AnyObject{
-    func sortingSetup(_ sortingType: SortingType)
+    func applySorting(_ sortingType: SortingType)
 }
 
 class SortingViewController: UIViewController {
     // MARK: - Constants
     private let alphabeticallySorting = RadioButtonView()
     private let byBirthdaySorting = RadioButtonView()
+    // добавляем свойство делегата типа DataSortingDelegate в SortingViewController
     weak var sortingDelegate: DataSortingDelegate?
 
     override func viewDidLoad() {
@@ -31,8 +32,8 @@ class SortingViewController: UIViewController {
         view.backgroundColor = .white
         title = "Сортировка"
         customizeNavigationBar()
-        sortingSetup(.alphabetically)
-        sortingSetup(.byBirthday)
+        applySorting(.alphabetically)
+        applySorting(.byBirthday)
         backButtonSetup()
         setConstraints()
     }
@@ -51,27 +52,29 @@ class SortingViewController: UIViewController {
     }
     
     // MARK: - Sorting setup
-    func sortingSetup(_ sortingType: SortingType) {
+    func applySorting(_ sortingType: SortingType) {
         // вызов делегата
-        sortingDelegate?.sortingSetup(sortingType)
+        sortingDelegate?.applySorting(sortingType)
+        let sortingView: RadioButtonView
+        let description: String
+        
         switch sortingType {
         case .alphabetically:
-            view.addSubview(alphabeticallySorting)
-            alphabeticallySorting.descriptionLabel.text = "По алфавиту"
-            alphabeticallySorting.selectButton.isHighlighted = true
-            // сортировка по алфавиту
-           // filteredContacts.sort {$0 < $1}
-            alphabeticallySorting.selectButton.addTarget(self, action: #selector(alphabeticallyButtonTapped), for: .touchUpInside)
+            sortingView = alphabeticallySorting
+            description = "По алфавиту"
+            sortingView.selectButton.isHighlighted = true
         case .byBirthday:
-            view.addSubview(byBirthdaySorting)
-            byBirthdaySorting.descriptionLabel.text = "По дню рождения"
-            //byBirthdaySorting.selectButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+            sortingView = byBirthdaySorting
+            description = "По дню рождения"
         }
+        view.addSubview(sortingView)
+        sortingView.descriptionLabel.text = description
+        sortingView.selectButton.addTarget(self, action: #selector(sortingButtonTapped), for: .touchUpInside)
     }
     
-    // MARK: - Alphabetically button tapped
-    @objc func alphabeticallyButtonTapped() {
-        print("alphabeticallyButton tapped")
+    // MARK: - sorting button tapped
+    @objc func sortingButtonTapped() {
+        print("sortingButton tapped")
     }
     
     // MARK: - backButtonSetup

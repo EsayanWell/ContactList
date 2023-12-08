@@ -27,6 +27,7 @@ class ContactListViewController: UIViewController {
     private var errorSearch = ErrorSearchView()
     private let identifier = "ContactCell"
     private var selectedDepartment: Departments = .all
+    private let secondVC = SortingViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +42,6 @@ class ContactListViewController: UIViewController {
         // подписка на delegate
         departmentMenuCollectionView.filterDelegate = self
         departmentSearchBar.searchDelegate = self
-        let secondVC = SortingViewController()
         secondVC.sortingDelegate = self
         errorSearch.isHidden = true
     }
@@ -155,7 +155,7 @@ class ContactListViewController: UIViewController {
 
 // MARK: - Extensions for VerticalContactTableView and DepartmentSearchBar
 extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate, CustomSearchBarDelegate, DataSortingDelegate {
- 
+    
     // функция для отображения количества строк на экране
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredContacts.count
@@ -225,13 +225,10 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     }
     
     // MARK: - Sorting data
-    func sortingSetup(_ sortingType: SortingType) {
+    func applySorting(_ sortingType: SortingType) {
         // сортировка по алфавиту
         filteredContacts.sort {$0.firstName < $1.firstName}
         departmentContactList.reloadData()
         print("sorting data")
     }
 }
-
-
-
