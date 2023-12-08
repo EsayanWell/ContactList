@@ -207,7 +207,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         errorSearch.isHidden = isContactListEmpty || !isSearchEmpty ? false : true
     }
     
-    // MARK: - searchBarBookmarkButtonClicked
+    // MARK: - searchBarBookmarkButtonClicked (переход на SortingViewController)
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
         // Открываем bottom sheet
         let navVC = UINavigationController(rootViewController: secondVC)
@@ -221,7 +221,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // MARK: - Sorting data
     func applySorting(_ sortingType: SortingType) {
-        // сортировка по алфавиту
         filteredContacts.sort {$0.firstName < $1.firstName}
         departmentContactList.reloadData()
         print("sorting data")
