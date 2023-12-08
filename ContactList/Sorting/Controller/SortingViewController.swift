@@ -26,7 +26,7 @@ class SortingViewController: UIViewController {
     private let byBirthdaySorting = RadioButtonView()
     // добавляем свойство делегата типа DataSortingDelegate в SortingViewController
     weak var sortingDelegate: DataSortingDelegate?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white

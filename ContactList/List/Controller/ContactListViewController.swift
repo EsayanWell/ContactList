@@ -8,12 +8,6 @@ import Foundation
 import UIKit
 import SnapKit
 
-
-////протокол для передачи данных между SortingViewController и ContactListViewController
-//protocol DataSortingDelegate: AnyObject{
-//    func sortingSetup(_ sortingType: SortingType)
-//}
-
 class ContactListViewController: UIViewController {
     
     // MARK: - Constants
@@ -176,9 +170,11 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         // фильтрация данных, отображаемых на экране
         if selectedDepartment == .all {
             filteredContacts = contacts
+            filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр Все")
         } else {
             filteredContacts = contacts.filter { $0.department == selectedDepartment }
+            filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр \(selectedDepartment)")
         }
         
@@ -214,8 +210,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     // MARK: - searchBarBookmarkButtonClicked
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
         // Открываем bottom sheet
-        let vc = SortingViewController()
-        let navVC = UINavigationController(rootViewController: vc)
+        let navVC = UINavigationController(rootViewController: secondVC)
         if let sheet = navVC.sheetPresentationController {
             // размеры
             sheet.detents = [.medium(), .large()]
