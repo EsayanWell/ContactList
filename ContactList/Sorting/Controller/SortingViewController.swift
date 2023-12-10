@@ -9,18 +9,31 @@ import Foundation
 import UIKit
 import SnapKit
 
+// enum сортировки
+enum SortingType {
+    case alphabetically
+    case byBirthday
+}
+
+//протокол для передачи данных между SortingViewController и ContactListViewController
+protocol DataSortingDelegate: AnyObject{
+    func applySorting(_ sortingType: SortingType)
+}
+
 class SortingViewController: UIViewController {
-    // MARK: - constants
+    // MARK: - Constants
     private let alphabeticallySorting = RadioButtonView()
     private let byBirthdaySorting = RadioButtonView()
+    // добавляем свойство делегата типа DataSortingDelegate в SortingViewController
+    weak var sortingDelegate: DataSortingDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         title = "Сортировка"
         customizeNavigationBar()
-        alphabeticallySortingSetup()
-        byBirthdaySortingSetup()
+        applySorting(.alphabetically)
+        applySorting(.byBirthday)
         backButtonSetup()
         setConstraints()
     }
@@ -38,22 +51,33 @@ class SortingViewController: UIViewController {
         navigationController?.navigationBar.titleTextAttributes = textAttributes
     }
     
-    // MARK: - alphabeticallySorting setup
-    func alphabeticallySortingSetup() {
-        view.addSubview(alphabeticallySorting)
-        alphabeticallySorting.descriptionLabel.text = "По алфавиту"
-        alphabeticallySorting.selectButton.isHighlighted = true
-        //alphabeticallySorting.selectButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+    // MARK: - Sorting setup
+    func applySorting(_ sortingType: SortingType) {
+        // вызов делегата
+        sortingDelegate?.applySorting(sortingType)
+        let sortingView: RadioButtonView
+        let description: String
+        
+        switch sortingType {
+        case .alphabetically:
+            sortingView = alphabeticallySorting
+            description = "По алфавиту"
+            sortingView.selectButton.isHighlighted = true
+        case .byBirthday:
+            sortingView = byBirthdaySorting
+            description = "По дню рождения"
+        }
+        view.addSubview(sortingView)
+        sortingView.descriptionLabel.text = description
+        sortingView.selectButton.addTarget(self, action: #selector(sortingButtonTapped), for: .touchUpInside)
     }
     
-    // MARK: - byBirthdaySorting setup
-    func byBirthdaySortingSetup() {
-        view.addSubview(byBirthdaySorting)
-        byBirthdaySorting.descriptionLabel.text = "По дню рождения"
-        //byBirthdaySorting.selectButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+    // MARK: - sorting button tapped
+    @objc func sortingButtonTapped() {
+        print("sortingButton tapped")
     }
     
-    // переход с сортировки на главный экран
+    // MARK: - backButtonSetup
     func backButtonSetup() {
         let backButton = UIBarButtonItem(image: UIImage(named: "Arrow"),
                                          style: .plain,
@@ -68,21 +92,7 @@ class SortingViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    //    @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
-    //        // Получите индекс выбранной радиокнопки
-    //        let selectedIndex = sender.selectedSegmentIndex
-    //        // Здесь можно выполнить действия в зависимости от выбранной радиокнопки
-    //        // Например:
-    //        if selectedIndex == 0 {
-    //            // Выбрана первая радиокнопка
-    //        } else if selectedIndex == 1 {
-    //            // Выбрана вторая радиокнопка
-    //        } else if selectedIndex == 2 {
-    //            // Выбрана третья радиокнопка
-    //        }
-    //    }
-    
-    // MARK: - set constraints
+    // MARK: - Set constraints
     func setConstraints() {
         alphabeticallySorting.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(68)

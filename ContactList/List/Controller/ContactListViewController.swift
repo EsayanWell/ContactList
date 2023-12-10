@@ -8,12 +8,6 @@ import Foundation
 import UIKit
 import SnapKit
 
-// протокол для передачи данных между контроллером и customSearchBar
-protocol CustomSearchBarDelegate: AnyObject {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String)
-    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar)
-}
-
 class ContactListViewController: UIViewController {
     
     // MARK: - Constants
@@ -27,6 +21,7 @@ class ContactListViewController: UIViewController {
     private var errorSearch = ErrorSearchView()
     private let identifier = "ContactCell"
     private var selectedDepartment: Departments = .all
+    //private let secondVC = SortingViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +36,7 @@ class ContactListViewController: UIViewController {
         // подписка на delegate
         departmentMenuCollectionView.filterDelegate = self
         departmentSearchBar.searchDelegate = self
+//        secondVC.sortingDelegate = self
         errorSearch.isHidden = true
     }
     
@@ -59,7 +55,7 @@ class ContactListViewController: UIViewController {
         departmentContactList.dataSource = self
         
         
-        // MARK: - make constraints
+        // MARK: - Set constraints
         departmentSearchBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.equalToSuperview().offset(8)
@@ -88,7 +84,7 @@ class ContactListViewController: UIViewController {
         }
     }
     
-    // MARK: - errorReloadSetup
+    // MARK: - Error reload Setup
     // ошибка загрузки
     private func errorReloadSetup(){
         errorReload.tryRequestButton.addTarget(self, action: #selector(updateRequest), for: .touchUpInside)
@@ -99,7 +95,7 @@ class ContactListViewController: UIViewController {
         fetchContactData()
     }
     
-    // MARK: - errorViewToggleVisibility
+    // MARK: - Error View visibility
     // метод, который срабатывает в зависимости от того, спрятана ли errorView
     private func errorViewToggleVisibility(isHidden: Bool) {
         departmentSearchBar.isHidden = isHidden
@@ -113,7 +109,7 @@ class ContactListViewController: UIViewController {
         }
     }
     
-    // MARK: - setup pull to refresh
+    // MARK: - Setup pull to refresh
     private func pullToRefreshSetup() {
         dataRefreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
         departmentContactList.addSubview(dataRefreshControl)
@@ -151,8 +147,8 @@ class ContactListViewController: UIViewController {
     }
 }
 
-// MARK: - extensions for VerticalContactTableView and DepartmentSearchBar
-extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate, CustomSearchBarDelegate {
+// MARK: - Extensions for VerticalContactTableView and DepartmentSearchBar
+extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate, CustomSearchBarDelegate, DataSortingDelegate {
     
     // функция для отображения количества строк на экране
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -167,16 +163,18 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         return cell
     }
     
-    // MARK: - filtered data delegate
+    // MARK: - Filtered data delegate
     func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
         
         selectedDepartment = selectedData
         // фильтрация данных, отображаемых на экране
         if selectedDepartment == .all {
             filteredContacts = contacts
+            filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр Все")
         } else {
             filteredContacts = contacts.filter { $0.department == selectedDepartment }
+            filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр \(selectedDepartment)")
         }
         
@@ -191,7 +189,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         }
     }
     
-    // MARK: - contact filtering
+    // MARK: - Contact filtering
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredContacts = contacts.filter { contact in
             // Проверка на соответствие поисковому тексту
@@ -209,12 +207,12 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         errorSearch.isHidden = isContactListEmpty || !isSearchEmpty ? false : true
     }
     
-    // MARK: - searchBarBookmarkButtonClicked
+    // MARK: - searchBarBookmarkButtonClicked (переход на SortingViewController)
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
         // Открываем bottom sheet
-        let vc = SortingViewController()
-        let navVC = UINavigationController(rootViewController: vc)
-        
+        let secondVC = SortingViewController()
+        secondVC.sortingDelegate = self
+        let navVC = UINavigationController(rootViewController: secondVC)
         if let sheet = navVC.sheetPresentationController {
             // размеры
             sheet.detents = [.medium(), .large()]
@@ -222,5 +220,11 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         navigationController?.present(navVC, animated: true)
         print ("BookMark is clicked")
     }
+    
+    // MARK: - Sorting data
+    func applySorting(_ sortingType: SortingType) {
+        filteredContacts.sort {$0.firstName < $1.firstName}
+        departmentContactList.reloadData()
+        print("sorting data")
+    }
 }
-

@@ -9,13 +9,21 @@ import Foundation
 import UIKit
 
 // MARK: - Item
-struct ContactData: Codable {
+struct ContactData: Codable, Comparable {
+    static func < (lhs: ContactData, rhs: ContactData) -> Bool {
+        if lhs.lastName != rhs.lastName {
+            return lhs.lastName < rhs.lastName
+        } else {
+            return lhs.firstName < rhs.firstName
+        }
+    }
+    
     let id: String
     let avatarURL: String
     let firstName, lastName, userTag: String
     let department: Departments
     let position, birthday, phone: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case avatarURL = "avatarUrl"
@@ -44,7 +52,7 @@ enum Departments: String, CodingKey, Codable, CaseIterable {
     case backend
     case support
     case analytics
-
+    
     var title: String {
         switch self {
         case .all:

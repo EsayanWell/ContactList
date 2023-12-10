@@ -29,6 +29,7 @@ class ErrorSearchView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Setup Views
     private func setupViews() {
         addSubview(errorImage)
         addSubview(errorTitleLabel)
@@ -60,8 +61,8 @@ class ErrorSearchView: UIView {
         errorDescriptionLabel.font = UIFont(name: "Inter-Regular", size: 16)
         errorDescriptionLabel.textAlignment = .center
     }
-        
-    // MARK: - setConstraints
+    
+    // MARK: - Set constraints
     private func setConstraints() {
         errorImage.snp.makeConstraints { make in
             make.top.equalToSuperview()

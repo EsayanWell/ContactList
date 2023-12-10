@@ -47,7 +47,7 @@ class HorizontalMenuCollectionView: UICollectionView {
         self.showsHorizontalScrollIndicator = false
     }
     
-    // функция с установкой подписки на delegates
+    // MARK: - Set delegates
     func setCollectionViewDelegates() {
         self.delegate = self
         self.dataSource = self

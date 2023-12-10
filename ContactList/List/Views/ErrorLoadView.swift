@@ -31,6 +31,7 @@ class ErrorLoadView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Setup Views
     private func setupViews() {
         addSubview(errorImage)
         addSubview(errorTitleLabel)
@@ -72,7 +73,7 @@ class ErrorLoadView: UIView {
         tryRequestButton.setTitleColor(UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1), for: .normal)
     }
     
-    // MARK: - setConstraints
+    // MARK: - Set constraints
     private func setConstraints() {
         errorImage.snp.makeConstraints { make in
             make.top.equalToSuperview()
