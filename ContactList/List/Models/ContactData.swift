@@ -11,7 +11,11 @@ import UIKit
 // MARK: - Item
 struct ContactData: Codable, Comparable {
     static func < (lhs: ContactData, rhs: ContactData) -> Bool {
-        return lhs.firstName == rhs.firstName
+        if lhs.lastName != rhs.lastName {
+            return lhs.lastName < rhs.lastName
+        } else {
+            return lhs.firstName < rhs.firstName
+        }
     }
     
     let id: String

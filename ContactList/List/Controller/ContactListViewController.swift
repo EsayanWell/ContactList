@@ -21,7 +21,7 @@ class ContactListViewController: UIViewController {
     private var errorSearch = ErrorSearchView()
     private let identifier = "ContactCell"
     private var selectedDepartment: Departments = .all
-    private let secondVC = SortingViewController()
+    //private let secondVC = SortingViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +36,7 @@ class ContactListViewController: UIViewController {
         // подписка на delegate
         departmentMenuCollectionView.filterDelegate = self
         departmentSearchBar.searchDelegate = self
-        secondVC.sortingDelegate = self
+//        secondVC.sortingDelegate = self
         errorSearch.isHidden = true
     }
     
@@ -210,6 +210,8 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     // MARK: - searchBarBookmarkButtonClicked (переход на SortingViewController)
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
         // Открываем bottom sheet
+        let secondVC = SortingViewController()
+        secondVC.sortingDelegate = self
         let navVC = UINavigationController(rootViewController: secondVC)
         if let sheet = navVC.sheetPresentationController {
             // размеры
