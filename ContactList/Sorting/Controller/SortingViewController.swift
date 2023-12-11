@@ -32,8 +32,8 @@ class SortingViewController: UIViewController {
         view.backgroundColor = .white
         title = "Сортировка"
         customizeNavigationBar()
-        applySorting(.alphabetically)
-        applySorting(.byBirthday)
+        setupSorting(.alphabetically)
+        setupSorting(.byBirthday)
         backButtonSetup()
         setConstraints()
     }
@@ -52,39 +52,39 @@ class SortingViewController: UIViewController {
     }
     
     // MARK: - Sorting setup
-    func applySorting(_ sortingType: SortingType) {
-        // вызов делегата
-        sortingDelegate?.applySorting(sortingType)
+    func setupSorting(_ sortingType: SortingType) {
         let sortingView: RadioButtonView
         let description: String
-        
         switch sortingType {
         case .alphabetically:
             sortingView = alphabeticallySorting
             description = "По алфавиту"
             sortingView.selectButton.isSelected = true
+            sortingView.selectButton.addTarget(self, action: #selector(alphabeticallyButtonTapped), for: .touchUpInside)
         case .byBirthday:
             sortingView = byBirthdaySorting
             description = "По дню рождения"
+            sortingView.selectButton.isSelected = false
+            sortingView.selectButton.addTarget(self, action: #selector(byBirthdayButtonTapped), for: .touchUpInside)
         }
         view.addSubview(sortingView)
         sortingView.descriptionLabel.text = description
-        sortingView.selectButton.addTarget(self, action: #selector(sortingButtonTapped), for: .touchUpInside)
     }
     
     // MARK: - sorting button tapped
-    @objc func sortingButtonTapped(_ sender: UIButton) {
-        print("sortingButton tapped")
-        if sender.tag == 1 {
-            alphabeticallySorting.selectButton.isSelected = true
-            byBirthdaySorting.selectButton.isSelected = false
-        } else if sender.tag == 2 {
-            alphabeticallySorting.selectButton.isSelected = false
-            byBirthdaySorting.selectButton.isSelected = true
-        }
+    @objc func alphabeticallyButtonTapped(_ sender: UIButton) {
+        print("alphabeticallyButton tapped")
+        sortingDelegate?.applySorting(.alphabetically)
+        alphabeticallySorting.selectButton.isSelected = true
+        byBirthdaySorting.selectButton.isSelected = false
     }
-
     
+    @objc func byBirthdayButtonTapped(_ sender: UIButton) {
+        print("alphabeticallyButton tapped")
+        sortingDelegate?.applySorting(.byBirthday)
+        alphabeticallySorting.selectButton.isSelected = false
+        byBirthdaySorting.selectButton.isSelected = true
+    }
     
     // MARK: - backButtonSetup
     func backButtonSetup() {

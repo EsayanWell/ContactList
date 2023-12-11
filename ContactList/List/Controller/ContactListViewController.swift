@@ -170,11 +170,11 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         // фильтрация данных, отображаемых на экране
         if selectedDepartment == .all {
             filteredContacts = contacts
-            filteredContacts.sort {$0.firstName < $1.firstName}
+            //filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр Все")
         } else {
             filteredContacts = contacts.filter { $0.department == selectedDepartment }
-            filteredContacts.sort {$0.firstName < $1.firstName}
+            //filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр \(selectedDepartment)")
         }
         
