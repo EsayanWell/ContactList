@@ -62,7 +62,7 @@ class SortingViewController: UIViewController {
         case .alphabetically:
             sortingView = alphabeticallySorting
             description = "По алфавиту"
-            sortingView.selectButton.isHighlighted = true
+            sortingView.selectButton.isSelected = true
         case .byBirthday:
             sortingView = byBirthdaySorting
             description = "По дню рождения"
@@ -73,9 +73,18 @@ class SortingViewController: UIViewController {
     }
     
     // MARK: - sorting button tapped
-    @objc func sortingButtonTapped() {
+    @objc func sortingButtonTapped(_ sender: UIButton) {
         print("sortingButton tapped")
+        if sender.tag == 1 {
+            alphabeticallySorting.selectButton.isSelected = true
+            byBirthdaySorting.selectButton.isSelected = false
+        } else if sender.tag == 2 {
+            alphabeticallySorting.selectButton.isSelected = false
+            byBirthdaySorting.selectButton.isSelected = true
+        }
     }
+
+    
     
     // MARK: - backButtonSetup
     func backButtonSetup() {
