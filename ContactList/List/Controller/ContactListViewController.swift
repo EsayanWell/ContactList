@@ -21,7 +21,6 @@ class ContactListViewController: UIViewController {
     private var errorSearch = ErrorSearchView()
     private let identifier = "ContactCell"
     private var selectedDepartment: Departments = .all
-    //private let secondVC = SortingViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +35,6 @@ class ContactListViewController: UIViewController {
         // подписка на delegate
         departmentMenuCollectionView.filterDelegate = self
         departmentSearchBar.searchDelegate = self
-//        secondVC.sortingDelegate = self
         errorSearch.isHidden = true
     }
     
@@ -53,8 +51,7 @@ class ContactListViewController: UIViewController {
         // setup UITableView
         departmentContactList.delegate = self
         departmentContactList.dataSource = self
-        
-        
+
         // MARK: - Set constraints
         departmentSearchBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -170,11 +167,11 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         // фильтрация данных, отображаемых на экране
         if selectedDepartment == .all {
             filteredContacts = contacts
-            //filteredContacts.sort {$0.firstName < $1.firstName}
+            filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр Все")
         } else {
             filteredContacts = contacts.filter { $0.department == selectedDepartment }
-            //filteredContacts.sort {$0.firstName < $1.firstName}
+            filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр \(selectedDepartment)")
         }
         
@@ -223,8 +220,24 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // MARK: - Sorting data
     func applySorting(_ sortingType: SortingType) {
-        filteredContacts.sort {$0.firstName < $1.firstName}
-        departmentContactList.reloadData()
-        print("sorting data")
+        switch sortingType {
+        case .alphabetically:
+            // Сортировка по алфавиту
+            filteredContacts.sort {$0.firstName < $1.firstName}
+            departmentContactList.reloadData()
+            print("sorting data alphabetically")
+        case .byBirthday:
+            // Отсортируем массив людей по дате рождения, начиная с самой близкой к сегодняшнему дню
+            filteredContacts = filteredContacts.sorted {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd-MM-yyyy" // Укажите здесь формат вашей даты рождения
+                let today = Date()
+                let date1 = dateFormatter.date(from: $0.birthday) ?? today
+                let date2 = dateFormatter.date(from: $1.birthday) ?? today
+                return abs(today.timeIntervalSince(date1)) < abs(today.timeIntervalSince(date2))
+            }
+            departmentContactList.reloadData()
+            print("sorting data byBirthday")
+        }
     }
 }
