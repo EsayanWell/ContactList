@@ -21,6 +21,7 @@ class ContactListViewController: UIViewController {
     private var errorSearch = ErrorSearchView()
     private let identifier = "ContactCell"
     private var selectedDepartment: Departments = .all
+    private var isDateOfBirthSelected = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -157,6 +158,13 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ContactCell
         let contact = filteredContacts[indexPath.row]
         cell.configure(contacts: contact)
+        // Проверяем, выбран ли фильтр по дате рождения
+        if isDateOfBirthSelected {
+            cell.profileDateOfBirth.isHidden = false
+        } else {
+            cell.profileDateOfBirth.isHidden = true
+        }
+        
         return cell
     }
     
@@ -167,11 +175,11 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         // фильтрация данных, отображаемых на экране
         if selectedDepartment == .all {
             filteredContacts = contacts
-            filteredContacts.sort {$0.firstName < $1.firstName}
+            //filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр Все")
         } else {
             filteredContacts = contacts.filter { $0.department == selectedDepartment }
-            filteredContacts.sort {$0.firstName < $1.firstName}
+            //filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр \(selectedDepartment)")
         }
         
@@ -225,6 +233,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             // Сортировка по алфавиту
             filteredContacts.sort {$0.firstName < $1.firstName}
             departmentContactList.reloadData()
+            isDateOfBirthSelected = false
             print("sorting data alphabetically")
         case .byBirthday:
             // Отсортируем массив людей по дате рождения, начиная с самой близкой к сегодняшнему дню
@@ -237,6 +246,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
                 print(date1.compare(date2) == .orderedAscending)
                 return date1.compare(date2) == .orderedAscending
             }
+            isDateOfBirthSelected = true
             departmentContactList.reloadData()
             print("sorting data byBirthday")
         }
