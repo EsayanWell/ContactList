@@ -230,11 +230,11 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             // Отсортируем массив людей по дате рождения, начиная с самой близкой к сегодняшнему дню
             filteredContacts = filteredContacts.sorted {
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "dd-MM-yyyy" // Укажите здесь формат вашей даты рождения
+                dateFormatter.dateFormat = "d MM" // Укажите здесь формат вашей даты рождения
                 let today = Date()
                 let date1 = dateFormatter.date(from: $0.birthday) ?? today
                 let date2 = dateFormatter.date(from: $1.birthday) ?? today
-                return abs(today.timeIntervalSince(date1)) < abs(today.timeIntervalSince(date2))
+                return today.timeIntervalSince(date1) < today.timeIntervalSince(date2)
             }
             departmentContactList.reloadData()
             print("sorting data byBirthday")

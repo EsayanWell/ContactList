@@ -43,6 +43,7 @@ class ContactCell: UITableViewCell {
         backgroundColor = .white
     }
     
+    // MARK: - Configures
     // функция выполняет задачу обновления интерфейсных элементов на экране информацией из объекта Contact, переданного в качестве параметра
     func configure(contacts: ContactData) {
         profileFirstName.text = contacts.firstName
@@ -50,6 +51,24 @@ class ContactCell: UITableViewCell {
         profilePosition.text = contacts.position
         profileUserTag.text = contacts.userTag
         profileDateOfBirth.text = contacts.birthday
+        // изменение формата даты
+        // Создается экземпляр DateFormatter для работы с датами
+        let dateFormatter = DateFormatter()
+        // установка формата для парсинга даты
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        // проверяется, удалось ли распарсить данные
+        if let birthDate = dateFormatter.date(from: contacts.birthday) {
+            dateFormatter.locale = Locale(identifier: "ru_RU")
+            // задание определенного формата
+            dateFormatter.dateFormat = "d MMM"
+            // дата форматируется в строку в новом формате
+            let formattedDate = dateFormatter.string(from: birthDate)
+            // присваиваем отформатированные данные для отображения
+            profileDateOfBirth.text = formattedDate
+        } else {
+            print("Invalid date format")
+        }
+        
         // Загрузка фотографии из URL через URLSession
         if let imageURL = URL(string: contacts.avatarURL) {
             let session = URLSession.shared
@@ -69,8 +88,7 @@ class ContactCell: UITableViewCell {
             task.resume()
         }
     }
-    
-    // MARK : - Configures
+
     // настройка фото профиля
     func configureProfilePhoto() {
         profilePhoto.layer.cornerRadius = 36
