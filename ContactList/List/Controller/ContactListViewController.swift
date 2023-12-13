@@ -21,7 +21,7 @@ class ContactListViewController: UIViewController {
     private var errorSearch = ErrorSearchView()
     private let identifier = "ContactCell"
     private var selectedDepartment: Departments = .all
-    private var isDateOfBirthSelected = false
+    private var currentSortingType: SortingType = .byBirthday
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +52,7 @@ class ContactListViewController: UIViewController {
         // setup UITableView
         departmentContactList.delegate = self
         departmentContactList.dataSource = self
-
+        
         // MARK: - Set constraints
         departmentSearchBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -135,6 +135,7 @@ class ContactListViewController: UIViewController {
                     self.departmentContactList.reloadData()
                     self.errorReload.isHidden = true
                     self.errorViewToggleVisibility(isHidden: false)
+                    self.currentSortingType = .alphabetically
                 case .failure(let networkError):
                     print("Failure: \(networkError)")
                     self.errorReload.isHidden = false
@@ -148,6 +149,7 @@ class ContactListViewController: UIViewController {
 // MARK: - Extensions for VerticalContactTableView and DepartmentSearchBar
 extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate, CustomSearchBarDelegate, DataSortingDelegate {
     
+    // MARK: - Extensions for UITableView
     // функция для отображения количества строк на экране
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredContacts.count
@@ -159,16 +161,16 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         let contact = filteredContacts[indexPath.row]
         cell.configure(contacts: contact)
         // Проверяем, выбран ли фильтр по дате рождения
-        if isDateOfBirthSelected {
-            cell.profileDateOfBirth.isHidden = false
-        } else {
+        switch currentSortingType {
+        case.alphabetically:
             cell.profileDateOfBirth.isHidden = true
+        case.byBirthday:
+            cell.profileDateOfBirth.isHidden = false
         }
-        
         return cell
     }
     
-    // MARK: - Filtered data delegate
+    // MARK: - Extensions for UICollectionView
     func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
         
         selectedDepartment = selectedData
@@ -194,7 +196,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         }
     }
     
-    // MARK: - Contact filtering
+    // MARK: - Extensions for UISearchBar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredContacts = contacts.filter { contact in
             // Проверка на соответствие поисковому тексту
@@ -228,25 +230,25 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // MARK: - Sorting data
     func applySorting(_ sortingType: SortingType) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd" // Укажите здесь формат вашей даты рождения
         switch sortingType {
         case .alphabetically:
             // Сортировка по алфавиту
             filteredContacts.sort {$0.firstName < $1.firstName}
             departmentContactList.reloadData()
-            isDateOfBirthSelected = false
+            currentSortingType = .alphabetically
             print("sorting data alphabetically")
         case .byBirthday:
             // Отсортируем массив людей по дате рождения, начиная с самой близкой к сегодняшнему дню
             filteredContacts = filteredContacts.sorted {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd" // Укажите здесь формат вашей даты рождения
                 let today = Date()
                 let date1 = dateFormatter.date(from: $0.birthday) ?? today
                 let date2 = dateFormatter.date(from: $1.birthday) ?? today
                 print(date1.compare(date2) == .orderedAscending)
                 return date1.compare(date2) == .orderedAscending
             }
-            isDateOfBirthSelected = true
+            currentSortingType = .byBirthday
             departmentContactList.reloadData()
             print("sorting data byBirthday")
         }

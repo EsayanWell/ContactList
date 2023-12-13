@@ -24,6 +24,7 @@ class SortingViewController: UIViewController {
     // MARK: - Constants
     private let alphabeticallySorting = RadioButtonView()
     private let byBirthdaySorting = RadioButtonView()
+    private var selectedSortingType: SortingType = .alphabetically
     // добавляем свойство делегата типа DataSortingDelegate в SortingViewController
     weak var sortingDelegate: DataSortingDelegate?
     
@@ -67,14 +68,22 @@ class SortingViewController: UIViewController {
             sortingView.selectButton.isSelected = false
             sortingView.selectButton.addTarget(self, action: #selector(byBirthdayButtonTapped), for: .touchUpInside)
         }
+        
+        if sortingType == selectedSortingType {
+             sortingView.selectButton.isSelected = true
+         } else {
+             sortingView.selectButton.isSelected = false
+         }
         view.addSubview(sortingView)
         sortingView.descriptionLabel.text = description
+        
     }
     
     // MARK: - sorting button tapped
     @objc func alphabeticallyButtonTapped(_ sender: UIButton) {
         print("alphabeticallyButton tapped")
         sortingDelegate?.applySorting(.alphabetically)
+        selectedSortingType = .alphabetically
         alphabeticallySorting.selectButton.isSelected = true
         byBirthdaySorting.selectButton.isSelected = false
     }
@@ -82,6 +91,7 @@ class SortingViewController: UIViewController {
     @objc func byBirthdayButtonTapped(_ sender: UIButton) {
         print("alphabeticallyButton tapped")
         sortingDelegate?.applySorting(.byBirthday)
+        selectedSortingType = .byBirthday
         alphabeticallySorting.selectButton.isSelected = false
         byBirthdaySorting.selectButton.isSelected = true
     }
