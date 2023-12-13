@@ -170,6 +170,49 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         return cell
     }
     
+    // Создание header для UITableView
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        // Проверяем, что section находится в пределах допустимых значений для массива filteredContacts
+        guard section < filteredContacts.count else {
+            return nil
+        }
+        let contact = filteredContacts[section]
+        guard let birthdayDate = dateFormatter.date(from: contact.birthday) else {
+            return nil
+        }
+        
+        let calendar = Calendar.current
+        let currentYear = calendar.component(.year, from: Date())
+        let birthdayYear = calendar.component(.year, from: birthdayDate)
+        
+        if birthdayYear > currentYear {
+            return "\(currentYear + 1)"
+        } else {
+            return "\(currentYear)"
+        }
+    }
+    
+    // Настройка надписи header
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = .white
+        
+        let headerLabel = UILabel()
+        headerLabel.font = UIFont(name: "Inter-Medium", size: 15)
+        headerLabel.textColor = UIColor(red: 0.765, green: 0.765, blue: 0.776, alpha: 1)
+        headerLabel.textAlignment = .center
+        headerLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
+        headerView.addSubview(headerLabel)
+        // Set constraints
+        headerLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        return headerView
+    }
+    
     // MARK: - Extensions for UICollectionView
     func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
         
@@ -230,6 +273,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // MARK: - Sorting data
     func applySorting(_ sortingType: SortingType) {
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd" // Укажите здесь формат вашей даты рождения
         switch sortingType {

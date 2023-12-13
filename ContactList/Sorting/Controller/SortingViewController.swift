@@ -69,11 +69,8 @@ class SortingViewController: UIViewController {
             sortingView.selectButton.addTarget(self, action: #selector(byBirthdayButtonTapped), for: .touchUpInside)
         }
         
-        if sortingType == selectedSortingType {
-             sortingView.selectButton.isSelected = true
-         } else {
-             sortingView.selectButton.isSelected = false
-         }
+//        sortingView.selectButton.isSelected = sortingType == selectedSortingType
+
         view.addSubview(sortingView)
         sortingView.descriptionLabel.text = description
         
