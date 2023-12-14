@@ -17,6 +17,7 @@
 		6E5373412AF4DF73007ECCB6 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5373402AF4DF73007ECCB6 /* Errors.swift */; };
 		6E590B3C2ADD71D100010257 /* VerticalContactTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E590B3B2ADD71D100010257 /* VerticalContactTableView.swift */; };
 		6E590B3F2ADD772D00010257 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E590B3E2ADD772D00010257 /* ContactCell.swift */; };
+		6E5EA31C2B2AF59F005AEC8F /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5EA31B2B2AF59F005AEC8F /* CustomHeaderView.swift */; };
 		6E6DB4152B18CB2300511EF5 /* ErrorSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6DB4142B18CB2300511EF5 /* ErrorSearchView.swift */; };
 		6E94F3BF2B262B4A00353D8B /* RadioButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E94F3BE2B262B4A00353D8B /* RadioButtonView.swift */; };
 		6E98D7B42AD6DAD500F36017 /* HorizontalMenuCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E98D7B32AD6DAD500F36017 /* HorizontalMenuCollectionView.swift */; };
@@ -41,6 +42,7 @@
 		6E5373402AF4DF73007ECCB6 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		6E590B3B2ADD71D100010257 /* VerticalContactTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalContactTableView.swift; sourceTree = "<group>"; };
 		6E590B3E2ADD772D00010257 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
+		6E5EA31B2B2AF59F005AEC8F /* CustomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
 		6E6DB4142B18CB2300511EF5 /* ErrorSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorSearchView.swift; sourceTree = "<group>"; };
 		6E94F3BE2B262B4A00353D8B /* RadioButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonView.swift; sourceTree = "<group>"; };
 		6E98D7B32AD6DAD500F36017 /* HorizontalMenuCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalMenuCollectionView.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 		6E9CBBE92ACD713F00B2629D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6E5EA31B2B2AF59F005AEC8F /* CustomHeaderView.swift */,
 				6E0065F52AFB99F900803BD7 /* ErrorLoadView.swift */,
 				6E6DB4142B18CB2300511EF5 /* ErrorSearchView.swift */,
 				6E5373402AF4DF73007ECCB6 /* Errors.swift */,
@@ -318,6 +321,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E5EA31C2B2AF59F005AEC8F /* CustomHeaderView.swift in Sources */,
 				6E5373412AF4DF73007ECCB6 /* Errors.swift in Sources */,
 				6E590B3F2ADD772D00010257 /* ContactCell.swift in Sources */,
 				6E9CBBEB2ACD716700B2629D /* ContactData.swift in Sources */,

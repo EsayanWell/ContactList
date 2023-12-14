@@ -62,18 +62,22 @@ class SortingViewController: UIViewController {
             description = "По алфавиту"
             sortingView.selectButton.isSelected = true
             sortingView.selectButton.addTarget(self, action: #selector(alphabeticallyButtonTapped), for: .touchUpInside)
+            // добавление нажатие на label
+            let tapGestureAlph = UITapGestureRecognizer(target: self,action: #selector(alphabeticallyButtonTapped))
+            sortingView.descriptionLabel.isUserInteractionEnabled = true
+            sortingView.descriptionLabel.addGestureRecognizer(tapGestureAlph)
         case .byBirthday:
             sortingView = byBirthdaySorting
             description = "По дню рождения"
             sortingView.selectButton.isSelected = false
             sortingView.selectButton.addTarget(self, action: #selector(byBirthdayButtonTapped), for: .touchUpInside)
+            let tapGestureBirth = UITapGestureRecognizer(target: self,action: #selector(byBirthdayButtonTapped))
+            sortingView.descriptionLabel.isUserInteractionEnabled = true
+            sortingView.descriptionLabel.addGestureRecognizer(tapGestureBirth)
         }
-        
 //        sortingView.selectButton.isSelected = sortingType == selectedSortingType
-
         view.addSubview(sortingView)
         sortingView.descriptionLabel.text = description
-        
     }
     
     // MARK: - sorting button tapped
@@ -86,7 +90,7 @@ class SortingViewController: UIViewController {
     }
     
     @objc func byBirthdayButtonTapped(_ sender: UIButton) {
-        print("alphabeticallyButton tapped")
+        print("byBirthdayButton tapped")
         sortingDelegate?.applySorting(.byBirthday)
         selectedSortingType = .byBirthday
         alphabeticallySorting.selectButton.isSelected = false

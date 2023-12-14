@@ -195,21 +195,11 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         }
     }
     
-    // Настройка надписи header
+    // Настройка надписи header и установка кастомной view
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView()
+        let headerView = CustomHeaderView(frame: CGRect(x: 0, y: 0, width: 328, height: 20))
         headerView.backgroundColor = .white
-        
-        let headerLabel = UILabel()
-        headerLabel.font = UIFont(name: "Inter-Medium", size: 15)
-        headerLabel.textColor = UIColor(red: 0.765, green: 0.765, blue: 0.776, alpha: 1)
-        headerLabel.textAlignment = .center
-        headerLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
-        headerView.addSubview(headerLabel)
-        // Set constraints
-        headerLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        headerView.yearLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
         return headerView
     }
     
