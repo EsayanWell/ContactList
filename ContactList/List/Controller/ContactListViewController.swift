@@ -179,11 +179,12 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         guard section < filteredContacts.count else {
             return nil
         }
+        //  получаем контакт на текущем индексе section из массива filteredContacts
         let contact = filteredContacts[section]
         guard let birthdayDate = dateFormatter.date(from: contact.birthday) else {
             return nil
         }
-        
+        // изменяем формат даты
         let calendar = Calendar.current
         let currentYear = calendar.component(.year, from: Date())
         let birthdayYear = calendar.component(.year, from: birthdayDate)
@@ -200,12 +201,26 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         let headerView = CustomHeaderView(frame: CGRect(x: 0, y: 0, width: 328, height: 20))
         headerView.backgroundColor = .white
         headerView.yearLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
+        // чтобы header появлялся только в случае выбора сортировки по дате рождения
+        switch currentSortingType {
+        case.alphabetically:
+            headerView.isHidden = true
+        case.byBirthday:
+            headerView.isHidden = false
+        }
         return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        // Проверяем, что section находится в пределах допустимых значений для массива filteredContacts
+        if section >= filteredContacts.count {
+            return 0 // Если нет, то возвращаем высоту 0
+        }
+        return 20 // Устанавливаем желаемую высоту заголовка
     }
     
     // MARK: - Extensions for UICollectionView
     func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
-        
         selectedDepartment = selectedData
         // фильтрация данных, отображаемых на экране
         if selectedDepartment == .all {
@@ -217,7 +232,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             //filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр \(selectedDepartment)")
         }
-        
+        // обновление экрана при наличии данных по тому или иному департаменту
         if  filteredContacts.isEmpty {
             departmentContactList.isHidden = true
             print("Нет данных по выбранному фильтру")
@@ -263,7 +278,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // MARK: - Sorting data
     func applySorting(_ sortingType: SortingType) {
-        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd" // Укажите здесь формат вашей даты рождения
         switch sortingType {
