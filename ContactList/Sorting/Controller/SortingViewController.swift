@@ -28,11 +28,11 @@ class SortingViewController: UIViewController {
     // добавляем свойство делегата типа DataSortingDelegate в SortingViewController
     weak var sortingDelegate: DataSortingDelegate?
     let initialSortingType: SortingType
-
+    
     init(initialSortingType: SortingType) {
-         self.initialSortingType = initialSortingType
-         super.init(nibName: nil, bundle: nil)
-     }
+        self.initialSortingType = initialSortingType
+        super.init(nibName: nil, bundle: nil)
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -84,7 +84,6 @@ class SortingViewController: UIViewController {
             sortingView.descriptionLabel.isUserInteractionEnabled = true
             sortingView.descriptionLabel.addGestureRecognizer(tapGestureBirth)
         }
-//        sortingView.selectButton.isSelected = sortingType == selectedSortingType
         view.addSubview(sortingView)
         sortingView.descriptionLabel.text = description
     }

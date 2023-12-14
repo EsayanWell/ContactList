@@ -225,11 +225,11 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         // фильтрация данных, отображаемых на экране
         if selectedDepartment == .all {
             filteredContacts = contacts
-            //filteredContacts.sort {$0.firstName < $1.firstName}
+            filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр Все")
         } else {
             filteredContacts = contacts.filter { $0.department == selectedDepartment }
-            //filteredContacts.sort {$0.firstName < $1.firstName}
+            filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр \(selectedDepartment)")
         }
         // обновление экрана при наличии данных по тому или иному департаменту
@@ -280,6 +280,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     func applySorting(_ sortingType: SortingType) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd" // Укажите здесь формат вашей даты рождения
+        //let today = Date()
         switch sortingType {
         case .alphabetically:
             // Сортировка по алфавиту
@@ -290,7 +291,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         case .byBirthday:
             // Отсортируем массив людей по дате рождения, начиная с самой близкой к сегодняшнему дню
             filteredContacts = filteredContacts.sorted {
-                let today = Date()
                 let dateComponents1 = Calendar.current.dateComponents([.month, .day], from: dateFormatter.date(from: $0.birthday)!)
                 let dateComponents2 = Calendar.current.dateComponents([.month, .day], from: dateFormatter.date(from: $1.birthday)!)
                 
@@ -307,6 +307,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             departmentContactList.reloadData()
             print("sorting data byBirthday")
         }
-
+        
     }
 }
