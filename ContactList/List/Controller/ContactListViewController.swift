@@ -291,14 +291,22 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             // Отсортируем массив людей по дате рождения, начиная с самой близкой к сегодняшнему дню
             filteredContacts = filteredContacts.sorted {
                 let today = Date()
-                let date1 = dateFormatter.date(from: $0.birthday) ?? today
-                let date2 = dateFormatter.date(from: $1.birthday) ?? today
-                print(date1.compare(date2) == .orderedAscending)
-                return date1.compare(date2) == .orderedAscending
+                let dateComponents1 = Calendar.current.dateComponents([.month, .day], from: dateFormatter.date(from: $0.birthday)!)
+                let dateComponents2 = Calendar.current.dateComponents([.month, .day], from: dateFormatter.date(from: $1.birthday)!)
+                
+                // Сравниваем только месяцы и дни, игнорируя год
+                if dateComponents1.month! < dateComponents2.month! {
+                    return true
+                } else if dateComponents1.month! == dateComponents2.month! && dateComponents1.day! < dateComponents2.day! {
+                    return true
+                } else {
+                    return false
+                }
             }
             currentSortingType = .byBirthday
             departmentContactList.reloadData()
             print("sorting data byBirthday")
         }
+
     }
 }
