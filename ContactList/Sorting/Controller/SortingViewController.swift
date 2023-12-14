@@ -27,7 +27,16 @@ class SortingViewController: UIViewController {
     private var selectedSortingType: SortingType = .alphabetically
     // добавляем свойство делегата типа DataSortingDelegate в SortingViewController
     weak var sortingDelegate: DataSortingDelegate?
+    let initialSortingType: SortingType
+
+    init(initialSortingType: SortingType) {
+         self.initialSortingType = initialSortingType
+         super.init(nibName: nil, bundle: nil)
+     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white

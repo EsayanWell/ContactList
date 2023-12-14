@@ -265,7 +265,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     // MARK: - searchBarBookmarkButtonClicked (переход на SortingViewController)
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
         // Открываем bottom sheet
-        let secondVC = SortingViewController()
+        let secondVC = SortingViewController(initialSortingType: currentSortingType)
         secondVC.sortingDelegate = self
         let navVC = UINavigationController(rootViewController: secondVC)
         if let sheet = navVC.sheetPresentationController {

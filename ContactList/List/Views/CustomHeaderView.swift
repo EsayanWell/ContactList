@@ -63,7 +63,6 @@ class CustomHeaderView: UIView {
         yearLabel.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.width.equalTo(160)
         }
         leftLineImage.snp.makeConstraints { make in
             make.leading.equalToSuperview()
