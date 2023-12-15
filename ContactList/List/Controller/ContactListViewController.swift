@@ -296,7 +296,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             filteredContacts = filteredContacts.sorted {
                 let dateComponents1 = Calendar.current.dateComponents([.month, .day], from: dateFormatter.date(from: $0.birthday)!)
                 let dateComponents2 = Calendar.current.dateComponents([.month, .day], from: dateFormatter.date(from: $1.birthday)!)
-                
                 // Сравниваем только месяцы и дни, игнорируя год
                 if dateComponents1.month! < dateComponents2.month! {
                     return true
