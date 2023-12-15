@@ -172,30 +172,32 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // Создание header для UITableView
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        //создание экземпляра DateFormatter для работы с датами и установка формата даты
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        
         // Проверяем, что section находится в пределах допустимых значений для массива filteredContacts
         guard section < filteredContacts.count else {
             return nil
         }
         //  получаем контакт на текущем индексе section из массива filteredContacts
         let contact = filteredContacts[section]
+        // попытка преобразовать дату дня рождения
         guard let birthdayDate = dateFormatter.date(from: contact.birthday) else {
             return nil
         }
-        // изменяем формат даты
+        // получение текущего календаря
         let calendar = Calendar.current
+        // получение текущего года
         let currentYear = calendar.component(.year, from: Date())
+        // получение года дня рождения контакта
         let birthdayYear = calendar.component(.year, from: birthdayDate)
-        
-        if birthdayYear > currentYear {
+        // Если день рождения уже прошел в этом году
+        if birthdayDate < Date() {
             return "\(currentYear + 1)"
         } else {
             return "\(currentYear)"
         }
     }
-    
     // Настройка надписи header и установка кастомной view
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = CustomHeaderView(frame: CGRect(x: 0, y: 0, width: 328, height: 20))
@@ -211,6 +213,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         return headerView
     }
     
+    // настройка видимости header
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // Проверяем, что section находится в пределах допустимых значений для массива filteredContacts
         if section >= filteredContacts.count {
@@ -307,6 +310,5 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             departmentContactList.reloadData()
             print("sorting data byBirthday")
         }
-        
     }
 }
