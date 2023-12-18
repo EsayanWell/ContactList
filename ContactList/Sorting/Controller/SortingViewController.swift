@@ -24,7 +24,6 @@ class SortingViewController: UIViewController {
     // MARK: - Constants
     private let alphabeticallySorting = RadioButtonView()
     private let byBirthdaySorting = RadioButtonView()
-    private var selectedSortingType: SortingType = .alphabetically
     // добавляем свойство делегата типа DataSortingDelegate в SortingViewController
     weak var sortingDelegate: DataSortingDelegate?
     let initialSortingType: SortingType
@@ -69,19 +68,19 @@ class SortingViewController: UIViewController {
         case .alphabetically:
             sortingView = alphabeticallySorting
             description = "По алфавиту"
-            sortingView.selectButton.isSelected = true
+            // сохранение выбора сортировки при повторном переходе на экран
+            sortingView.selectButton.isSelected = initialSortingType == sortingType
             sortingView.selectButton.addTarget(self, action: #selector(alphabeticallyButtonTapped), for: .touchUpInside)
             // добавление нажатие на label
             let tapGestureAlph = UITapGestureRecognizer(target: self,action: #selector(alphabeticallyButtonTapped))
-            sortingView.descriptionLabel.isUserInteractionEnabled = true
             sortingView.descriptionLabel.addGestureRecognizer(tapGestureAlph)
         case .byBirthday:
             sortingView = byBirthdaySorting
             description = "По дню рождения"
-            sortingView.selectButton.isSelected = false
+            // сохранение выбора сортировки при повторном переходе на экран
+            sortingView.selectButton.isSelected = initialSortingType == sortingType
             sortingView.selectButton.addTarget(self, action: #selector(byBirthdayButtonTapped), for: .touchUpInside)
             let tapGestureBirth = UITapGestureRecognizer(target: self,action: #selector(byBirthdayButtonTapped))
-            sortingView.descriptionLabel.isUserInteractionEnabled = true
             sortingView.descriptionLabel.addGestureRecognizer(tapGestureBirth)
         }
         view.addSubview(sortingView)
@@ -92,7 +91,6 @@ class SortingViewController: UIViewController {
     @objc func alphabeticallyButtonTapped(_ sender: UIButton) {
         print("alphabeticallyButton tapped")
         sortingDelegate?.applySorting(.alphabetically)
-        selectedSortingType = .alphabetically
         alphabeticallySorting.selectButton.isSelected = true
         byBirthdaySorting.selectButton.isSelected = false
     }
@@ -100,7 +98,6 @@ class SortingViewController: UIViewController {
     @objc func byBirthdayButtonTapped(_ sender: UIButton) {
         print("byBirthdayButton tapped")
         sortingDelegate?.applySorting(.byBirthday)
-        selectedSortingType = .byBirthday
         alphabeticallySorting.selectButton.isSelected = false
         byBirthdaySorting.selectButton.isSelected = true
     }

@@ -53,6 +53,7 @@ class RadioButtonView: UIView {
         descriptionLabel.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
         descriptionLabel.font = UIFont(name: "Inter-Medium", size: 16)
         descriptionLabel.textAlignment = .center
+        descriptionLabel.isUserInteractionEnabled = true
     }
     
     // MARK: - Set constraints

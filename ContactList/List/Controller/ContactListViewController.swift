@@ -161,12 +161,8 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         let contact = filteredContacts[indexPath.row]
         cell.configure(contacts: contact)
         // Проверяем, выбран ли фильтр по дате рождения
-        switch currentSortingType {
-        case.alphabetically:
-            cell.profileDateOfBirth.isHidden = true
-        case.byBirthday:
-            cell.profileDateOfBirth.isHidden = false
-        }
+        // если currentSortingType не равен byBirthday, то true
+        cell.profileDateOfBirth.isHidden = currentSortingType != .byBirthday
         return cell
     }
     
@@ -175,35 +171,30 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         //создание экземпляра DateFormatter для работы с датами и установка формата даты
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        // Проверяем, что section находится в пределах допустимых значений для массива filteredContacts
-        guard section < filteredContacts.count else {
-            return nil
-        }
         //  получаем контакт на текущем индексе section из массива filteredContacts
         let contact = filteredContacts[section]
         // попытка преобразовать дату дня рождения
-        guard let birthdayDate = dateFormatter.date(from: contact.birthday) else {
+        guard dateFormatter.date(from: contact.birthday) != nil else {
             return nil
         }
         // получение текущего календаря
         let calendar = Calendar.current
-        // получение текущего года
-        let currentYear = calendar.component(.year, from: Date())
-        // получение года дня рождения контакта
-        let birthdayYear = calendar.component(.year, from: birthdayDate)
-        // Если день рождения уже прошел в этом году
-        if birthdayDate < Date() {
-            return "\(currentYear + 1)"
+        let currentDate = Date()
+        
+        if let closestBirthday = contact.closestBirthday {
+            let birthdayYear = calendar.component(.year, from: closestBirthday)
+            return closestBirthday < currentDate ? "\(birthdayYear + 1)" : "\(birthdayYear)"
         } else {
-            return "\(currentYear)"
+            return "N/A"
         }
     }
     // Настройка надписи header и установка кастомной view
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = CustomHeaderView(frame: CGRect(x: 0, y: 0, width: 328, height: 20))
-        headerView.backgroundColor = .white
+        let headerView = CustomHeaderView(frame: CGRect.zero)
         headerView.yearLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
         // чтобы header появлялся только в случае выбора сортировки по дате рождения
+        // сомнительно, но оукэй
+        //пока что выглядит так, что лучше и проще будет хедер обычной ячейкой показывать, а не хедером секции
         switch currentSortingType {
         case.alphabetically:
             headerView.isHidden = true
@@ -228,11 +219,9 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         // фильтрация данных, отображаемых на экране
         if selectedDepartment == .all {
             filteredContacts = contacts
-            filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр Все")
         } else {
             filteredContacts = contacts.filter { $0.department == selectedDepartment }
-            filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр \(selectedDepartment)")
         }
         // обновление экрана при наличии данных по тому или иному департаменту
@@ -281,9 +270,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // MARK: - Sorting data
     func applySorting(_ sortingType: SortingType) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd" // Укажите здесь формат вашей даты рождения
-        //let today = Date()
         switch sortingType {
         case .alphabetically:
             // Сортировка по алфавиту
@@ -292,18 +278,12 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             currentSortingType = .alphabetically
             print("sorting data alphabetically")
         case .byBirthday:
-            // Отсортируем массив людей по дате рождения, начиная с самой близкой к сегодняшнему дню
+            // Отсортируем массив людей по ближайшему дню рождения к сегодняшнему дню
             filteredContacts = filteredContacts.sorted {
-                let dateComponents1 = Calendar.current.dateComponents([.month, .day], from: dateFormatter.date(from: $0.birthday)!)
-                let dateComponents2 = Calendar.current.dateComponents([.month, .day], from: dateFormatter.date(from: $1.birthday)!)
-                // Сравниваем только месяцы и дни, игнорируя год
-                if dateComponents1.month! < dateComponents2.month! {
-                    return true
-                } else if dateComponents1.month! == dateComponents2.month! && dateComponents1.day! < dateComponents2.day! {
-                    return true
-                } else {
-                    return false
+                if let date1 = $0.closestBirthday, let date2 = $1.closestBirthday {
+                    return date1 < date2
                 }
+                return false
             }
             currentSortingType = .byBirthday
             departmentContactList.reloadData()
