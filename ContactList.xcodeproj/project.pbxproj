@@ -19,11 +19,7 @@
 		6E590B3F2ADD772D00010257 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E590B3E2ADD772D00010257 /* ContactCell.swift */; };
 		6E5EA31C2B2AF59F005AEC8F /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5EA31B2B2AF59F005AEC8F /* CustomHeaderView.swift */; };
 		6E6DB4152B18CB2300511EF5 /* ErrorSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6DB4142B18CB2300511EF5 /* ErrorSearchView.swift */; };
-<<<<<<< HEAD
 		6E94F3BF2B262B4A00353D8B /* RadioButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E94F3BE2B262B4A00353D8B /* RadioButtonView.swift */; };
-=======
-		6E94F3C22B262C8800353D8B /* RadioButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E94F3C12B262C8800353D8B /* RadioButtonView.swift */; };
->>>>>>> main
 		6E98D7B42AD6DAD500F36017 /* HorizontalMenuCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E98D7B32AD6DAD500F36017 /* HorizontalMenuCollectionView.swift */; };
 		6E98D7B82AD6EBE300F36017 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E98D7B72AD6EBE300F36017 /* CustomSearchBar.swift */; };
 		6E9CBBEB2ACD716700B2629D /* ContactData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9CBBEA2ACD716700B2629D /* ContactData.swift */; };
@@ -48,11 +44,7 @@
 		6E590B3E2ADD772D00010257 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		6E5EA31B2B2AF59F005AEC8F /* CustomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
 		6E6DB4142B18CB2300511EF5 /* ErrorSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorSearchView.swift; sourceTree = "<group>"; };
-<<<<<<< HEAD
 		6E94F3BE2B262B4A00353D8B /* RadioButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonView.swift; sourceTree = "<group>"; };
-=======
-		6E94F3C12B262C8800353D8B /* RadioButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonView.swift; sourceTree = "<group>"; };
->>>>>>> main
 		6E98D7B32AD6DAD500F36017 /* HorizontalMenuCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalMenuCollectionView.swift; sourceTree = "<group>"; };
 		6E98D7B72AD6EBE300F36017 /* CustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
 		6E9CBBEA2ACD716700B2629D /* ContactData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactData.swift; sourceTree = "<group>"; };
@@ -106,7 +98,6 @@
 			path = ContactList;
 			sourceTree = "<group>";
 		};
-<<<<<<< HEAD
 		6E94F3BC2B2629ED00353D8B /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -119,13 +110,6 @@
 			children = (
 				6E94F3BE2B262B4A00353D8B /* RadioButtonView.swift */,
 			);
-=======
-		6E94F3C02B262C4C00353D8B /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				6E94F3C12B262C8800353D8B /* RadioButtonView.swift */,
-			);
->>>>>>> main
 			path = Views;
 			sourceTree = "<group>";
 		};
@@ -183,13 +167,8 @@
 		6ED2F12F2AEA608900C275C4 /* Sorting */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
 				6E94F3BC2B2629ED00353D8B /* Models */,
 				6E94F3BD2B262AEF00353D8B /* Views */,
-=======
-				6ED2F1322AEA60C100C275C4 /* Models */,
-				6E94F3C02B262C4C00353D8B /* Views */,
->>>>>>> main
 				6ED2F1302AEA60AE00C275C4 /* Controller */,
 			);
 			path = Sorting;
@@ -356,10 +335,7 @@
 				6E6DB4152B18CB2300511EF5 /* ErrorSearchView.swift in Sources */,
 				6E0065F62AFB99F900803BD7 /* ErrorLoadView.swift in Sources */,
 				6E590B3C2ADD71D100010257 /* VerticalContactTableView.swift in Sources */,
-<<<<<<< HEAD
 				6E94F3BF2B262B4A00353D8B /* RadioButtonView.swift in Sources */,
-=======
->>>>>>> main
 				6E0257EF2ACC2AA7000EA6D9 /* SceneDelegate.swift in Sources */,
 				6ED2F12E2AEA5FE300C275C4 /* SortingViewController.swift in Sources */,
 			);
