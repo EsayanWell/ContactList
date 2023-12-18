@@ -41,11 +41,11 @@ struct Query: Codable {
 enum Departments: String, CodingKey, Codable, CaseIterable {
     case all
     case android
-    case iOS = "ios"
+    case iOS
     case design
     case management
     case qa
-    case backOffice = "back_office"
+    case backOffice
     case frontend
     case hr
     case pr
@@ -82,26 +82,5 @@ enum Departments: String, CodingKey, Codable, CaseIterable {
         case .analytics:
             return "Аналитика"
         }
-    }
-}
-
-extension ContactData {
-    var closestBirthday: Date? {
-        let currentDate = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let currentYear = Calendar.current.component(.year, from: currentDate)
-        let contactBirthdayComponents = Calendar.current.dateComponents([.month, .day], from: dateFormatter.date(from: birthday)!)
-        var contactNextBirthdayComponents = DateComponents()
-        contactNextBirthdayComponents.year = currentYear
-        contactNextBirthdayComponents.month = contactBirthdayComponents.month
-        contactNextBirthdayComponents.day = contactBirthdayComponents.day
-        if let nextBirthdayDate = Calendar.current.date(from: contactNextBirthdayComponents) {
-            if nextBirthdayDate < currentDate {
-                contactNextBirthdayComponents.year! += 1
-            }
-            return Calendar.current.date(from: contactNextBirthdayComponents)
-        }
-        return nil
     }
 }
