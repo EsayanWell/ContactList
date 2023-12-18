@@ -12,8 +12,12 @@ import SnapKit
 // MARK: - Create customViewController
 class RadioButtonView: UIView {
     // MARK: - Constants
+<<<<<<< HEAD
    // var radioButtons: [UIButton] = []
     var selectButton = UIButton()
+=======
+    let selectButton = UIButton()
+>>>>>>> main
     let descriptionLabel = UILabel()
     
     override init(frame: CGRect) {
@@ -39,6 +43,7 @@ class RadioButtonView: UIView {
         // Установка изображения для обычного состояния кнопки
         selectButton.setImage(UIImage(named: "UnSelected"), for: .normal)
         // Установка изображения для состояния кнопки при нажатии
+<<<<<<< HEAD
         selectButton.setImage(UIImage(named: "Selected"), for: .selected)
         selectButton.addTarget(self, action: #selector(radioButtonSelected), for: .touchUpInside)
     }
@@ -49,11 +54,19 @@ class RadioButtonView: UIView {
         sender.isSelected = !sender.isSelected
         }
     
+=======
+        selectButton.setImage(UIImage(named: "Selected"), for: .highlighted)
+    }
+    
+>>>>>>> main
     private func configureDescriptionLabel() {
         descriptionLabel.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
         descriptionLabel.font = UIFont(name: "Inter-Medium", size: 16)
         descriptionLabel.textAlignment = .center
+<<<<<<< HEAD
         descriptionLabel.isUserInteractionEnabled = true
+=======
+>>>>>>> main
     }
     
     // MARK: - Set constraints
