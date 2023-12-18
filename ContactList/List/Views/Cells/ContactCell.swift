@@ -14,6 +14,7 @@ class ContactCell: UITableViewCell {
     let profileLastName = UILabel()
     let profilePosition = UILabel()
     let profileUserTag = UILabel()
+    var profileDateOfBirth = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -24,6 +25,7 @@ class ContactCell: UITableViewCell {
         configureProfileLastName()
         configureProfilePosition()
         configureProfileUserTag()
+        configureProfileDateOfBirth()
         setConstraints()
     }
     
@@ -37,15 +39,36 @@ class ContactCell: UITableViewCell {
         addSubview(profileLastName)
         addSubview(profilePosition)
         addSubview(profileUserTag)
+        addSubview(profileDateOfBirth)
         backgroundColor = .white
     }
     
+    // MARK: - Configures
     // функция выполняет задачу обновления интерфейсных элементов на экране информацией из объекта Contact, переданного в качестве параметра
     func configure(contacts: ContactData) {
         profileFirstName.text = contacts.firstName
         profileLastName.text = contacts.lastName
         profilePosition.text = contacts.position
         profileUserTag.text = contacts.userTag
+        profileDateOfBirth.text = contacts.birthday
+        // изменение формата даты
+        // Создается экземпляр DateFormatter для работы с датами
+        let dateFormatter = DateFormatter()
+        // установка формата для парсинга даты
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        // проверяется, удалось ли распарсить данные
+        if let birthDate = dateFormatter.date(from: contacts.birthday) {
+            dateFormatter.locale = Locale(identifier: "ru_RU")
+            // задание определенного формата
+            dateFormatter.dateFormat = "d MMM"
+            // дата форматируется в строку в новом формате
+            let formattedDate = dateFormatter.string(from: birthDate)
+            // присваиваем отформатированные данные для отображения
+            profileDateOfBirth.text = formattedDate
+        } else {
+            print("Invalid date format")
+        }
+        
         // Загрузка фотографии из URL через URLSession
         if let imageURL = URL(string: contacts.avatarURL) {
             let session = URLSession.shared
@@ -65,8 +88,7 @@ class ContactCell: UITableViewCell {
             task.resume()
         }
     }
-    
-    // MARK : - Configures
+
     // настройка фото профиля
     func configureProfilePhoto() {
         profilePhoto.layer.cornerRadius = 36
@@ -84,26 +106,25 @@ class ContactCell: UITableViewCell {
     
     // настройки надписи lastName
     func configureProfileLastName() {
-        // цвет текста
         profileLastName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
-        // шрифт
         profileLastName.font = UIFont(name: "Inter-Medium", size: 16)
     }
     
     // настройки надписи Department
     func configureProfilePosition() {
-        // цвет текста
         profilePosition.textColor = UIColor(red: 0.333, green: 0.333, blue: 0.361, alpha: 1)
-        // шрифт
         profilePosition.font = UIFont(name: "Inter-Regular", size: 13)
     }
     
     // настройки надписи Email
     func configureProfileUserTag() {
-        // цвет текста
         profileUserTag.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
-        // шрифт
         profileUserTag.font = UIFont(name: "Inter-Medium", size: 14)
+    }
+    
+    func configureProfileDateOfBirth() {
+        profileDateOfBirth.textColor = UIColor(red: 0.333, green: 0.333, blue: 0.361, alpha: 1)
+        profileDateOfBirth.font = UIFont(name: "Inter-Regular", size: 15)
     }
     
     // MARK: - setConstraints
@@ -116,15 +137,13 @@ class ContactCell: UITableViewCell {
         }
         
         profileFirstName.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(12)
+            make.top.equalToSuperview().offset(22)
             make.leading.equalTo(profilePhoto.snp.trailing).offset(16)
-            make.height.equalTo(20)
         }
         
         profileLastName.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(12)
+            make.top.equalToSuperview().offset(22)
             make.leading.equalTo(profileFirstName.snp.trailing).offset(4)
-            make.height.equalTo(20)
         }
         
         profilePosition.snp.makeConstraints { make in
@@ -134,6 +153,10 @@ class ContactCell: UITableViewCell {
         profileUserTag.snp.makeConstraints { make in
             make.bottom.equalTo(profileFirstName.snp.bottom)
             make.leading.equalTo(profileLastName.snp.trailing).offset(4)
+        }
+        profileDateOfBirth.snp.makeConstraints { make in
+            make.centerY.equalTo(profilePhoto.snp.centerY)
+            make.trailing.equalToSuperview()
         }
     }
 }

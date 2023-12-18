@@ -21,7 +21,7 @@ class ContactListViewController: UIViewController {
     private var errorSearch = ErrorSearchView()
     private let identifier = "ContactCell"
     private var selectedDepartment: Departments = .all
-    //private let secondVC = SortingViewController()
+    private var currentSortingType: SortingType = .byBirthday
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +36,6 @@ class ContactListViewController: UIViewController {
         // подписка на delegate
         departmentMenuCollectionView.filterDelegate = self
         departmentSearchBar.searchDelegate = self
-//        secondVC.sortingDelegate = self
         errorSearch.isHidden = true
     }
     
@@ -53,7 +52,6 @@ class ContactListViewController: UIViewController {
         // setup UITableView
         departmentContactList.delegate = self
         departmentContactList.dataSource = self
-        
         
         // MARK: - Set constraints
         departmentSearchBar.snp.makeConstraints { make in
@@ -137,6 +135,7 @@ class ContactListViewController: UIViewController {
                     self.departmentContactList.reloadData()
                     self.errorReload.isHidden = true
                     self.errorViewToggleVisibility(isHidden: false)
+                    self.currentSortingType = .alphabetically
                 case .failure(let networkError):
                     print("Failure: \(networkError)")
                     self.errorReload.isHidden = false
@@ -150,6 +149,7 @@ class ContactListViewController: UIViewController {
 // MARK: - Extensions for VerticalContactTableView and DepartmentSearchBar
 extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate, CustomSearchBarDelegate, DataSortingDelegate {
     
+    // MARK: - Extensions for UITableView
     // функция для отображения количества строк на экране
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredContacts.count
@@ -160,24 +160,71 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ContactCell
         let contact = filteredContacts[indexPath.row]
         cell.configure(contacts: contact)
+        // Проверяем, выбран ли фильтр по дате рождения
+        // если currentSortingType не равен byBirthday, то true
+        cell.profileDateOfBirth.isHidden = currentSortingType != .byBirthday
         return cell
     }
     
-    // MARK: - Filtered data delegate
-    func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
+    // Создание header для UITableView
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        //создание экземпляра DateFormatter для работы с датами и установка формата даты
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        //  получаем контакт на текущем индексе section из массива filteredContacts
+        let contact = filteredContacts[section]
+        // попытка преобразовать дату дня рождения
+        guard dateFormatter.date(from: contact.birthday) != nil else {
+            return nil
+        }
+        // получение текущего календаря
+        let calendar = Calendar.current
+        let currentDate = Date()
         
+        if let closestBirthday = contact.closestBirthday {
+            let birthdayYear = calendar.component(.year, from: closestBirthday)
+            return closestBirthday < currentDate ? "\(birthdayYear + 1)" : "\(birthdayYear)"
+        } else {
+            return "N/A"
+        }
+    }
+    // Настройка надписи header и установка кастомной view
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = CustomHeaderView(frame: CGRect.zero)
+        headerView.yearLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
+        // чтобы header появлялся только в случае выбора сортировки по дате рождения
+        // сомнительно, но оукэй
+        //пока что выглядит так, что лучше и проще будет хедер обычной ячейкой показывать, а не хедером секции
+        switch currentSortingType {
+        case.alphabetically:
+            headerView.isHidden = true
+        case.byBirthday:
+            headerView.isHidden = false
+        }
+        return headerView
+    }
+    
+    // настройка видимости header
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        // Проверяем, что section находится в пределах допустимых значений для массива filteredContacts
+        if section >= filteredContacts.count {
+            return 0 // Если нет, то возвращаем высоту 0
+        }
+        return 20 // Устанавливаем желаемую высоту заголовка
+    }
+    
+    // MARK: - Extensions for UICollectionView
+    func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
         selectedDepartment = selectedData
         // фильтрация данных, отображаемых на экране
         if selectedDepartment == .all {
             filteredContacts = contacts
-            filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр Все")
         } else {
             filteredContacts = contacts.filter { $0.department == selectedDepartment }
-            filteredContacts.sort {$0.firstName < $1.firstName}
             print("Выбран фильтр \(selectedDepartment)")
         }
-        
+        // обновление экрана при наличии данных по тому или иному департаменту
         if  filteredContacts.isEmpty {
             departmentContactList.isHidden = true
             print("Нет данных по выбранному фильтру")
@@ -189,7 +236,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         }
     }
     
-    // MARK: - Contact filtering
+    // MARK: - Extensions for UISearchBar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredContacts = contacts.filter { contact in
             // Проверка на соответствие поисковому тексту
@@ -210,7 +257,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     // MARK: - searchBarBookmarkButtonClicked (переход на SortingViewController)
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
         // Открываем bottom sheet
-        let secondVC = SortingViewController()
+        let secondVC = SortingViewController(initialSortingType: currentSortingType)
         secondVC.sortingDelegate = self
         let navVC = UINavigationController(rootViewController: secondVC)
         if let sheet = navVC.sheetPresentationController {
@@ -223,8 +270,24 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // MARK: - Sorting data
     func applySorting(_ sortingType: SortingType) {
-        filteredContacts.sort {$0.firstName < $1.firstName}
-        departmentContactList.reloadData()
-        print("sorting data")
+        switch sortingType {
+        case .alphabetically:
+            // Сортировка по алфавиту
+            filteredContacts.sort {$0.firstName < $1.firstName}
+            departmentContactList.reloadData()
+            currentSortingType = .alphabetically
+            print("sorting data alphabetically")
+        case .byBirthday:
+            // Отсортируем массив людей по ближайшему дню рождения к сегодняшнему дню
+            filteredContacts = filteredContacts.sorted {
+                if let date1 = $0.closestBirthday, let date2 = $1.closestBirthday {
+                    return date1 < date2
+                }
+                return false
+            }
+            currentSortingType = .byBirthday
+            departmentContactList.reloadData()
+            print("sorting data byBirthday")
+        }
     }
 }
