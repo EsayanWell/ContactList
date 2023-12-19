@@ -166,6 +166,18 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         return cell
     }
     
+    // отработка нажатия на ячейку UITableView
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // employees - массив сотрудников, indexPath.row - выбранная ячейка
+        let selectedContact = filteredContacts[indexPath.row]
+        // Создание экземпляра контроллера с карточкой сотрудника
+        let contactDetailViewController = UserProfileViewController()
+        // передача данных о выбранном сотруднике в контроллер с карточкой
+        contactDetailViewController.contactDetail = selectedContact
+        // выполнение перехода на контроллер с карточкой сотрудника
+        navigationController?.pushViewController(contactDetailViewController, animated: true)
+    }
+    
     // Создание header для UITableView
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         //создание экземпляра DateFormatter для работы с датами и установка формата даты

@@ -12,7 +12,7 @@ import SnapKit
 class UserDateOfBirthView: UIView {
     // MARK: - Constants
     var profileDateOfBirth = UILabel()
-    let profileAge = UILabel()
+    var profileAge = UILabel()
     let profileStarImage = UIImageView()
     
     override init(frame: CGRect) {
@@ -35,29 +35,6 @@ class UserDateOfBirthView: UIView {
         addSubview(profileAge)
         addSubview(profileStarImage)
         backgroundColor = .white
-    }
-    
-    // MARK: - Configures
-    // функция выполняет задачу обновления интерфейсных элементов на экране информацией из объекта Contact, переданного в качестве параметра
-    func configure(contacts: ContactData) {
-        profileDateOfBirth.text = contacts.birthday
-        // изменение формата даты
-        // Создается экземпляр DateFormatter для работы с датами
-        let dateFormatter = DateFormatter()
-        // установка формата для парсинга даты
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        // проверяется, удалось ли распарсить данные
-        if let birthDate = dateFormatter.date(from: contacts.birthday) {
-            dateFormatter.locale = Locale(identifier: "ru_RU")
-            // задание определенного формата
-            dateFormatter.dateFormat = "d MMM"
-            // дата форматируется в строку в новом формате
-            let formattedDate = dateFormatter.string(from: birthDate)
-            // присваиваем отформатированные данные для отображения
-            profileDateOfBirth.text = formattedDate
-        } else {
-            print("Invalid date format")
-        }
     }
     
     func configureProfileDateOfBirth() {
@@ -89,7 +66,7 @@ class UserDateOfBirthView: UIView {
         }
         
         profileAge.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
+            make.centerY.equalTo(profileDateOfBirth.snp.centerY)
             make.trailing.equalToSuperview()
         }
     }

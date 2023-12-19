@@ -33,13 +33,7 @@ class UserPhoneNumberView: UIView {
         addSubview(profilePhoneImage)
         backgroundColor = .white
     }
-    
-    // MARK: - Configures
-    // функция выполняет задачу обновления интерфейсных элементов на экране информацией из объекта Contact, переданного в качестве параметра
-    func configure(contacts: ContactData) {
-        profilePhoneNumber.text = contacts.phone
-    }
-    
+        
     func configureProfilePhoneNumber() {
         profilePhoneNumber.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
         profilePhoneNumber.font = UIFont(name: "Inter-Medium", size: 16)

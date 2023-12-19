@@ -43,7 +43,7 @@ class SortingViewController: UIViewController {
         customizeNavigationBar()
         setupSorting(.alphabetically)
         setupSorting(.byBirthday)
-        backButtonSetup()
+        backButtonsSetup()
         setConstraints()
     }
     
@@ -103,20 +103,20 @@ class SortingViewController: UIViewController {
     }
     
     // MARK: - backButtonSetup
-    func backButtonSetup() {
-        let backButton = UIBarButtonItem(image: UIImage(named: "Arrow"),
+    func backButtonsSetup() {
+        let backButtons = UIBarButtonItem(image: UIImage(named: "Arrow"),
                                          style: .plain,
                                          target: self,
                                          action: #selector(dismissViewController))
-        backButton.tintColor = UIColor.black
-        navigationItem.leftBarButtonItem = backButton
+        backButtons.tintColor = UIColor.black
+        navigationItem.leftBarButtonItem = backButtons
     }
     
     // обработчик нажатия на cтрелку
     @objc private func dismissViewController() {
         dismiss(animated: true)
     }
-    
+
     // MARK: - Set constraints
     func setConstraints() {
         alphabeticallySorting.snp.makeConstraints { make in

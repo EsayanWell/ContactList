@@ -12,9 +12,11 @@ import SnapKit
 class UserProfileView: UIView {
     // MARK: - Constants
     var profilePhoto = UIImageView()
-    let profileName = UILabel()
-    let profilePosition = UILabel()
-    let profileUserTag = UILabel()
+    let profileFirstName = UILabel()
+    let profileLastName = UILabel()
+    var profilePosition = UILabel()
+    var profileUserTag = UILabel()
+    let containerView = UIView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,7 +24,8 @@ class UserProfileView: UIView {
         // MARK: - sets
         setupViews()
         configureProfilePhoto()
-        configureProfileName()
+        configureProfileFirstName()
+        configureProfileLastName()
         configureProfilePosition()
         configureProfileUserTag()
         setConstraints()
@@ -34,18 +37,12 @@ class UserProfileView: UIView {
     
     private func setupViews() {
         addSubview(profilePhoto)
-        addSubview(profileName)
+        containerView.addSubview(profileFirstName)
+        containerView.addSubview(profileLastName)
+        containerView.addSubview(profileUserTag)
         addSubview(profilePosition)
-        addSubview(profileUserTag)
+        addSubview(containerView)
         backgroundColor = .white
-    }
-    
-    // MARK: - Configures
-    // функция выполняет задачу обновления интерфейсных элементов на экране информацией из объекта Contact, переданного в качестве параметра
-    func configure(contacts: ContactData) {
-        profileName.text = contacts.firstName + contacts.lastName
-        profilePosition.text = contacts.position
-        profileUserTag.text = contacts.userTag
     }
     
     // настройка фото профиля
@@ -56,9 +53,14 @@ class UserProfileView: UIView {
     }
     
     // настройки надписи Name
-    func configureProfileName() {
-        profileName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
-        profileName.font = UIFont(name: "Inter-Bold", size: 24)
+    func configureProfileFirstName() {
+        profileFirstName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
+        profileFirstName.font = UIFont(name: "Inter-Bold", size: 24)
+    }
+    
+    func configureProfileLastName() {
+        profileLastName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
+        profileLastName.font = UIFont(name: "Inter-Bold", size: 24)
     }
     
     // настройки надписи Department
@@ -67,36 +69,44 @@ class UserProfileView: UIView {
         profilePosition.font = UIFont(name: "Inter-Regular", size: 13)
     }
     
-    // настройки надписи Email
     func configureProfileUserTag() {
         profileUserTag.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
         profileUserTag.font = UIFont(name: "Inter-Regular", size: 17)
     }
     
-    
     // MARK: - setConstraints
     private func setConstraints() {
         profilePhoto.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(6)
-            make.centerY.equalToSuperview()
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
             make.height.width.equalTo(104)
         }
         
-        profileName.snp.makeConstraints { make in
-            make.top.equalTo(profilePhoto.snp.bottom).offset(24)
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(85)
+        profileFirstName.snp.makeConstraints { make in
+            make.top.equalTo(containerView)
+            make.leading.equalTo(containerView)
+        }
+        
+        profileLastName.snp.makeConstraints { make in
+            make.centerY.equalTo(profileFirstName.snp.centerY)
+            make.leading.equalTo(profileFirstName.snp.trailing).offset(4)
         }
         
         profileUserTag.snp.makeConstraints { make in
-            make.centerX.equalTo(profilePhoto.snp.centerX)
-            make.leading.equalTo(profileName.snp.trailing).offset(4)
+            make.centerY.equalTo(profileFirstName.snp.centerY)
+            make.leading.equalTo(profileLastName.snp.trailing).offset(4)
+            make.trailing.equalTo(containerView.snp.trailing).offset(-4)
         }
         
         profilePosition.snp.makeConstraints { make in
-            make.top.equalTo(profileName.snp.bottom).offset(12)
-            make.centerY.equalTo(profilePhoto.snp.centerY)
+            make.top.equalTo(profileFirstName.snp.bottom).offset(12)
+            make.centerX.equalToSuperview()
             make.bottom.equalToSuperview()
+        }
+        // Установка констрейнтов для контейнера относительно другого объекта
+        containerView.snp.makeConstraints { make in
+            make.centerX.equalTo(profilePhoto)
+            make.top.equalTo(profilePhoto.snp.bottom).offset(24)
         }
     }
 }
