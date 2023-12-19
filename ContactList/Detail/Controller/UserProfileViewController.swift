@@ -23,6 +23,14 @@ class UserProfileViewController: UIViewController {
         backButtonSetup()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        for subview in self.view.subviews {
+            print("Subview: \(subview) Frame: \(subview.frame)")
+        }
+    }
+
     // MARK: - loadingView
     func appropriationData() {
         if let contactDetail = contactDetail {
@@ -53,36 +61,36 @@ class UserProfileViewController: UIViewController {
             userPhoneNumber.profilePhoneNumber.text = contactDetail.phone
             userBirth.profileDateOfBirth.text = contactDetail.birthday
             // изменение формата даты
+            // Создается экземпляр DateFormatter для работы с датами
             let dateFormatter = DateFormatter()
-            // установка формата для парсинга даты
+            dateFormatter.locale = Locale(identifier: "ru_RU")
+            // исходный формат
             dateFormatter.dateFormat = "yyyy-MM-dd"
-            // проверка парсинга
-            if let birthDate = dateFormatter.date(from: contactDetail.birthday),
-               let age = Calendar.current.dateComponents([.year], from: birthDate, to: Date()).year {
-                var ageString = String(age)
-                // Проверяем последнюю цифру в возрасте
-                if let lastDigit = ageString.last {
-                    // Проверяем числовые значения последней цифры
-                    switch lastDigit {
-                    case "1":
-                        if age != 11 { // Исключаем исключение для числа 11 (11 лет)
-                            ageString += " год"
-                        }
-                    case "2", "3", "4":
-                        if age != 12 && age != 13 && age != 14 {
-                            ageString += " года"
-                        }
-                    default:
-                        ageString += " лет"
-                    }
+            // изменение исходного формата
+            if let birthDate = dateFormatter.date(from: contactDetail.birthday) {
+                dateFormatter.dateFormat = "d MMMM yyyy"
+                //
+                let age = Calendar.current.dateComponents([.year], from: birthDate, to: Date()).year ?? 0
+                let ageString: String
+                // проверка для выбора год/года/лет в зависимости от возраста
+                switch age {
+                case 1, 21, 31, 41, 51, 61, 71, 81, 91, 101:
+                    ageString = "\(age) год"
+                case 2...4, 22...24, 32...34, 42...44, 52...54, 62...64, 72...74, 82...84, 92...94, 102...104:
+                    ageString = "\(age) года"
+                default:
+                    ageString = "\(age) лет"
                 }
+                // присваиваем отформатированную дату
+                let formattedDate = dateFormatter.string(from: birthDate)
                 userBirth.profileAge.text = ageString
-                print(ageString)
+                userBirth.profileDateOfBirth.text = formattedDate
             } else {
-                print("Ошибка при вычислении возраста")
+                print("Invalid date format")
             }
         }
     }
+    
     // MARK: - setupViews
     private func setupViews() {
         // addSubviews
@@ -100,11 +108,13 @@ class UserProfileViewController: UIViewController {
                                          action: #selector(backButtonTapped))
         backButton.tintColor = UIColor.black
         navigationItem.leftBarButtonItem = backButton
+        print("кнопка тут, но ее не видно")
     }
     
     // обработчик нажатия на cтрелку
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
+        print("нажал!")
     }
     
     // MARK: - setConstraints
