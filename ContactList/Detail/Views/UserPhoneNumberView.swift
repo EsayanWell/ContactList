@@ -8,7 +8,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-// MARK: - Create customViewController
+// MARK: - Create UserPhoneNumberView
 class UserPhoneNumberView: UIView {
     // MARK: - Constants
     let profilePhoneNumber = UILabel()
@@ -33,7 +33,7 @@ class UserPhoneNumberView: UIView {
         addSubview(profilePhoneImage)
         backgroundColor = .white
     }
-        
+    
     func configureProfilePhoneNumber() {
         profilePhoneNumber.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
         profilePhoneNumber.font = UIFont(name: "Inter-Medium", size: 16)

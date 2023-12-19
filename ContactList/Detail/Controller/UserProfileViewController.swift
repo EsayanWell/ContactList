@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 
 class UserProfileViewController: UIViewController {
+    // MARK: - Constants
     let userProfile = UserProfileView()
     let userBirth = UserDateOfBirthView()
     let userPhoneNumber = UserPhoneNumberView()
@@ -21,16 +22,10 @@ class UserProfileViewController: UIViewController {
         appropriationData()
         setConstraints()
         backButtonSetup()
+        phoneTapRecognizer()
+        makeCall()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        for subview in self.view.subviews {
-            print("Subview: \(subview) Frame: \(subview.frame)")
-        }
-    }
-
     // MARK: - loadingView
     func appropriationData() {
         if let contactDetail = contactDetail {
@@ -69,7 +64,6 @@ class UserProfileViewController: UIViewController {
             // изменение исходного формата
             if let birthDate = dateFormatter.date(from: contactDetail.birthday) {
                 dateFormatter.dateFormat = "d MMMM yyyy"
-                //
                 let age = Calendar.current.dateComponents([.year], from: birthDate, to: Date()).year ?? 0
                 let ageString: String
                 // проверка для выбора год/года/лет в зависимости от возраста
@@ -93,7 +87,6 @@ class UserProfileViewController: UIViewController {
     
     // MARK: - setupViews
     private func setupViews() {
-        // addSubviews
         view.addSubview(userProfile)
         view.addSubview(userBirth)
         view.addSubview(userPhoneNumber)
@@ -102,7 +95,7 @@ class UserProfileViewController: UIViewController {
     
     // MARK: - backButtonSetup
     func backButtonSetup() {
-        let backButton = UIBarButtonItem(image: UIImage(named: "Left"),
+        let backButton = UIBarButtonItem(image: UIImage(named: "shevron"),
                                          style: .plain,
                                          target: self,
                                          action: #selector(backButtonTapped))
@@ -115,6 +108,58 @@ class UserProfileViewController: UIViewController {
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
         print("нажал!")
+    }
+    
+    func phoneTapRecognizer() {
+        // обработчик нажатия на номер и иконку вызова
+        let tapPhoneIcon = UITapGestureRecognizer(target: self, action: #selector(handlePhoneTap))
+        let tapPhoneNumber = UITapGestureRecognizer(target: self, action: #selector(handlePhoneTap))
+        userPhoneNumber.profilePhoneNumber.isUserInteractionEnabled = true
+        userPhoneNumber.profilePhoneImage.isUserInteractionEnabled = true
+        userPhoneNumber.profilePhoneNumber.addGestureRecognizer(tapPhoneIcon)
+        userPhoneNumber.profilePhoneImage.addGestureRecognizer(tapPhoneNumber)
+    }
+    
+    // нажатие на номер
+    @objc func handlePhoneTap() {
+        // nil для того, чтобы не было дополнительных строк
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        // проверка на nil
+        let phoneNumberTitle = userPhoneNumber.profilePhoneNumber.text ?? "There's no number"
+        let callAction = UIAlertAction(title: "\(phoneNumberTitle)", style: .default) { (_) in
+            self.makeCall()
+        }
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        // изменение цвета кнопок по ТЗ
+        callAction.setValue(UIColor(red: 0.198, green: 0.198, blue: 0.198, alpha: 1), forKey: "titleTextColor")
+        cancelAction.setValue(UIColor(red: 0.198, green: 0.198, blue: 0.198, alpha: 1), forKey: "titleTextColor")
+        alertController.addAction(callAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    // звонок
+    func makeCall() {
+        // проверка, что номер корректный
+        guard let phoneNumber = userPhoneNumber.profilePhoneNumber.text,
+              let url = URL(string: "tel://\(phoneNumber)") else {
+            print("Некорректный номер телефона")
+            return
+        }
+        // может ли устройство открыть указанный URL
+        if UIApplication.shared.canOpenURL(url) {
+            // Если устройство может открыть URL, вызывается метод open у объекта UIApplication для начала звонка. Пустой словарь [:] передается в качестве параметра options.
+            UIApplication.shared.open(url, options: [:], completionHandler: { success in
+                if success {
+                    print("Идет вызов")
+                } else {
+                    print("Не удалось совершить звонок")
+                }
+            })
+        } else {
+            // Если устройство не может открыть URL для звонка
+            print("Устройство не может осуществить звонок")
+        }
     }
     
     // MARK: - setConstraints

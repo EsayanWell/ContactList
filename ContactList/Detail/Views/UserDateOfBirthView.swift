@@ -8,7 +8,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-// MARK: - Create customViewController
+// MARK: - Create UserDateOfBirthView
 class UserDateOfBirthView: UIView {
     // MARK: - Constants
     var profileDateOfBirth = UILabel()
@@ -59,12 +59,10 @@ class UserDateOfBirthView: UIView {
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview()
         }
-        
         profileDateOfBirth.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalTo(profileStarImage.snp.trailing).offset(12)
         }
-        
         profileAge.snp.makeConstraints { make in
             make.centerY.equalTo(profileDateOfBirth.snp.centerY)
             make.trailing.equalToSuperview()

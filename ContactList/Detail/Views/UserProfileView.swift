@@ -8,7 +8,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-// MARK: - Create customViewController
+// MARK: - Create UserProfileView
 class UserProfileView: UIView {
     // MARK: - Constants
     var profilePhoto = UIImageView()
@@ -45,14 +45,12 @@ class UserProfileView: UIView {
         backgroundColor = .white
     }
     
-    // настройка фото профиля
     func configureProfilePhoto() {
         profilePhoto.layer.cornerRadius = 52
         profilePhoto.clipsToBounds = true
         profilePhoto.contentMode = .scaleAspectFill
     }
     
-    // настройки надписи Name
     func configureProfileFirstName() {
         profileFirstName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
         profileFirstName.font = UIFont(name: "Inter-Bold", size: 24)
@@ -63,7 +61,6 @@ class UserProfileView: UIView {
         profileLastName.font = UIFont(name: "Inter-Bold", size: 24)
     }
     
-    // настройки надписи Department
     func configureProfilePosition() {
         profilePosition.textColor = UIColor(red: 0.333, green: 0.333, blue: 0.361, alpha: 1)
         profilePosition.font = UIFont(name: "Inter-Regular", size: 13)
@@ -81,23 +78,19 @@ class UserProfileView: UIView {
             make.centerX.equalToSuperview()
             make.height.width.equalTo(104)
         }
-        
         profileFirstName.snp.makeConstraints { make in
             make.top.equalTo(containerView)
             make.leading.equalTo(containerView)
         }
-        
         profileLastName.snp.makeConstraints { make in
             make.centerY.equalTo(profileFirstName.snp.centerY)
             make.leading.equalTo(profileFirstName.snp.trailing).offset(4)
         }
-        
         profileUserTag.snp.makeConstraints { make in
             make.centerY.equalTo(profileFirstName.snp.centerY)
             make.leading.equalTo(profileLastName.snp.trailing).offset(4)
             make.trailing.equalTo(containerView.snp.trailing).offset(-4)
         }
-        
         profilePosition.snp.makeConstraints { make in
             make.top.equalTo(profileFirstName.snp.bottom).offset(12)
             make.centerX.equalToSuperview()
