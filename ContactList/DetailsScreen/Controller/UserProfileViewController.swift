@@ -24,10 +24,8 @@ class UserProfileViewController: UIViewController {
         phoneTapRecognizer()
         makeCall()
         setConstraints()
-        title = "123"
-        navigationController?.navigationBar.isHidden = false
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
-    
     
     // MARK: - setupViews
     private func setupViews() {
@@ -168,7 +166,7 @@ class UserProfileViewController: UIViewController {
     // MARK: - setConstraints
     private func setConstraints() {
         userProfile.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(32)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.trailing.centerX.equalToSuperview()
             make.height.equalTo(184)
         }
