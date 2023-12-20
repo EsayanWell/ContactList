@@ -27,12 +27,12 @@ class ContactListViewController: UIViewController {
         super.viewDidLoad()
         // скрываю NavigationBar
         navigationController?.setNavigationBarHidden(true, animated: true)
-        // вызов функций
+        // FunctionsCall
         setupViews()
-        errorViewToggleVisibility(isHidden: false)
-        fetchContactData()
-        pullToRefreshSetup()
         errorReloadSetup()
+        errorViewToggleVisibility(isHidden: false)
+        pullToRefreshSetup()
+        fetchContactData()
         // подписка на delegate
         departmentMenuCollectionView.filterDelegate = self
         departmentSearchBar.searchDelegate = self
@@ -42,7 +42,6 @@ class ContactListViewController: UIViewController {
     // MARK: - setupViews
     private func setupViews() {
         view.backgroundColor = .white
-        // addSubviews
         view.addSubview(departmentMenuCollectionView)
         view.addSubview(departmentSearchBar)
         view.addSubview(departmentContactList)
@@ -55,13 +54,13 @@ class ContactListViewController: UIViewController {
         
         // MARK: - Set constraints
         departmentSearchBar.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.equalToSuperview().offset(8)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(6)
+            make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
             make.height.equalTo(40)
         }
         departmentMenuCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(departmentSearchBar.snp.bottom).offset(8)
+            make.top.equalTo(departmentSearchBar.snp.bottom).offset(14)
             make.leading.equalToSuperview().offset(12)
             make.trailing.equalToSuperview()
             make.height.equalTo(36)
@@ -83,12 +82,11 @@ class ContactListViewController: UIViewController {
     }
     
     // MARK: - Error reload Setup
-    // ошибка загрузки
     private func errorReloadSetup(){
         errorReload.tryRequestButton.addTarget(self, action: #selector(updateRequest), for: .touchUpInside)
     }
     
-    @objc func updateRequest() {
+    @objc private func updateRequest() {
         print("Try to send request again")
         fetchContactData()
     }
@@ -150,7 +148,6 @@ class ContactListViewController: UIViewController {
 extension ContactListViewController: UITableViewDelegate, UITableViewDataSource, FilterDelegate, CustomSearchBarDelegate, DataSortingDelegate {
     
     // MARK: - Extensions for UITableView
-    // функция для отображения количества строк на экране
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredContacts.count
     }
@@ -200,13 +197,14 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             return "N/A"
         }
     }
+    
     // Настройка надписи header и установка кастомной view
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = CustomHeaderView(frame: CGRect.zero)
         headerView.yearLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
         // чтобы header появлялся только в случае выбора сортировки по дате рождения
         // сомнительно, но оукэй
-        //пока что выглядит так, что лучше и проще будет хедер обычной ячейкой показывать, а не хедером секции
+        // пока что выглядит так, что лучше и проще будет хедер обычной ячейкой показывать, а не хедером секции
         switch currentSortingType {
         case.alphabetically:
             headerView.isHidden = true

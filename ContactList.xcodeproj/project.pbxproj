@@ -97,9 +97,9 @@
 			children = (
 				6E0257EC2ACC2AA7000EA6D9 /* AppDelegate.swift */,
 				6E0257EE2ACC2AA7000EA6D9 /* SceneDelegate.swift */,
-				6E9CBBE62ACD6BDC00B2629D /* List */,
-				6ED2F12F2AEA608900C275C4 /* Sorting */,
-				6E29DDF62B3095FB00CEF06F /* Detail */,
+				6E9CBBE62ACD6BDC00B2629D /* ListOfContacts */,
+				6ED2F12F2AEA608900C275C4 /* SortingContacts */,
+				6E29DDF62B3095FB00CEF06F /* DetailsScreen */,
 				6E0257F52ACC2AA8000EA6D9 /* Assets.xcassets */,
 				6E0257F72ACC2AA8000EA6D9 /* LaunchScreen.storyboard */,
 				6E0257FA2ACC2AA8000EA6D9 /* Info.plist */,
@@ -107,14 +107,14 @@
 			path = ContactList;
 			sourceTree = "<group>";
 		};
-		6E29DDF62B3095FB00CEF06F /* Detail */ = {
+		6E29DDF62B3095FB00CEF06F /* DetailsScreen */ = {
 			isa = PBXGroup;
 			children = (
 				6E29DDFA2B30969A00CEF06F /* Models */,
 				6E29DDF92B30969000CEF06F /* Views */,
 				6E29DDF82B30968400CEF06F /* Controller */,
 			);
-			path = Detail;
+			path = DetailsScreen;
 			sourceTree = "<group>";
 		};
 		6E29DDF72B30967600CEF06F /* Models */ = {
@@ -166,7 +166,7 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		6E9CBBE62ACD6BDC00B2629D /* List */ = {
+		6E9CBBE62ACD6BDC00B2629D /* ListOfContacts */ = {
 			isa = PBXGroup;
 			children = (
 				6ED2F1372AEB066C00C275C4 /* Services */,
@@ -174,7 +174,7 @@
 				6E9CBBE92ACD713F00B2629D /* Views */,
 				6E9CBBE72ACD712800B2629D /* Controller */,
 			);
-			path = List;
+			path = ListOfContacts;
 			sourceTree = "<group>";
 		};
 		6E9CBBE72ACD712800B2629D /* Controller */ = {
@@ -208,14 +208,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		6ED2F12F2AEA608900C275C4 /* Sorting */ = {
+		6ED2F12F2AEA608900C275C4 /* SortingContacts */ = {
 			isa = PBXGroup;
 			children = (
 				6E29DDF72B30967600CEF06F /* Models */,
 				6E94F3BD2B262AEF00353D8B /* Views */,
 				6ED2F1302AEA60AE00C275C4 /* Controller */,
 			);
-			path = Sorting;
+			path = SortingContacts;
 			sourceTree = "<group>";
 		};
 		6ED2F1302AEA60AE00C275C4 /* Controller */ = {

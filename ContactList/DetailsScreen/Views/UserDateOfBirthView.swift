@@ -37,17 +37,17 @@ class UserDateOfBirthView: UIView {
         backgroundColor = .white
     }
     
-    func configureProfileDateOfBirth() {
+    private func configureProfileDateOfBirth() {
         profileDateOfBirth.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
         profileDateOfBirth.font = UIFont(name: "Inter-Medium", size: 16)
     }
     
-    func configureProfileAge() {
+    private func configureProfileAge() {
         profileAge.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
         profileAge.font = UIFont(name: "Inter-Medium", size: 16)
     }
     
-    func configureProfileStarImage() {
+    private func configureProfileStarImage() {
         profileStarImage.clipsToBounds = true
         profileStarImage.contentMode = .scaleAspectFill
         profileStarImage.image = UIImage(named: "star")

@@ -9,16 +9,16 @@ import UIKit
 import SnapKit
 
 class ContactCell: UITableViewCell {
-    var profilePhoto = UIImageView()
-    let profileFirstName = UILabel()
-    let profileLastName = UILabel()
-    let profilePosition = UILabel()
-    let profileUserTag = UILabel()
+    private var profilePhoto = UIImageView()
+    private let profileFirstName = UILabel()
+    private let profileLastName = UILabel()
+    private let profilePosition = UILabel()
+    private let profileUserTag = UILabel()
     var profileDateOfBirth = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        // MARK: - sets
+        // FunctionsCall
         setupViews()
         configureProfilePhoto()
         configureProfileFirstName()
@@ -68,7 +68,6 @@ class ContactCell: UITableViewCell {
         } else {
             print("Invalid date format")
         }
-        
         // Загрузка фотографии из URL через URLSession
         if let imageURL = URL(string: contacts.avatarURL) {
             let session = URLSession.shared
@@ -88,41 +87,34 @@ class ContactCell: UITableViewCell {
             task.resume()
         }
     }
-
-    // настройка фото профиля
-    func configureProfilePhoto() {
+    
+    private func configureProfilePhoto() {
         profilePhoto.layer.cornerRadius = 36
         profilePhoto.clipsToBounds = true
         profilePhoto.contentMode = .scaleAspectFill
     }
     
-    // настройки надписи firstName
-    func configureProfileFirstName() {
-        // цвет текста
+    private func configureProfileFirstName() {
         profileFirstName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
-        // шрифт
         profileFirstName.font = UIFont(name: "Inter-Medium", size: 16)
     }
     
-    // настройки надписи lastName
-    func configureProfileLastName() {
+    private func configureProfileLastName() {
         profileLastName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
         profileLastName.font = UIFont(name: "Inter-Medium", size: 16)
     }
     
-    // настройки надписи Department
-    func configureProfilePosition() {
+    private func configureProfilePosition() {
         profilePosition.textColor = UIColor(red: 0.333, green: 0.333, blue: 0.361, alpha: 1)
         profilePosition.font = UIFont(name: "Inter-Regular", size: 13)
     }
     
-    // настройки надписи Email
-    func configureProfileUserTag() {
+    private func configureProfileUserTag() {
         profileUserTag.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
         profileUserTag.font = UIFont(name: "Inter-Medium", size: 14)
     }
     
-    func configureProfileDateOfBirth() {
+    private func configureProfileDateOfBirth() {
         profileDateOfBirth.textColor = UIColor(red: 0.333, green: 0.333, blue: 0.361, alpha: 1)
         profileDateOfBirth.font = UIFont(name: "Inter-Regular", size: 15)
     }
@@ -135,17 +127,14 @@ class ContactCell: UITableViewCell {
             make.leading.equalToSuperview()
             make.height.width.equalTo(72)
         }
-        
         profileFirstName.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(22)
             make.leading.equalTo(profilePhoto.snp.trailing).offset(16)
         }
-        
         profileLastName.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(22)
             make.leading.equalTo(profileFirstName.snp.trailing).offset(4)
         }
-        
         profilePosition.snp.makeConstraints { make in
             make.top.equalTo(profileFirstName.snp.bottom).offset(3)
             make.leading.equalTo(profileFirstName.snp.leading)

@@ -7,7 +7,7 @@
 
 import Foundation
 
-func warningMessage (error: NetworkError) -> String {
+private func warningMessage (error: NetworkError) -> String {
     switch error {
     case .noData:
         return "Data cannot be found at this URL"

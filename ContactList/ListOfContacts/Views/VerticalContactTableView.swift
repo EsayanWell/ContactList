@@ -16,6 +16,7 @@ class VerticalContactTableView: UITableView {
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: .zero, style: .plain)
+        // FunctionCall
         configureTableView()
     }
     

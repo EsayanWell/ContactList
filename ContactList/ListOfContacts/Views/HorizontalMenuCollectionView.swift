@@ -26,6 +26,7 @@ class HorizontalMenuCollectionView: UICollectionView {
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: departmentLayout)
+        // FunctionsCall
         configureCollectionView()
         setCollectionViewDelegates()
         departments = receiveData()
@@ -41,7 +42,6 @@ class HorizontalMenuCollectionView: UICollectionView {
         departmentLayout.scrollDirection = .horizontal
         // изменение размера ячейки в зависимости от введенного текста
         departmentLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        // расстояние между ячейками горизонтальной таблицы (department)
         self.backgroundColor = .white
         self.register(DepartmentCell.self, forCellWithReuseIdentifier: identifier)
         self.showsHorizontalScrollIndicator = false
@@ -62,7 +62,6 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
     }
     
     // MARK: - Cell setup
-    // настройка ячеек таблицы
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? DepartmentCell else {
             return DepartmentCell()
@@ -108,9 +107,8 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
 }
 
 extension HorizontalMenuCollectionView{
-    
     // функция не принимает аргументов и возвращает массив типа Departments (структура в модели)
-    func receiveData() -> [Departments] {
+    private func receiveData() -> [Departments] {
         return Departments.allCases
     }
 }

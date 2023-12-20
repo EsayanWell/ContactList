@@ -12,12 +12,13 @@ import SnapKit
 // MARK: - create customViewController
 class CustomHeaderView: UIView {
     // MARK: - Constants
-     let yearLabel = UILabel()
     private let leftLineImage = UIImageView()
     private let rightLineImage = UIImageView()
+    let yearLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        // FunctionsCall
         setupViews()
         configureYearLabel()
         configureLeftLineImage()
@@ -56,7 +57,6 @@ class CustomHeaderView: UIView {
         rightLineImage.contentMode = .scaleAspectFill
         rightLineImage.image = UIImage(named: "Line")
     }
-    
     
     // MARK: - Set constraints
     private func setConstraints() {

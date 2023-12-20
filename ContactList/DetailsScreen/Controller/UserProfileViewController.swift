@@ -11,23 +11,34 @@ import SnapKit
 
 class UserProfileViewController: UIViewController {
     // MARK: - Constants
-    let userProfile = UserProfileView()
-    let userBirth = UserDateOfBirthView()
-    let userPhoneNumber = UserPhoneNumberView()
+    private let userProfile = UserProfileView()
+    private let userBirth = UserDateOfBirthView()
+    private let userPhoneNumber = UserPhoneNumberView()
     var contactDetail: ContactData?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         appropriationData()
-        setConstraints()
         backButtonSetup()
         phoneTapRecognizer()
         makeCall()
+        setConstraints()
+        title = "123"
+        navigationController?.navigationBar.isHidden = false
+    }
+    
+    
+    // MARK: - setupViews
+    private func setupViews() {
+        view.addSubview(userProfile)
+        view.addSubview(userBirth)
+        view.addSubview(userPhoneNumber)
+        view.backgroundColor = .white
     }
     
     // MARK: - loadingView
-    func appropriationData() {
+    private func appropriationData() {
         if let contactDetail = contactDetail {
             // Загрузка фотографии из URL через URLSession
             if let imageURL = URL(string: contactDetail.avatarURL) {
@@ -85,16 +96,8 @@ class UserProfileViewController: UIViewController {
         }
     }
     
-    // MARK: - setupViews
-    private func setupViews() {
-        view.addSubview(userProfile)
-        view.addSubview(userBirth)
-        view.addSubview(userPhoneNumber)
-        view.backgroundColor = .white
-    }
-    
     // MARK: - backButtonSetup
-    func backButtonSetup() {
+    private func backButtonSetup() {
         let backButton = UIBarButtonItem(image: UIImage(named: "shevron"),
                                          style: .plain,
                                          target: self,
@@ -110,7 +113,7 @@ class UserProfileViewController: UIViewController {
         print("нажал!")
     }
     
-    func phoneTapRecognizer() {
+    private func phoneTapRecognizer() {
         // обработчик нажатия на номер и иконку вызова
         let tapPhoneIcon = UITapGestureRecognizer(target: self, action: #selector(handlePhoneTap))
         let tapPhoneNumber = UITapGestureRecognizer(target: self, action: #selector(handlePhoneTap))
@@ -121,7 +124,7 @@ class UserProfileViewController: UIViewController {
     }
     
     // нажатие на номер
-    @objc func handlePhoneTap() {
+    @objc private func handlePhoneTap() {
         // nil для того, чтобы не было дополнительных строк
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         // проверка на nil
@@ -138,8 +141,8 @@ class UserProfileViewController: UIViewController {
         present(alertController, animated: true, completion: nil)
     }
     
-    // звонок
-    func makeCall() {
+    // MARK: - makeCall
+    private func makeCall() {
         // проверка, что номер корректный
         guard let phoneNumber = userPhoneNumber.profilePhoneNumber.text,
               let url = URL(string: "tel://\(phoneNumber)") else {
@@ -176,7 +179,6 @@ class UserProfileViewController: UIViewController {
             make.height.equalTo(60)
         }
         userPhoneNumber.snp.makeConstraints { make in
-            //make.centerY.equalTo(userProfile)
             make.top.equalTo(userBirth.snp.bottom).offset(6)
             make.leading.equalTo(userBirth)
             make.trailing.equalTo(userBirth)

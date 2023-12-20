@@ -45,28 +45,28 @@ class UserProfileView: UIView {
         backgroundColor = .white
     }
     
-    func configureProfilePhoto() {
+    private func configureProfilePhoto() {
         profilePhoto.layer.cornerRadius = 52
         profilePhoto.clipsToBounds = true
         profilePhoto.contentMode = .scaleAspectFill
     }
     
-    func configureProfileFirstName() {
+    private func configureProfileFirstName() {
         profileFirstName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
         profileFirstName.font = UIFont(name: "Inter-Bold", size: 24)
     }
     
-    func configureProfileLastName() {
+    private func configureProfileLastName() {
         profileLastName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
         profileLastName.font = UIFont(name: "Inter-Bold", size: 24)
     }
     
-    func configureProfilePosition() {
+    private func configureProfilePosition() {
         profilePosition.textColor = UIColor(red: 0.333, green: 0.333, blue: 0.361, alpha: 1)
         profilePosition.font = UIFont(name: "Inter-Regular", size: 13)
     }
     
-    func configureProfileUserTag() {
+    private func configureProfileUserTag() {
         profileUserTag.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
         profileUserTag.font = UIFont(name: "Inter-Regular", size: 17)
     }
@@ -95,6 +95,7 @@ class UserProfileView: UIView {
             make.top.equalTo(profileFirstName.snp.bottom).offset(12)
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview()
+            make.height.equalTo(16)
         }
         // Установка констрейнтов для контейнера относительно другого объекта
         containerView.snp.makeConstraints { make in

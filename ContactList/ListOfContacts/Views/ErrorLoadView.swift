@@ -10,18 +10,21 @@ import UIKit
 import SnapKit
 
 // MARK: - create customViewController
-class ErrorSearchView: UIView {
+class ErrorLoadView: UIView {
     // MARK: - Constants
     private let errorImage = UIImageView()
     private let errorTitleLabel = UILabel()
     private let errorDescriptionLabel = UILabel()
+    let tryRequestButton = UIButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        // FunctionsCall
         setupViews()
         configureErrorImage()
         configureErrorTitleLabel()
         configureDescriptionLabel()
+        configureRequestButton()
         setConstraints()
     }
     
@@ -34,6 +37,7 @@ class ErrorSearchView: UIView {
         addSubview(errorImage)
         addSubview(errorTitleLabel)
         addSubview(errorDescriptionLabel)
+        addSubview(tryRequestButton)
         backgroundColor = .white
     }
     
@@ -41,25 +45,29 @@ class ErrorSearchView: UIView {
     private func configureErrorImage() {
         errorImage.clipsToBounds = true
         errorImage.contentMode = .scaleAspectFill
-        errorImage.image = UIImage(named: "loop")
+        errorImage.image = UIImage(named: "flying-saucer")
     }
     
     private func configureErrorTitleLabel() {
-        errorTitleLabel.text = "Мы никого не нашли"
-        // цвет текста
+        errorTitleLabel.text = "Какой-то сверхразум все сломал"
         errorTitleLabel.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
-        // шрифт
         errorTitleLabel.font = UIFont(name: "Inter-SemiBold", size: 17)
         errorTitleLabel.textAlignment = .center
     }
     
     private func configureDescriptionLabel() {
-        errorDescriptionLabel.text = "Попробуй скорректировать запрос"
-        // цвет текста
+        errorDescriptionLabel.text = "Постараемся быстро починить"
         errorDescriptionLabel.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
-        // шрифт
         errorDescriptionLabel.font = UIFont(name: "Inter-Regular", size: 16)
         errorDescriptionLabel.textAlignment = .center
+    }
+    
+    private func configureRequestButton() {
+        tryRequestButton.setTitle("Попробовать снова", for: .normal)
+        tryRequestButton.backgroundColor = .white
+        tryRequestButton.titleLabel?.font = UIFont(name: "Inter-SemiBold", size: 16)
+        tryRequestButton.setTitleColor(UIColor.systemGray4, for: .highlighted)
+        tryRequestButton.setTitleColor(UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1), for: .normal)
     }
     
     // MARK: - Set constraints
@@ -76,6 +84,12 @@ class ErrorSearchView: UIView {
         errorDescriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(errorTitleLabel.snp.bottom).offset(12)
             make.centerX.equalToSuperview()
+        }
+        tryRequestButton.snp.makeConstraints { make in
+            make.top.equalTo(errorDescriptionLabel.snp.bottom).offset(12)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(20)
+            make.width.equalTo(343)
         }
     }
 }

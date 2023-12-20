@@ -34,12 +34,12 @@ class UserPhoneNumberView: UIView {
         backgroundColor = .white
     }
     
-    func configureProfilePhoneNumber() {
+    private func configureProfilePhoneNumber() {
         profilePhoneNumber.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
         profilePhoneNumber.font = UIFont(name: "Inter-Medium", size: 16)
     }
     
-    func configureProfilePhoneImage() {
+    private func configureProfilePhoneImage() {
         profilePhoneImage.clipsToBounds = true
         profilePhoneImage.contentMode = .scaleAspectFill
         profilePhoneImage.image = UIImage(named: "phone")

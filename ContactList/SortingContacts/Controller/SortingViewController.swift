@@ -24,9 +24,9 @@ class SortingViewController: UIViewController {
     // MARK: - Constants
     private let alphabeticallySorting = RadioButtonView()
     private let byBirthdaySorting = RadioButtonView()
+    private let initialSortingType: SortingType
     // добавляем свойство делегата типа DataSortingDelegate в SortingViewController
     weak var sortingDelegate: DataSortingDelegate?
-    let initialSortingType: SortingType
     
     init(initialSortingType: SortingType) {
         self.initialSortingType = initialSortingType
@@ -40,15 +40,16 @@ class SortingViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         title = "Сортировка"
+        // FunctionsCall
         customizeNavigationBar()
         setupSorting(.alphabetically)
         setupSorting(.byBirthday)
-        backButtonsSetup()
+        backButtonSetup()
         setConstraints()
     }
     
     // MARK: - Customize NavigationBar
-    func customizeNavigationBar() {
+    private func customizeNavigationBar() {
         // Создаем объект шрифта
         let customFont = UIFont(name: "Inter-SemiBold", size: 20) ?? UIFont.systemFont(ofSize: 20.0, weight: .medium)
         // Создаем атрибуты текста с заданным шрифтом
@@ -61,7 +62,7 @@ class SortingViewController: UIViewController {
     }
     
     // MARK: - Sorting setup
-    func setupSorting(_ sortingType: SortingType) {
+    private func setupSorting(_ sortingType: SortingType) {
         let sortingView: RadioButtonView
         let description: String
         switch sortingType {
@@ -103,7 +104,7 @@ class SortingViewController: UIViewController {
     }
     
     // MARK: - backButtonSetup
-    func backButtonsSetup() {
+    private func backButtonSetup() {
         let backButtons = UIBarButtonItem(image: UIImage(named: "Arrow"),
                                          style: .plain,
                                          target: self,
@@ -118,7 +119,7 @@ class SortingViewController: UIViewController {
     }
 
     // MARK: - Set constraints
-    func setConstraints() {
+    private func setConstraints() {
         alphabeticallySorting.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(68)
             make.leading.equalToSuperview().offset(24)

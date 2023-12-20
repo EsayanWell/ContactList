@@ -14,8 +14,7 @@ class DepartmentCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        // MARK: - sets
+        // FunctionsCall
         setupViews()
         setupCell()
         configureDepartmentLabel()
@@ -32,7 +31,7 @@ class DepartmentCell: UICollectionViewCell {
         addSubview(selectedCell)
     }
     
-    func setupCell() {
+    private func setupCell() {
         // цвет полоски
         selectedCell.backgroundColor = UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1)
         selectedCell.isHidden = true
@@ -43,20 +42,18 @@ class DepartmentCell: UICollectionViewCell {
         departmentName.text = department.title
     }
     
-    func configureDepartmentLabel() {
-        // цвет и шрифт из Figma
+    private func configureDepartmentLabel() {
         departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
         departmentName.font = UIFont(name: "Inter-Medium", size: 15)
     }
     
-    // MARK: - constraints
-    func setConstraints() {
+    // MARK: - setConstraints
+    private func setConstraints() {
         departmentName.snp.makeConstraints { make in
             make.top.trailing.equalToSuperview()
             make.leading.equalToSuperview().offset(16)
             make.bottom.equalTo(selectedCell.snp.top)
         }
-        
         selectedCell.snp.makeConstraints { make in
             make.top.equalTo(departmentName.snp.bottom)
             make.leading.equalTo(departmentName).offset(-12)
