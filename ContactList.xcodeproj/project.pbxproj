@@ -110,18 +110,10 @@
 		6E29DDF62B3095FB00CEF06F /* DetailsScreen */ = {
 			isa = PBXGroup;
 			children = (
-				6E29DDFA2B30969A00CEF06F /* Models */,
 				6E29DDF92B30969000CEF06F /* Views */,
 				6E29DDF82B30968400CEF06F /* Controller */,
 			);
 			path = DetailsScreen;
-			sourceTree = "<group>";
-		};
-		6E29DDF72B30967600CEF06F /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		6E29DDF82B30968400CEF06F /* Controller */ = {
@@ -140,13 +132,6 @@
 				6E29DE012B30A20D00CEF06F /* UserPhoneNumberView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		6E29DDFA2B30969A00CEF06F /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		6E94F3BD2B262AEF00353D8B /* Views */ = {
@@ -211,7 +196,6 @@
 		6ED2F12F2AEA608900C275C4 /* SortingContacts */ = {
 			isa = PBXGroup;
 			children = (
-				6E29DDF72B30967600CEF06F /* Models */,
 				6E94F3BD2B262AEF00353D8B /* Views */,
 				6ED2F1302AEA60AE00C275C4 /* Controller */,
 			);

@@ -39,6 +39,12 @@ class ContactListViewController: UIViewController {
         errorSearch.isHidden = true
     }
     
+    // сокрытие navigationController
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
     // MARK: - setupViews
     private func setupViews() {
         view.backgroundColor = .white
