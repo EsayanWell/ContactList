@@ -12,18 +12,13 @@ import SnapKit
 // MARK: - create customViewController
 class CustomHeaderView: UIView {
     // MARK: - Constants
-    private let leftLineImage = UIImageView()
-    private let rightLineImage = UIImageView()
+    private let leftLineImageView = UIImageView()
+    private let rightLineImageView = UIImageView()
     let yearLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        // FunctionsCall
         setupViews()
-        configureYearLabel()
-        configureLeftLineImage()
-        configureRightLineImage()
-        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -33,9 +28,31 @@ class CustomHeaderView: UIView {
     // MARK: - Setup Views
     private func setupViews() {
         addSubview(yearLabel)
-        addSubview(leftLineImage)
-        addSubview(rightLineImage)
+        addSubview(leftLineImageView)
+        addSubview(rightLineImageView)
         backgroundColor = .white
+        // вызов функций
+        configureYearLabel()
+        configureLeftLineImageView()
+        configureRightLineImageView()
+        
+        // MARK: - Set constraints
+        yearLabel.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        leftLineImageView.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(yearLabel.snp.leading).offset(12)
+            make.centerY.equalTo(yearLabel.snp.centerY)
+            make.width.equalTo(72)
+        }
+        rightLineImageView.snp.makeConstraints { make in
+            make.trailing.equalToSuperview()
+            make.leading.equalTo(yearLabel.snp.trailing).offset(-12)
+            make.centerY.equalTo(yearLabel.snp.centerY)
+            make.width.equalTo(72)
+        }
     }
     
     // MARK: - Configures
@@ -46,35 +63,15 @@ class CustomHeaderView: UIView {
         yearLabel.textAlignment = .center
     }
     
-    private func configureLeftLineImage() {
-        leftLineImage.clipsToBounds = true
-        leftLineImage.contentMode = .scaleAspectFill
-        leftLineImage.image = UIImage(named: "Line")
+    private func configureLeftLineImageView() {
+        leftLineImageView.clipsToBounds = true
+        leftLineImageView.contentMode = .scaleAspectFill
+        leftLineImageView.image = UIImage(named: "Line")
     }
     
-    private func configureRightLineImage() {
-        rightLineImage.clipsToBounds = true
-        rightLineImage.contentMode = .scaleAspectFill
-        rightLineImage.image = UIImage(named: "Line")
-    }
-    
-    // MARK: - Set constraints
-    private func setConstraints() {
-        yearLabel.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
-        leftLineImage.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.trailing.equalTo(yearLabel.snp.leading).offset(12)
-            make.centerY.equalTo(yearLabel.snp.centerY)
-            make.width.equalTo(72)
-        }
-        rightLineImage.snp.makeConstraints { make in
-            make.trailing.equalToSuperview()
-            make.leading.equalTo(yearLabel.snp.trailing).offset(-12)
-            make.centerY.equalTo(yearLabel.snp.centerY)
-            make.width.equalTo(72)
-        }
+    private func configureRightLineImageView() {
+        rightLineImageView.clipsToBounds = true
+        rightLineImageView.contentMode = .scaleAspectFill
+        rightLineImageView.image = UIImage(named: "Line")
     }
 }

@@ -11,24 +11,15 @@ import SnapKit
 // MARK: - Create UserProfileView
 class UserProfileView: UIView {
     // MARK: - Constants
-    var profilePhoto = UIImageView()
-    let profileFirstName = UILabel()
-    let profileLastName = UILabel()
-    var profilePosition = UILabel()
-    var profileUserTag = UILabel()
+    let photoImageView = UIImageView()
+    let nameLabel = UILabel()
+    let positionLabel = UILabel()
+    let userTagLabel = UILabel()
     let containerView = UIView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        // MARK: - sets
         setupViews()
-        configureProfilePhoto()
-        configureProfileFirstName()
-        configureProfileLastName()
-        configureProfilePosition()
-        configureProfileUserTag()
-        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -36,71 +27,66 @@ class UserProfileView: UIView {
     }
     
     private func setupViews() {
-        addSubview(profilePhoto)
-        containerView.addSubview(profileFirstName)
-        containerView.addSubview(profileLastName)
-        containerView.addSubview(profileUserTag)
-        addSubview(profilePosition)
+        addSubview(photoImageView)
+        containerView.addSubview(nameLabel)
+        containerView.addSubview(userTagLabel)
+        addSubview(positionLabel)
         addSubview(containerView)
         backgroundColor = .white
-    }
-    
-    private func configureProfilePhoto() {
-        profilePhoto.layer.cornerRadius = 52
-        profilePhoto.clipsToBounds = true
-        profilePhoto.contentMode = .scaleAspectFill
-    }
-    
-    private func configureProfileFirstName() {
-        profileFirstName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
-        profileFirstName.font = UIFont(name: "Inter-Bold", size: 24)
-    }
-    
-    private func configureProfileLastName() {
-        profileLastName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
-        profileLastName.font = UIFont(name: "Inter-Bold", size: 24)
-    }
-    
-    private func configureProfilePosition() {
-        profilePosition.textColor = UIColor(red: 0.333, green: 0.333, blue: 0.361, alpha: 1)
-        profilePosition.font = UIFont(name: "Inter-Regular", size: 13)
-    }
-    
-    private func configureProfileUserTag() {
-        profileUserTag.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
-        profileUserTag.font = UIFont(name: "Inter-Regular", size: 17)
-    }
-    
-    // MARK: - setConstraints
-    private func setConstraints() {
-        profilePhoto.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+        // вызов функций
+        configurePhotoImageView()
+        configureNameLabel()
+        configurePositionLabel()
+        configureUserTagLabel()
+        
+        // MARK: - setConstraints
+        photoImageView.snp.makeConstraints { make in
+            make.top.equalTo(safeAreaLayoutGuide)
             make.centerX.equalToSuperview()
             make.height.width.equalTo(104)
         }
-        profileFirstName.snp.makeConstraints { make in
-            make.top.equalTo(containerView)
-            make.leading.equalTo(containerView)
+        nameLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview()
         }
-        profileLastName.snp.makeConstraints { make in
-            make.centerY.equalTo(profileFirstName.snp.centerY)
-            make.leading.equalTo(profileFirstName.snp.trailing).offset(4)
+        
+        userTagLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(nameLabel.snp.centerY)
+            make.leading.equalTo(nameLabel.snp.trailing).offset(4)
+            make.trailing.equalToSuperview().offset(-4)
         }
-        profileUserTag.snp.makeConstraints { make in
-            make.centerY.equalTo(profileFirstName.snp.centerY)
-            make.leading.equalTo(profileLastName.snp.trailing).offset(4)
-            make.trailing.equalTo(containerView.snp.trailing).offset(-4)
+        
+        // Установка ограничений для контейнера относительно другого объекта
+        containerView.snp.makeConstraints { make in
+            make.centerX.equalTo(photoImageView)
+            make.top.equalTo(photoImageView.snp.bottom).offset(24)
         }
-        profilePosition.snp.makeConstraints { make in
-            make.top.equalTo(profileFirstName.snp.bottom).offset(12)
+        positionLabel.snp.makeConstraints { make in
+            make.top.equalTo(containerView.snp.bottom).offset(12)
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview()
             make.height.equalTo(16)
         }
-        // Установка констрейнтов для контейнера относительно другого объекта
-        containerView.snp.makeConstraints { make in
-            make.centerX.equalTo(profilePhoto)
-            make.top.equalTo(profilePhoto.snp.bottom).offset(24)
-        }
+    }
+    
+    private func configurePhotoImageView() {
+        photoImageView.layer.cornerRadius = 52
+        photoImageView.clipsToBounds = true
+        photoImageView.contentMode = .scaleAspectFill
+    }
+    
+    private func configureNameLabel() {
+        nameLabel.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
+        nameLabel.font = UIFont(name: "Inter-Bold", size: 24)
+    }
+    
+    private func configurePositionLabel() {
+        positionLabel.textColor = UIColor(red: 0.333, green: 0.333, blue: 0.361, alpha: 1)
+        positionLabel.font = UIFont(name: "Inter-Regular", size: 13)
+    }
+    
+    private func configureUserTagLabel() {
+        userTagLabel.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
+        userTagLabel.font = UIFont(name: "Inter-Regular", size: 17)
     }
 }

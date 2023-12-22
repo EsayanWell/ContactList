@@ -11,87 +11,100 @@ import SnapKit
 
 class UserProfileViewController: UIViewController {
     // MARK: - Constants
-    private let userProfile = UserProfileView()
-    private let userBirth = UserDateOfBirthView()
-    private let userPhoneNumber = UserPhoneNumberView()
+    private let profileView = UserProfileView()
+    private let birthView = UserDateOfBirthView()
+    private let phoneNumberView = UserPhoneNumberView()
     var contactDetail: ContactData?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        appropriationData()
         backButtonSetup()
-        phoneTapRecognizer()
-        makeCall()
-        setConstraints()
-        navigationController?.setNavigationBarHidden(false, animated: true)
+        // обработчик нажатия на номер телефона
+        phoneNumberView.tapPhoneHandler = {
+            self.handlePhoneTap()
+        }
+    }
+    
+    // сокрытие navigationController
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     // MARK: - setupViews
     private func setupViews() {
-        view.addSubview(userProfile)
-        view.addSubview(userBirth)
-        view.addSubview(userPhoneNumber)
+        view.addSubview(profileView)
+        view.addSubview(birthView)
+        view.addSubview(phoneNumberView)
         view.backgroundColor = .white
+        // вызов функций
+        setupUserProfile()
+        
+        // MARK: - setConstraints
+        profileView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(184)
+        }
+        birthView.snp.makeConstraints { make in
+            make.top.equalTo(profileView.snp.bottom).offset(32)
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+            make.height.equalTo(60)
+        }
+        phoneNumberView.snp.makeConstraints { make in
+            make.top.equalTo(birthView.snp.bottom).offset(6)
+            make.leading.equalTo(birthView)
+            make.trailing.equalTo(birthView)
+            make.height.equalTo(60)
+        }
     }
     
     // MARK: - loadingView
-    private func appropriationData() {
-        if let contactDetail = contactDetail {
-            // Загрузка фотографии из URL через URLSession
-            if let imageURL = URL(string: contactDetail.avatarURL) {
-                let session = URLSession.shared
-                let task = session.dataTask(with: imageURL) { (data, response, error) in
-                    if let error = error {
-                        print("Ошибка при загрузке данных: \(error)")
-                        return
-                    }
-                    if let data = data {
-                        if let image = UIImage(data: data) {
-                            DispatchQueue.main.async {
-                                self.userProfile.profilePhoto.image = image
-                            }
-                        }
-                    }
+    private func setupUserProfile() {
+        guard let contactDetail = contactDetail else {
+            return
+        }
+        // загрузка изображения
+        ImageLoader.loadImage(from: contactDetail.avatarURL) { (image) in
+            if let image = image {
+                DispatchQueue.main.async {
+                    self.profileView.photoImageView.image = image
                 }
-                task.resume()
-            }
-            // присвоение данных
-            userProfile.profileFirstName.text = contactDetail.firstName
-            userProfile.profileLastName.text = contactDetail.lastName
-            userProfile.profileUserTag.text = contactDetail.userTag
-            userProfile.profilePosition.text = contactDetail.position
-            userBirth.profileDateOfBirth.text = contactDetail.birthday
-            userPhoneNumber.profilePhoneNumber.text = contactDetail.phone
-            userBirth.profileDateOfBirth.text = contactDetail.birthday
-            // изменение формата даты
-            // Создается экземпляр DateFormatter для работы с датами
-            let dateFormatter = DateFormatter()
-            dateFormatter.locale = Locale(identifier: "ru_RU")
-            // исходный формат
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            // изменение исходного формата
-            if let birthDate = dateFormatter.date(from: contactDetail.birthday) {
-                dateFormatter.dateFormat = "d MMMM yyyy"
-                let age = Calendar.current.dateComponents([.year], from: birthDate, to: Date()).year ?? 0
-                let ageString: String
-                // проверка для выбора год/года/лет в зависимости от возраста
-                switch age {
-                case 1, 21, 31, 41, 51, 61, 71, 81, 91, 101:
-                    ageString = "\(age) год"
-                case 2...4, 22...24, 32...34, 42...44, 52...54, 62...64, 72...74, 82...84, 92...94, 102...104:
-                    ageString = "\(age) года"
-                default:
-                    ageString = "\(age) лет"
-                }
-                // присваиваем отформатированную дату
-                let formattedDate = dateFormatter.string(from: birthDate)
-                userBirth.profileAge.text = ageString
-                userBirth.profileDateOfBirth.text = formattedDate
             } else {
-                print("Invalid date format")
+                // Обработка ошибки или отсутствия изображения
+                print("Ошибка при загрузке данных")
             }
         }
+        
+        // присвоение данных
+        profileView.nameLabel.text = contactDetail.firstName + " " + contactDetail.lastName
+        profileView.userTagLabel.text = contactDetail.userTag
+        profileView.positionLabel.text = contactDetail.position
+        birthView.dateOfBirthLabel.text = contactDetail.birthday
+        phoneNumberView.numberLabel.text = contactDetail.phone
+        
+        // изменение формата даты для отображения даты рождения
+        let formattedDate = DateFormat.formatDate(contactDetail.birthday,
+                                                  fromFormat: "yyyy-MM-dd",
+                                                  toFormat: "d MMMM yyyy",
+                                                  localeIdentifier: "ru_RU")
+        
+        // отображение возраста
+        let age = DateFormat.calculateAgeFromDate(contactDetail.birthday, format: "yyyy-MM-dd")
+        let ageString: String
+        // Проверка для выбора правильного формата строки в зависимости от возраста
+        switch age {
+        case 1, 21, 31, 41, 51, 61, 71, 81, 91, 101:
+            ageString = String.localizedStringWithFormat(NSLocalizedString("%lld год", comment: ""), age)
+        case 2...4, 22...24, 32...34, 42...44, 52...54, 62...64, 72...74, 82...84, 92...94, 102...104:
+            ageString = String.localizedStringWithFormat(NSLocalizedString("%lld года", comment: ""), age)
+        default:
+            ageString = String.localizedStringWithFormat(NSLocalizedString("%lld лет", comment: ""), age)
+        }
+        birthView.ageLabel.text = ageString
+        birthView.dateOfBirthLabel.text = formattedDate
     }
     
     // MARK: - backButtonSetup
@@ -111,22 +124,11 @@ class UserProfileViewController: UIViewController {
         print("нажал!")
     }
     
-    private func phoneTapRecognizer() {
-        // обработчик нажатия на номер и иконку вызова
-        let tapPhoneIcon = UITapGestureRecognizer(target: self, action: #selector(handlePhoneTap))
-        let tapPhoneNumber = UITapGestureRecognizer(target: self, action: #selector(handlePhoneTap))
-        userPhoneNumber.profilePhoneNumber.isUserInteractionEnabled = true
-        userPhoneNumber.profilePhoneImage.isUserInteractionEnabled = true
-        userPhoneNumber.profilePhoneNumber.addGestureRecognizer(tapPhoneIcon)
-        userPhoneNumber.profilePhoneImage.addGestureRecognizer(tapPhoneNumber)
-    }
-    
-    // нажатие на номер
-    @objc private func handlePhoneTap() {
+    private func handlePhoneTap() {
         // nil для того, чтобы не было дополнительных строк
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         // проверка на nil
-        let phoneNumberTitle = userPhoneNumber.profilePhoneNumber.text ?? "There's no number"
+        let phoneNumberTitle = phoneNumberView.numberLabel.text ?? "There's no number"
         let callAction = UIAlertAction(title: "\(phoneNumberTitle)", style: .default) { (_) in
             self.makeCall()
         }
@@ -142,7 +144,7 @@ class UserProfileViewController: UIViewController {
     // MARK: - makeCall
     private func makeCall() {
         // проверка, что номер корректный
-        guard let phoneNumber = userPhoneNumber.profilePhoneNumber.text,
+        guard let phoneNumber = phoneNumberView.numberLabel.text,
               let url = URL(string: "tel://\(phoneNumber)") else {
             print("Некорректный номер телефона")
             return
@@ -160,27 +162,6 @@ class UserProfileViewController: UIViewController {
         } else {
             // Если устройство не может открыть URL для звонка
             print("Устройство не может осуществить звонок")
-        }
-    }
-    
-    // MARK: - setConstraints
-    private func setConstraints() {
-        userProfile.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.trailing.centerX.equalToSuperview()
-            make.height.equalTo(184)
-        }
-        userBirth.snp.makeConstraints { make in
-            make.top.equalTo(userProfile.snp.bottom).offset(32)
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-            make.height.equalTo(60)
-        }
-        userPhoneNumber.snp.makeConstraints { make in
-            make.top.equalTo(userBirth.snp.bottom).offset(6)
-            make.leading.equalTo(userBirth)
-            make.trailing.equalTo(userBirth)
-            make.height.equalTo(60)
         }
     }
 }

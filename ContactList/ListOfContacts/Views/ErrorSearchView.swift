@@ -12,18 +12,13 @@ import SnapKit
 // MARK: - create customViewController
 class ErrorSearchView: UIView {
     // MARK: - Constants
-    private let errorImage = UIImageView()
+    private let errorImageView = UIImageView()
     private let errorTitleLabel = UILabel()
     private let errorDescriptionLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        // FunctionsCall
         setupViews()
-        configureErrorImage()
-        configureErrorTitleLabel()
-        configureDescriptionLabel()
-        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -32,17 +27,37 @@ class ErrorSearchView: UIView {
     
     // MARK: - Setup Views
     private func setupViews() {
-        addSubview(errorImage)
+        // добавление на view
+        addSubview(errorImageView)
         addSubview(errorTitleLabel)
         addSubview(errorDescriptionLabel)
         backgroundColor = .white
+        //вызов функций
+        configureErrorImageView()
+        configureErrorTitleLabel()
+        configureDescriptionLabel()
+        
+        // MARK: - Set constraints
+        errorImageView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.height.width.equalTo(56)
+        }
+        errorTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(errorImageView.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+        }
+        errorDescriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(errorTitleLabel.snp.bottom).offset(12)
+            make.centerX.equalToSuperview()
+        }
     }
     
     // MARK: - Configures
-    private func configureErrorImage() {
-        errorImage.clipsToBounds = true
-        errorImage.contentMode = .scaleAspectFill
-        errorImage.image = UIImage(named: "loop")
+    private func configureErrorImageView() {
+        errorImageView.clipsToBounds = true
+        errorImageView.contentMode = .scaleAspectFill
+        errorImageView.image = UIImage(named: "loop")
     }
     
     private func configureErrorTitleLabel() {
@@ -57,22 +72,5 @@ class ErrorSearchView: UIView {
         errorDescriptionLabel.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
         errorDescriptionLabel.font = UIFont(name: "Inter-Regular", size: 16)
         errorDescriptionLabel.textAlignment = .center
-    }
-    
-    // MARK: - Set constraints
-    private func setConstraints() {
-        errorImage.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.height.width.equalTo(56)
-        }
-        errorTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(errorImage.snp.bottom).offset(8)
-            make.centerX.equalToSuperview()
-        }
-        errorDescriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(errorTitleLabel.snp.bottom).offset(12)
-            make.centerX.equalToSuperview()
-        }
     }
 }

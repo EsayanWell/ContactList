@@ -9,16 +9,12 @@ import UIKit
 import SnapKit
 
 class DepartmentCell: UICollectionViewCell {
-    let departmentName = UILabel()
-    let selectedCell = UIView()
+    let departmentNameLabel = UILabel()
+    let selectedCellView = UIView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        // FunctionsCall
         setupViews()
-        setupCell()
-        configureDepartmentLabel()
-        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -27,39 +23,39 @@ class DepartmentCell: UICollectionViewCell {
     
     // MARK: - Configures
     private func setupViews() {
-        addSubview(departmentName)
-        addSubview(selectedCell)
+        addSubview(departmentNameLabel)
+        addSubview(selectedCellView)
+        // вызов функций
+        setupCellView()
+        configureDepartmentLabel()
+        
+        // MARK: - setConstraints
+        departmentNameLabel.snp.makeConstraints { make in
+            make.top.trailing.equalToSuperview()
+            make.leading.equalToSuperview().offset(16)
+        }
+        selectedCellView.snp.makeConstraints { make in
+            make.top.equalTo(departmentNameLabel.snp.bottom)
+            make.leading.equalTo(departmentNameLabel).offset(-12)
+            make.trailing.equalTo(departmentNameLabel).offset(12)
+            make.bottom.equalToSuperview()
+            make.height.equalTo(2)
+        }
     }
     
-    private func setupCell() {
+    private func setupCellView() {
         // цвет полоски
-        selectedCell.backgroundColor = UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1)
-        selectedCell.isHidden = true
+        selectedCellView.backgroundColor = UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1)
+        selectedCellView.isHidden = true
     }
     
     // функция выполняет задачу обновления интерфейсных элементов на экране информацией из объекта Expense, переданного в качестве параметра
     func set(department: Departments) {
-        departmentName.text = department.title
+        departmentNameLabel.text = department.title
     }
     
     private func configureDepartmentLabel() {
-        departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
-        departmentName.font = UIFont(name: "Inter-Medium", size: 15)
-    }
-    
-    // MARK: - setConstraints
-    private func setConstraints() {
-        departmentName.snp.makeConstraints { make in
-            make.top.trailing.equalToSuperview()
-            make.leading.equalToSuperview().offset(16)
-            make.bottom.equalTo(selectedCell.snp.top)
-        }
-        selectedCell.snp.makeConstraints { make in
-            make.top.equalTo(departmentName.snp.bottom)
-            make.leading.equalTo(departmentName).offset(-12)
-            make.trailing.equalTo(departmentName).offset(12)
-            make.bottom.equalToSuperview()
-            make.height.equalTo(2)
-        }
+        departmentNameLabel.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
+        departmentNameLabel.font = UIFont(name: "Inter-Medium", size: 15)
     }
 }

@@ -11,17 +11,14 @@ import SnapKit
 // MARK: - Create UserPhoneNumberView
 class UserPhoneNumberView: UIView {
     // MARK: - Constants
-    let profilePhoneNumber = UILabel()
-    let profilePhoneImage = UIImageView()
+    let numberLabel = UILabel()
+    let phoneImageView = UIImageView()
+    // замыкание, которое не принимает аргументы и не возвращает никаких значений (Void).
+    var tapPhoneHandler: (() -> Void)?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        // MARK: - sets
         setupViews()
-        configureProfilePhoneNumber()
-        configureProfilePhoneImage()
-        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -29,31 +26,42 @@ class UserPhoneNumberView: UIView {
     }
     
     private func setupViews() {
-        addSubview(profilePhoneNumber)
-        addSubview(profilePhoneImage)
+        addSubview(numberLabel)
+        addSubview(phoneImageView)
         backgroundColor = .white
+        // вызов функций
+        configureProfilePhoneNumberLabel()
+        configureProfilePhoneImage()
+        
+        // MARK: - setConstraints
+        phoneImageView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.leading.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-16)
+        }
+        numberLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(phoneImageView)
+            make.leading.equalTo(phoneImageView.snp.trailing).offset(12)
+        }
     }
     
-    private func configureProfilePhoneNumber() {
-        profilePhoneNumber.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
-        profilePhoneNumber.font = UIFont(name: "Inter-Medium", size: 16)
+    private func configureProfilePhoneNumberLabel() {
+        numberLabel.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
+        numberLabel.font = UIFont(name: "Inter-Medium", size: 16)
+        numberLabel.isUserInteractionEnabled = true
+        numberLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(phoneIconTapped)))
     }
     
     private func configureProfilePhoneImage() {
-        profilePhoneImage.clipsToBounds = true
-        profilePhoneImage.contentMode = .scaleAspectFill
-        profilePhoneImage.image = UIImage(named: "phone")
+        phoneImageView.clipsToBounds = true
+        phoneImageView.contentMode = .scaleAspectFill
+        phoneImageView.image = UIImage(named: "phone")
+        phoneImageView.isUserInteractionEnabled = true
+        phoneImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(phoneIconTapped)))
     }
     
-    // MARK: - setConstraints
-    private func setConstraints() {
-        profilePhoneImage.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview()
-        }
-        profilePhoneNumber.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalTo(profilePhoneImage.snp.trailing).offset(12)
-        }
+    @objc private func phoneIconTapped() {
+        // Обработка нажатия на иконку телефона
+        tapPhoneHandler?()
     }
 }

@@ -16,7 +16,7 @@ class ContactListViewController: UIViewController {
     private var contacts = [ContactData]()
     private let dataRefreshControl = UIRefreshControl()
     private var filteredContacts = [ContactData]()
-    private let departmentContactList = VerticalContactTableView()
+    private let departmentContactListTableView = VerticalContactTableView()
     private let errorReload = ErrorLoadView()
     private var errorSearch = ErrorSearchView()
     private let identifier = "ContactCell"
@@ -25,10 +25,24 @@ class ContactListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // скрываю NavigationBar
-        navigationController?.setNavigationBarHidden(true, animated: true)
-        // FunctionsCall
         setupViews()
+    }
+    
+    // сокрытие navigationController
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    // MARK: - setupViews
+    private func setupViews() {
+        view.backgroundColor = .white
+        view.addSubview(departmentMenuCollectionView)
+        view.addSubview(departmentSearchBar)
+        view.addSubview(departmentContactListTableView)
+        view.addSubview(errorReload)
+        view.addSubview(errorSearch)
+        // вызов функций
         errorReloadSetup()
         errorViewToggleVisibility(isHidden: false)
         pullToRefreshSetup()
@@ -37,26 +51,10 @@ class ContactListViewController: UIViewController {
         departmentMenuCollectionView.filterDelegate = self
         departmentSearchBar.searchDelegate = self
         errorSearch.isHidden = true
-    }
-    
-    // сокрытие navigationController
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
-    }
-
-    // MARK: - setupViews
-    private func setupViews() {
-        view.backgroundColor = .white
-        view.addSubview(departmentMenuCollectionView)
-        view.addSubview(departmentSearchBar)
-        view.addSubview(departmentContactList)
-        view.addSubview(errorReload)
-        view.addSubview(errorSearch)
         
         // setup UITableView
-        departmentContactList.delegate = self
-        departmentContactList.dataSource = self
+        departmentContactListTableView.delegate = self
+        departmentContactListTableView.dataSource = self
         
         // MARK: - Set constraints
         departmentSearchBar.snp.makeConstraints { make in
@@ -71,7 +69,7 @@ class ContactListViewController: UIViewController {
             make.trailing.equalToSuperview()
             make.height.equalTo(36)
         }
-        departmentContactList.snp.makeConstraints { make in
+        departmentContactListTableView.snp.makeConstraints { make in
             make.top.equalTo(departmentMenuCollectionView.snp.bottom).offset(16)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
@@ -102,7 +100,7 @@ class ContactListViewController: UIViewController {
     private func errorViewToggleVisibility(isHidden: Bool) {
         departmentSearchBar.isHidden = isHidden
         departmentMenuCollectionView.isHidden = isHidden
-        departmentContactList.isHidden = isHidden
+        departmentContactListTableView.isHidden = isHidden
         
         if isHidden {
             print("Данных в таблице нет")
@@ -114,8 +112,8 @@ class ContactListViewController: UIViewController {
     // MARK: - Setup pull to refresh
     private func pullToRefreshSetup() {
         dataRefreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
-        departmentContactList.addSubview(dataRefreshControl)
-        departmentContactList.reloadData()
+        departmentContactListTableView.addSubview(dataRefreshControl)
+        departmentContactListTableView.reloadData()
     }
     
     // MARK: - Re-fetch API data
@@ -136,7 +134,7 @@ class ContactListViewController: UIViewController {
                     print("Success")
                     self.contacts = decodedContacts
                     self.dataRefreshControl.endRefreshing()
-                    self.departmentContactList.reloadData()
+                    self.departmentContactListTableView.reloadData()
                     self.errorReload.isHidden = true
                     self.errorViewToggleVisibility(isHidden: false)
                     self.currentSortingType = .alphabetically
@@ -165,7 +163,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         cell.configure(contacts: contact)
         // Проверяем, выбран ли фильтр по дате рождения
         // если currentSortingType не равен byBirthday, то true
-        cell.profileDateOfBirth.isHidden = currentSortingType != .byBirthday
+        cell.dateOfBirthLabel.isHidden = currentSortingType != .byBirthday
         return cell
     }
     
@@ -242,11 +240,11 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         }
         // обновление экрана при наличии данных по тому или иному департаменту
         if  filteredContacts.isEmpty {
-            departmentContactList.isHidden = true
+            departmentContactListTableView.isHidden = true
             print("Нет данных по выбранному фильтру")
         } else {
-            departmentContactList.reloadData()
-            departmentContactList.isHidden = false
+            departmentContactListTableView.reloadData()
+            departmentContactListTableView.isHidden = false
             print("Данные по выбранному фильтру есть")
             errorSearch.isHidden = true
         }
@@ -262,7 +260,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             contact.phone.contains(searchText)
         }
         // Обновление таблицы с отфильтрованными результатами
-        departmentContactList.reloadData()
+        departmentContactListTableView.reloadData()
         // проверка наличия отфильтрованных данных
         let isSearchEmpty = departmentSearchBar.searchTextField.state.isEmpty
         let isContactListEmpty = filteredContacts.isEmpty
@@ -290,7 +288,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         case .alphabetically:
             // Сортировка по алфавиту
             filteredContacts.sort {$0.firstName < $1.firstName}
-            departmentContactList.reloadData()
+            departmentContactListTableView.reloadData()
             currentSortingType = .alphabetically
             print("sorting data alphabetically")
         case .byBirthday:
@@ -302,7 +300,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
                 return false
             }
             currentSortingType = .byBirthday
-            departmentContactList.reloadData()
+            departmentContactListTableView.reloadData()
             print("sorting data byBirthday")
         }
     }

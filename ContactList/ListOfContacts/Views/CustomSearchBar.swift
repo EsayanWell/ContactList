@@ -20,7 +20,6 @@ class CustomSearchBar: UISearchBar {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        // FunctionCall
         searchSetup()
     }
     
@@ -68,7 +67,7 @@ extension CustomSearchBar: UISearchBarDelegate {
     // MARK: - UISearchBarDelegate
     // функция, реагирующая на изменение текста в поисковой строке
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        // вызов делегата 
+        // вызов делегата
         searchDelegate?.searchBar(searchBar, textDidChange: searchText)
         // если не вставить сюда, то при повторном использовании строки не появляются
         self.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)

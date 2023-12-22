@@ -11,19 +11,13 @@ import SnapKit
 // MARK: - Create UserDateOfBirthView
 class UserDateOfBirthView: UIView {
     // MARK: - Constants
-    var profileDateOfBirth = UILabel()
-    var profileAge = UILabel()
-    let profileStarImage = UIImageView()
+    let dateOfBirthLabel = UILabel()
+    let ageLabel = UILabel()
+    let starImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        // MARK: - sets
         setupViews()
-        configureProfileDateOfBirth()
-        configureProfileAge()
-        configureProfileStarImage()
-        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -31,41 +25,44 @@ class UserDateOfBirthView: UIView {
     }
     
     private func setupViews() {
-        addSubview(profileDateOfBirth)
-        addSubview(profileAge)
-        addSubview(profileStarImage)
+        addSubview(dateOfBirthLabel)
+        addSubview(ageLabel)
+        addSubview(starImageView)
         backgroundColor = .white
-    }
-    
-    private func configureProfileDateOfBirth() {
-        profileDateOfBirth.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
-        profileDateOfBirth.font = UIFont(name: "Inter-Medium", size: 16)
-    }
-    
-    private func configureProfileAge() {
-        profileAge.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
-        profileAge.font = UIFont(name: "Inter-Medium", size: 16)
-    }
-    
-    private func configureProfileStarImage() {
-        profileStarImage.clipsToBounds = true
-        profileStarImage.contentMode = .scaleAspectFill
-        profileStarImage.image = UIImage(named: "star")
-    }
-    
-    // MARK: - setConstraints
-    private func setConstraints() {
-        profileStarImage.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
+        // вызов функций
+        configureDateOfBirthLabel()
+        configureAgeLabel()
+        configureStarImageView()
+        
+        // MARK: - setConstraints
+        starImageView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
             make.leading.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-16)
         }
-        profileDateOfBirth.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalTo(profileStarImage.snp.trailing).offset(12)
+        dateOfBirthLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(starImageView)
+            make.leading.equalTo(starImageView.snp.trailing).offset(12)
         }
-        profileAge.snp.makeConstraints { make in
-            make.centerY.equalTo(profileDateOfBirth.snp.centerY)
+        ageLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(starImageView)
             make.trailing.equalToSuperview()
         }
+    }
+    
+    private func configureDateOfBirthLabel() {
+        dateOfBirthLabel.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
+        dateOfBirthLabel.font = UIFont(name: "Inter-Medium", size: 16)
+    }
+    
+    private func configureAgeLabel() {
+        ageLabel.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
+        ageLabel.font = UIFont(name: "Inter-Medium", size: 16)
+    }
+    
+    private func configureStarImageView() {
+        starImageView.clipsToBounds = true
+        starImageView.contentMode = .scaleAspectFill
+        starImageView.image = UIImage(named: "star")
     }
 }

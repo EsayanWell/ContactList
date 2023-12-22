@@ -26,7 +26,6 @@ class HorizontalMenuCollectionView: UICollectionView {
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: departmentLayout)
-        // FunctionsCall
         configureCollectionView()
         setCollectionViewDelegates()
         departments = receiveData()
@@ -71,13 +70,13 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
         
         if selectedIndexPath == indexPath {
             // Если текущая ячейка выбрана, установить желаемый цвет шрифта
-            cell.departmentName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
-            cell.selectedCell.isHidden = false
+            cell.departmentNameLabel.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
+            cell.selectedCellView.isHidden = false
         } else {
             // Если ячейка не выбрана, вернуть её в исходное состояние
             // если не спрятать cell, будут выделяться несколько ячеек
-            cell.departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
-            cell.selectedCell.isHidden = true
+            cell.departmentNameLabel.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
+            cell.selectedCellView.isHidden = true
         }
         return cell
     }
@@ -88,8 +87,8 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
         if let previousSelectedIndexPath = selectedIndexPath,
            let previousCell = collectionView.cellForItem(at: previousSelectedIndexPath) as? DepartmentCell
         {
-            previousCell.departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
-            previousCell.selectedCell.isHidden = true
+            previousCell.departmentNameLabel.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
+            previousCell.selectedCellView.isHidden = true
         }
         // Установить выбранной ячейке индекс и обновить её
         selectedIndexPath = indexPath
