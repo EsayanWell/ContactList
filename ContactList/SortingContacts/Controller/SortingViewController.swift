@@ -15,7 +15,7 @@ enum SortingType {
     case byBirthday
 }
 
-//протокол для передачи данных между SortingViewController и ContactListViewController
+// протокол для передачи данных между SortingViewController и ContactListViewController
 protocol DataSortingDelegate: AnyObject{
     func applySorting(_ sortingType: SortingType)
 }
