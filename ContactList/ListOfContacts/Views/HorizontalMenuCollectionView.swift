@@ -41,7 +41,6 @@ class HorizontalMenuCollectionView: UICollectionView {
         departmentLayout.scrollDirection = .horizontal
         // изменение размера ячейки в зависимости от введенного текста
         departmentLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        // расстояние между ячейками горизонтальной таблицы (department)
         self.backgroundColor = .white
         self.register(DepartmentCell.self, forCellWithReuseIdentifier: identifier)
         self.showsHorizontalScrollIndicator = false
@@ -62,7 +61,6 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
     }
     
     // MARK: - Cell setup
-    // настройка ячеек таблицы
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? DepartmentCell else {
             return DepartmentCell()
@@ -72,13 +70,13 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
         
         if selectedIndexPath == indexPath {
             // Если текущая ячейка выбрана, установить желаемый цвет шрифта
-            cell.departmentName.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
-            cell.selectedCell.isHidden = false
+            cell.departmentNameLabel.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
+            cell.selectedCellView.isHidden = false
         } else {
             // Если ячейка не выбрана, вернуть её в исходное состояние
             // если не спрятать cell, будут выделяться несколько ячеек
-            cell.departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
-            cell.selectedCell.isHidden = true
+            cell.departmentNameLabel.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
+            cell.selectedCellView.isHidden = true
         }
         return cell
     }
@@ -89,8 +87,8 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
         if let previousSelectedIndexPath = selectedIndexPath,
            let previousCell = collectionView.cellForItem(at: previousSelectedIndexPath) as? DepartmentCell
         {
-            previousCell.departmentName.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
-            previousCell.selectedCell.isHidden = true
+            previousCell.departmentNameLabel.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
+            previousCell.selectedCellView.isHidden = true
         }
         // Установить выбранной ячейке индекс и обновить её
         selectedIndexPath = indexPath
@@ -108,9 +106,8 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
 }
 
 extension HorizontalMenuCollectionView{
-    
     // функция не принимает аргументов и возвращает массив типа Departments (структура в модели)
-    func receiveData() -> [Departments] {
+    private func receiveData() -> [Departments] {
         return Departments.allCases
     }
 }

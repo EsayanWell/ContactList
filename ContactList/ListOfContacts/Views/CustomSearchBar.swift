@@ -37,7 +37,6 @@ class CustomSearchBar: UISearchBar {
         self.searchTextField.layer.cornerRadius = 16
         // обрезка контента, который выходит за пределы радиуса
         self.searchTextField.clipsToBounds = true
-        // цвет текстового поля из Figma
         self.searchTextField.backgroundColor = UIColor(cgColor: CGColor(red: 0.969, green: 0.969, blue: 0.973, alpha: 1))
         // подписка на delegate
         self.delegate = self
@@ -68,14 +67,14 @@ extension CustomSearchBar: UISearchBarDelegate {
     // MARK: - UISearchBarDelegate
     // функция, реагирующая на изменение текста в поисковой строке
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        // вызов делегата 
+        // вызов делегата
         searchDelegate?.searchBar(searchBar, textDidChange: searchText)
         // если не вставить сюда, то при повторном использовании строки не появляются
         self.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)
         self.showsCancelButton = true
     }
     
-    // функция, реагирующая на начало ввода данных
+    // MARK: - TextDidBeginEditing
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         self.showsCancelButton = true
         self.setImage(UIImage(named: "searchDark"), for: .search, state: .normal)
@@ -87,12 +86,12 @@ extension CustomSearchBar: UISearchBarDelegate {
         }
     }
     
-    // функция, реагирующая на окончание ввода данных
+    // MARK: - TextDidEndEditing
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         self.showsCancelButton = true
     }
     
-    // функция, реагирующая на нажатие кнопки "отмена"
+    // MARK: - CancelButtonClicked
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.showsCancelButton = false
         self.setImage(UIImage(named: "searchLight"), for: .search, state: .normal)
@@ -100,7 +99,7 @@ extension CustomSearchBar: UISearchBarDelegate {
         self.placeholder = "Введи имя, тег, почту ..."
     }
     
-    // функция, реагирующая на нажатие кнопки "Bookmark"
+    // MARK: - BookmarkButtonClicked
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
         // вызов делегата
         searchDelegate?.searchBarBookmarkButtonClicked(searchBar)

@@ -22,11 +22,11 @@ protocol DataSortingDelegate: AnyObject{
 
 class SortingViewController: UIViewController {
     // MARK: - Constants
-    private let alphabeticallySorting = RadioButtonView()
-    private let byBirthdaySorting = RadioButtonView()
+    private let alphabeticallySortingView = RadioButtonView()
+    private let byBirthdaySortingView = RadioButtonView()
+    private let initialSortingType: SortingType
     // добавляем свойство делегата типа DataSortingDelegate в SortingViewController
     weak var sortingDelegate: DataSortingDelegate?
-    let initialSortingType: SortingType
     
     init(initialSortingType: SortingType) {
         self.initialSortingType = initialSortingType
@@ -38,17 +38,35 @@ class SortingViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupViews()
+        backButtonSetup()
+    }
+    
+    private func setupViews() {
         view.backgroundColor = .white
         title = "Сортировка"
+        // вызов функций
         customizeNavigationBar()
         setupSorting(.alphabetically)
         setupSorting(.byBirthday)
-        backButtonSetup()
-        setConstraints()
+        
+        // MARK: - Set constraints
+        alphabeticallySortingView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(68)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
+            make.height.equalTo(60)
+        }
+        byBirthdaySortingView.snp.makeConstraints { make in
+            make.top.equalTo(alphabeticallySortingView.snp.bottom)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
+            make.height.equalTo(60)
+        }
     }
     
     // MARK: - Customize NavigationBar
-    func customizeNavigationBar() {
+    private func customizeNavigationBar() {
         // Создаем объект шрифта
         let customFont = UIFont(name: "Inter-SemiBold", size: 20) ?? UIFont.systemFont(ofSize: 20.0, weight: .medium)
         // Создаем атрибуты текста с заданным шрифтом
@@ -61,12 +79,12 @@ class SortingViewController: UIViewController {
     }
     
     // MARK: - Sorting setup
-    func setupSorting(_ sortingType: SortingType) {
+    private func setupSorting(_ sortingType: SortingType) {
         let sortingView: RadioButtonView
         let description: String
         switch sortingType {
         case .alphabetically:
-            sortingView = alphabeticallySorting
+            sortingView = alphabeticallySortingView
             description = "По алфавиту"
             // сохранение выбора сортировки при повторном переходе на экран
             sortingView.selectButton.isSelected = initialSortingType == sortingType
@@ -75,7 +93,7 @@ class SortingViewController: UIViewController {
             let tapGestureAlph = UITapGestureRecognizer(target: self,action: #selector(alphabeticallyButtonTapped))
             sortingView.descriptionLabel.addGestureRecognizer(tapGestureAlph)
         case .byBirthday:
-            sortingView = byBirthdaySorting
+            sortingView = byBirthdaySortingView
             description = "По дню рождения"
             // сохранение выбора сортировки при повторном переходе на экран
             sortingView.selectButton.isSelected = initialSortingType == sortingType
@@ -91,19 +109,19 @@ class SortingViewController: UIViewController {
     @objc func alphabeticallyButtonTapped(_ sender: UIButton) {
         print("alphabeticallyButton tapped")
         sortingDelegate?.applySorting(.alphabetically)
-        alphabeticallySorting.selectButton.isSelected = true
-        byBirthdaySorting.selectButton.isSelected = false
+        alphabeticallySortingView.selectButton.isSelected = true
+        byBirthdaySortingView.selectButton.isSelected = false
     }
     
     @objc func byBirthdayButtonTapped(_ sender: UIButton) {
         print("byBirthdayButton tapped")
         sortingDelegate?.applySorting(.byBirthday)
-        alphabeticallySorting.selectButton.isSelected = false
-        byBirthdaySorting.selectButton.isSelected = true
+        alphabeticallySortingView.selectButton.isSelected = false
+        byBirthdaySortingView.selectButton.isSelected = true
     }
     
     // MARK: - backButtonSetup
-    func backButtonSetup() {
+    private func backButtonSetup() {
         let backButton = UIBarButtonItem(image: UIImage(named: "Arrow"),
                                          style: .plain,
                                          target: self,
@@ -115,21 +133,5 @@ class SortingViewController: UIViewController {
     // обработчик нажатия на cтрелку
     @objc private func dismissViewController() {
         dismiss(animated: true)
-    }
-    
-    // MARK: - Set constraints
-    func setConstraints() {
-        alphabeticallySorting.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(68)
-            make.leading.equalToSuperview().offset(24)
-            make.trailing.equalToSuperview().offset(-24)
-            make.height.equalTo(60)
-        }
-        byBirthdaySorting.snp.makeConstraints { make in
-            make.top.equalTo(alphabeticallySorting.snp.bottom)
-            make.leading.equalToSuperview().offset(24)
-            make.trailing.equalToSuperview().offset(-24)
-            make.height.equalTo(60)
-        }
     }
 }

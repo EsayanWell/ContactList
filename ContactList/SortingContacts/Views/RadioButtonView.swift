@@ -17,9 +17,6 @@ class RadioButtonView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
-        configureSelectButton()
-        configureDescriptionLabel()
-        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -30,6 +27,19 @@ class RadioButtonView: UIView {
         addSubview(selectButton)
         addSubview(descriptionLabel)
         backgroundColor = .white
+        // вызов функций
+        configureSelectButton()
+        configureDescriptionLabel()
+        // MARK: - Set constraints
+        selectButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(18)
+            make.leading.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-18)
+        }
+        descriptionLabel.snp.makeConstraints { make in
+            make.leading.equalTo(selectButton.snp.trailing).offset(12)
+            make.centerY.equalTo(selectButton.snp.centerY)
+        }
     }
     
     // MARK: - Configures
@@ -45,25 +55,12 @@ class RadioButtonView: UIView {
     @objc func radioButtonSelected(sender: UIButton) {
         // состояние кнопки меняется на противоположное : если кнопка выбрана, то станет невыбранной и наоборот
         sender.isSelected = !sender.isSelected
-        }
-        
+    }
+    
     private func configureDescriptionLabel() {
         descriptionLabel.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
         descriptionLabel.font = UIFont(name: "Inter-Medium", size: 16)
         descriptionLabel.textAlignment = .center
         descriptionLabel.isUserInteractionEnabled = true
-    }
-    
-    // MARK: - Set constraints
-    private func setConstraints() {
-        selectButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(18)
-            make.leading.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-18)
-        }
-        descriptionLabel.snp.makeConstraints { make in
-            make.leading.equalTo(selectButton.snp.trailing).offset(12)
-            make.centerY.equalTo(selectButton.snp.centerY)
-        }
     }
 }
