@@ -90,21 +90,15 @@ class UserProfileViewController: UIViewController {
                                                   fromFormat: "yyyy-MM-dd",
                                                   toFormat: "d MMMM yyyy",
                                                   localeIdentifier: "ru_RU")
+        birthView.dateOfBirthLabel.text = formattedDate
         
         // отображение возраста
         let age = DateFormat.calculateAgeFromDate(contactDetail.birthday, format: "yyyy-MM-dd")
-        let ageString: String
         // Проверка для выбора правильного формата строки в зависимости от возраста
-        switch age {
-        case 1, 21, 31, 41, 51, 61, 71, 81, 91, 101:
-            ageString = String.localizedStringWithFormat(NSLocalizedString("%lld год", comment: ""), age)
-        case 2...4, 22...24, 32...34, 42...44, 52...54, 62...64, 72...74, 82...84, 92...94, 102...104:
-            ageString = String.localizedStringWithFormat(NSLocalizedString("%lld года", comment: ""), age)
-        default:
-            ageString = String.localizedStringWithFormat(NSLocalizedString("%lld лет", comment: ""), age)
-        }
-        birthView.ageLabel.text = ageString
-        birthView.dateOfBirthLabel.text = formattedDate
+        let formatAgeString: String = NSLocalizedString("age_years", comment: "Person's age in plural configuration")
+        let resultAgeString = String.localizedStringWithFormat(formatAgeString, age)
+        birthView.ageLabel.text = resultAgeString
+        
     }
     
     // MARK: - backButtonSetup

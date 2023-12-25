@@ -35,13 +35,15 @@ class UserPhoneNumberView: UIView {
         
         // MARK: - setConstraints
         phoneImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16)
-            make.leading.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-16)
+            make.top.equalTo(safeAreaLayoutGuide).offset(16)
+            make.leading.equalTo(safeAreaLayoutGuide)
+            make.bottom.equalTo(safeAreaLayoutGuide).offset(-16)
         }
         numberLabel.snp.makeConstraints { make in
             make.centerY.equalTo(phoneImageView)
             make.leading.equalTo(phoneImageView.snp.trailing).offset(12)
+            // Устанавливаем правую границу метки таким образом чтобы она находилась внутри
+            make.trailing.lessThanOrEqualTo(safeAreaLayoutGuide).offset(-16)
         }
     }
     

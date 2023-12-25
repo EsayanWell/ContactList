@@ -13,6 +13,7 @@
 		6E0257F12ACC2AA7000EA6D9 /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0257F02ACC2AA7000EA6D9 /* ContactListViewController.swift */; };
 		6E0257F62ACC2AA8000EA6D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E0257F52ACC2AA8000EA6D9 /* Assets.xcassets */; };
 		6E0257F92ACC2AA8000EA6D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E0257F72ACC2AA8000EA6D9 /* LaunchScreen.storyboard */; };
+		6E239E5E2B39BBE900C62230 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 6E239E5D2B39BBE900C62230 /* Localizable.stringsdict */; };
 		6E29DDFC2B30975E00CEF06F /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E29DDFB2B30975E00CEF06F /* UserProfileViewController.swift */; };
 		6E29DDFE2B30979700CEF06F /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E29DDFD2B30979700CEF06F /* UserProfileView.swift */; };
 		6E29DE002B30A1C900CEF06F /* UserDateOfBirthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E29DDFF2B30A1C900CEF06F /* UserDateOfBirthView.swift */; };
@@ -30,8 +31,7 @@
 		6ED2F12A2AE8121B00C275C4 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED2F1292AE8121B00C275C4 /* APIManager.swift */; };
 		6ED2F12E2AEA5FE300C275C4 /* SortingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED2F12D2AEA5FE300C275C4 /* SortingViewController.swift */; };
 		6EF901AA2B358E4600149356 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF901A92B358E4600149356 /* ImageLoader.swift */; };
-		6EF901AD2B35D2FD00149356 /* DateFortmat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF901AC2B35D2FD00149356 /* DateFortmat.swift */; };
-		6EF901AF2B35E02100149356 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 6EF901AE2B35E02100149356 /* Localizable.stringsdict */; };
+		6EF901AD2B35D2FD00149356 /* DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF901AC2B35D2FD00149356 /* DateFormat.swift */; };
 		FF8DB56B61A634C790FE6B9A /* Pods_ContactList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83A40711035507E60F03613E /* Pods_ContactList.framework */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +45,7 @@
 		6E0257F52ACC2AA8000EA6D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E0257F82ACC2AA8000EA6D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6E0257FA2ACC2AA8000EA6D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E239E5D2B39BBE900C62230 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
 		6E29DDFB2B30975E00CEF06F /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		6E29DDFD2B30979700CEF06F /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		6E29DDFF2B30A1C900CEF06F /* UserDateOfBirthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDateOfBirthView.swift; sourceTree = "<group>"; };
@@ -62,8 +63,7 @@
 		6ED2F1292AE8121B00C275C4 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		6ED2F12D2AEA5FE300C275C4 /* SortingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingViewController.swift; sourceTree = "<group>"; };
 		6EF901A92B358E4600149356 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
-		6EF901AC2B35D2FD00149356 /* DateFortmat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFortmat.swift; sourceTree = "<group>"; };
-		6EF901AE2B35E02100149356 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
+		6EF901AC2B35D2FD00149356 /* DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormat.swift; sourceTree = "<group>"; };
 		83A40711035507E60F03613E /* Pods_ContactList.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ContactList.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E242DD9F77C093638CF3BCDF /* Pods-ContactList.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactList.debug.xcconfig"; path = "Target Support Files/Pods-ContactList/Pods-ContactList.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -107,7 +107,7 @@
 				6ED2F12F2AEA608900C275C4 /* SortingContacts */,
 				6E29DDF62B3095FB00CEF06F /* DetailsScreen */,
 				6E0257F52ACC2AA8000EA6D9 /* Assets.xcassets */,
-				6EF901AE2B35E02100149356 /* Localizable.stringsdict */,
+				6E239E5D2B39BBE900C62230 /* Localizable.stringsdict */,
 				6E0257F72ACC2AA8000EA6D9 /* LaunchScreen.storyboard */,
 				6E0257FA2ACC2AA8000EA6D9 /* Info.plist */,
 			);
@@ -222,7 +222,7 @@
 			children = (
 				6ED2F1292AE8121B00C275C4 /* APIManager.swift */,
 				6EF901A92B358E4600149356 /* ImageLoader.swift */,
-				6EF901AC2B35D2FD00149356 /* DateFortmat.swift */,
+				6EF901AC2B35D2FD00149356 /* DateFormat.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -306,7 +306,7 @@
 			files = (
 				6E0257F92ACC2AA8000EA6D9 /* LaunchScreen.storyboard in Resources */,
 				6E0257F62ACC2AA8000EA6D9 /* Assets.xcassets in Resources */,
-				6EF901AF2B35E02100149356 /* Localizable.stringsdict in Resources */,
+				6E239E5E2B39BBE900C62230 /* Localizable.stringsdict in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,7 +380,7 @@
 				6E0257EF2ACC2AA7000EA6D9 /* SceneDelegate.swift in Sources */,
 				6E29DE002B30A1C900CEF06F /* UserDateOfBirthView.swift in Sources */,
 				6ED2F12E2AEA5FE300C275C4 /* SortingViewController.swift in Sources */,
-				6EF901AD2B35D2FD00149356 /* DateFortmat.swift in Sources */,
+				6EF901AD2B35D2FD00149356 /* DateFormat.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
