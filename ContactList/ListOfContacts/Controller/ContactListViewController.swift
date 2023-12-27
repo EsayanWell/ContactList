@@ -11,14 +11,15 @@ import SnapKit
 class ContactListViewController: UIViewController {
     
     // MARK: - Constants
-    private let departmentMenuCollectionView = HorizontalMenuCollectionView()
     private let departmentSearchBar = CustomSearchBar()
-    private var contacts = [ContactData]()
-    private let dataRefreshControl = UIRefreshControl()
-    private var filteredContacts = [ContactData]()
+    private let departmentMenuCollectionView = HorizontalMenuCollectionView()
     private let departmentContactListTableView = VerticalContactTableView()
+    private let dataRefreshControl = UIRefreshControl()
     private let errorReload = ErrorLoadView()
     private var errorSearch = ErrorSearchView()
+    // data
+    private var filteredContacts = [ContactData]()
+    private var contacts = [ContactData]()
     private let identifier = "ContactCell"
     private var selectedDepartment: Departments = .all
     private var currentSortingType: SortingType = .byBirthday
@@ -70,7 +71,7 @@ class ContactListViewController: UIViewController {
             make.height.equalTo(36)
         }
         departmentContactListTableView.snp.makeConstraints { make in
-            make.top.equalTo(departmentMenuCollectionView.snp.bottom).offset(16)
+            make.top.equalTo(departmentMenuCollectionView.snp.bottom)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
             make.bottom.equalToSuperview()
@@ -113,20 +114,17 @@ class ContactListViewController: UIViewController {
     private func pullToRefreshSetup() {
         dataRefreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
         departmentContactListTableView.addSubview(dataRefreshControl)
-        departmentContactListTableView.reloadData()
     }
     
     // MARK: - Re-fetch API data
     @objc private func didPullToRefresh() {
-        print("Start refresh")
         fetchContactData()
+        departmentContactListTableView.reloadData()
         dataRefreshControl.endRefreshing()
     }
     
     // MARK: - Data from API
     private func fetchContactData() {
-        print("Fetching data")
-        
         APIManager.shared.fetchUserData { result in
             DispatchQueue.main.async {
                 switch result {
@@ -134,7 +132,7 @@ class ContactListViewController: UIViewController {
                     print("Success")
                     self.contacts = decodedContacts
                     self.dataRefreshControl.endRefreshing()
-                    self.departmentContactListTableView.reloadData()
+                    //self.departmentContactListTableView.reloadData()
                     self.errorReload.isHidden = true
                     self.errorViewToggleVisibility(isHidden: false)
                     self.currentSortingType = .alphabetically
@@ -206,9 +204,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = CustomHeaderView(frame: CGRect.zero)
         headerView.yearLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
-        // чтобы header появлялся только в случае выбора сортировки по дате рождения
-        // сомнительно, но оукэй
-        // пока что выглядит так, что лучше и проще будет хедер обычной ячейкой показывать, а не хедером секции
+    
         switch currentSortingType {
         case.alphabetically:
             headerView.isHidden = true
@@ -221,10 +217,14 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     // настройка видимости header
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // Проверяем, что section находится в пределах допустимых значений для массива filteredContacts
-        if section >= filteredContacts.count {
-            return 0 // Если нет, то возвращаем высоту 0
+        if currentSortingType == .alphabetically {
+            return 0
+        } else {
+            if section >= filteredContacts.count {
+                return 0
+            }
+            return 20
         }
-        return 20 // Устанавливаем желаемую высоту заголовка
     }
     
     // MARK: - Extensions for UICollectionView
@@ -233,10 +233,8 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         // фильтрация данных, отображаемых на экране
         if selectedDepartment == .all {
             filteredContacts = contacts
-            print("Выбран фильтр Все")
         } else {
             filteredContacts = contacts.filter { $0.department == selectedDepartment }
-            print("Выбран фильтр \(selectedDepartment)")
         }
         // обновление экрана при наличии данных по тому или иному департаменту
         if  filteredContacts.isEmpty {
@@ -245,7 +243,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         } else {
             departmentContactListTableView.reloadData()
             departmentContactListTableView.isHidden = false
-            print("Данные по выбранному фильтру есть")
             errorSearch.isHidden = true
         }
     }
@@ -279,7 +276,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             sheet.detents = [.medium(), .large()]
         }
         navigationController?.present(navVC, animated: true)
-        print ("BookMark is clicked")
     }
     
     // MARK: - Sorting data
@@ -290,7 +286,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             filteredContacts.sort {$0.firstName < $1.firstName}
             departmentContactListTableView.reloadData()
             currentSortingType = .alphabetically
-            print("sorting data alphabetically")
         case .byBirthday:
             // Отсортируем массив людей по ближайшему дню рождения к сегодняшнему дню
             filteredContacts = filteredContacts.sorted {
@@ -301,7 +296,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             }
             currentSortingType = .byBirthday
             departmentContactListTableView.reloadData()
-            print("sorting data byBirthday")
         }
     }
 }

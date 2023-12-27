@@ -191,7 +191,6 @@
 				6E5EA31B2B2AF59F005AEC8F /* CustomHeaderView.swift */,
 				6E0065F52AFB99F900803BD7 /* ErrorLoadView.swift */,
 				6E6DB4142B18CB2300511EF5 /* ErrorSearchView.swift */,
-				6E5373402AF4DF73007ECCB6 /* Errors.swift */,
 				6E98D7B32AD6DAD500F36017 /* HorizontalMenuCollectionView.swift */,
 				6E590B3B2ADD71D100010257 /* VerticalContactTableView.swift */,
 				6E98D7B72AD6EBE300F36017 /* CustomSearchBar.swift */,
@@ -223,6 +222,7 @@
 				6ED2F1292AE8121B00C275C4 /* APIManager.swift */,
 				6EF901A92B358E4600149356 /* ImageLoader.swift */,
 				6EF901AC2B35D2FD00149356 /* DateFormat.swift */,
+				6E5373402AF4DF73007ECCB6 /* Errors.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
