@@ -18,9 +18,8 @@ class ContactListViewController: UIViewController {
     private let errorReload = ErrorLoadView()
     private var errorSearch = ErrorSearchView()
     // data
-    private var filteredContacts = [ContactData]()
     private var contacts = [ContactData]()
-    private let identifier = "ContactCell"
+    private var filteredContacts = [ContactData]()
     private var selectedDepartment: Departments = .all
     private var currentSortingType: SortingType = .byBirthday
     
@@ -144,6 +143,7 @@ class ContactListViewController: UIViewController {
             }
         }
     }
+    
 }
 
 // MARK: - Extensions for VerticalContactTableView and DepartmentSearchBar
@@ -156,9 +156,10 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // настройка ячейки
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ContactCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ContactCell", for: indexPath) as! ContactCell
         let contact = filteredContacts[indexPath.row]
         cell.configure(contacts: contact)
+        cell.cellIdentifier = "exampleIdentifier"
         // Проверяем, выбран ли фильтр по дате рождения
         // если currentSortingType не равен byBirthday, то true
         cell.dateOfBirthLabel.isHidden = currentSortingType != .byBirthday
@@ -167,6 +168,10 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // отработка нажатия на ячейку UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! ContactCell
+        if let identifier = cell.cellIdentifier {
+            print("Cell identifier: \(identifier)")
+        }
         // employees - массив сотрудников, indexPath.row - выбранная ячейка
         let selectedContact = filteredContacts[indexPath.row]
         // Создание экземпляра контроллера с карточкой сотрудника
@@ -223,11 +228,12 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             if section >= filteredContacts.count {
                 return 0
             }
-            return 20
+            return 72
         }
     }
     
     // MARK: - Extensions for UICollectionView
+    
     func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
         selectedDepartment = selectedData
         // фильтрация данных, отображаемых на экране
@@ -239,11 +245,12 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
         // обновление экрана при наличии данных по тому или иному департаменту
         if  filteredContacts.isEmpty {
             departmentContactListTableView.isHidden = true
+            errorSearch.isHidden = false
             print("Нет данных по выбранному фильтру")
         } else {
-            departmentContactListTableView.reloadData()
             departmentContactListTableView.isHidden = false
             errorSearch.isHidden = true
+            departmentContactListTableView.reloadData()
         }
     }
     

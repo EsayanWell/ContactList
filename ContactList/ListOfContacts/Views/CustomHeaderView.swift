@@ -12,8 +12,8 @@ import SnapKit
 // MARK: - create customViewController
 class CustomHeaderView: UIView {
     // MARK: - Constants
-    private let leftLineImageView = UIImageView()
-    private let rightLineImageView = UIImageView()
+    private let leftLineView = UIView()
+    private let rightLineView = UIView()
     let yearLabel = UILabel()
     
     override init(frame: CGRect) {
@@ -28,30 +28,33 @@ class CustomHeaderView: UIView {
     // MARK: - Setup Views
     private func setupViews() {
         addSubview(yearLabel)
-        addSubview(leftLineImageView)
-        addSubview(rightLineImageView)
+        addSubview(leftLineView)
+        addSubview(rightLineView)
         backgroundColor = .white
+        // цвет линий
+        leftLineView.backgroundColor = UIColor(red: 0.76, green: 0.76, blue: 0.78, alpha: 1)
+        rightLineView.backgroundColor = UIColor(red: 0.76, green: 0.76, blue: 0.78, alpha: 1)
         // вызов функций
         configureYearLabel()
-        configureLeftLineImageView()
-        configureRightLineImageView()
         
         // MARK: - Set constraints
         yearLabel.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.centerX.equalToSuperview()
         }
-        leftLineImageView.snp.makeConstraints { make in
+        leftLineView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalTo(yearLabel.snp.leading).offset(12)
             make.centerY.equalTo(yearLabel.snp.centerY)
             make.width.equalTo(72)
+            make.height.equalTo(1)
         }
-        rightLineImageView.snp.makeConstraints { make in
+        rightLineView.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.leading.equalTo(yearLabel.snp.trailing).offset(-12)
             make.centerY.equalTo(yearLabel.snp.centerY)
             make.width.equalTo(72)
+            make.height.equalTo(1)
         }
     }
     
@@ -61,17 +64,5 @@ class CustomHeaderView: UIView {
         yearLabel.font = UIFont(name: "Inter-Medium", size: 15)
         yearLabel.textColor = UIColor(red: 0.765, green: 0.765, blue: 0.776, alpha: 1)
         yearLabel.textAlignment = .center
-    }
-    
-    private func configureLeftLineImageView() {
-        leftLineImageView.clipsToBounds = true
-        leftLineImageView.contentMode = .scaleAspectFill
-        leftLineImageView.image = UIImage(named: "Line")
-    }
-    
-    private func configureRightLineImageView() {
-        rightLineImageView.clipsToBounds = true
-        rightLineImageView.contentMode = .scaleAspectFill
-        rightLineImageView.image = UIImage(named: "Line")
     }
 }

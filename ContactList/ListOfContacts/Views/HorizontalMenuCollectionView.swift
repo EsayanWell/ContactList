@@ -16,7 +16,6 @@ protocol FilterDelegate: AnyObject {
 class HorizontalMenuCollectionView: UICollectionView {
     
     // MARK: - Constants
-    private let identifier = "DepartmentCell"
     private var departments: [Departments] = []
     private let departmentLayout = UICollectionViewFlowLayout()
     // Индекс выбранной ячейки
@@ -42,7 +41,7 @@ class HorizontalMenuCollectionView: UICollectionView {
         // изменение размера ячейки в зависимости от введенного текста
         departmentLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         self.backgroundColor = .white
-        self.register(DepartmentCell.self, forCellWithReuseIdentifier: identifier)
+        self.register(DepartmentCell.self, forCellWithReuseIdentifier: "DepartmentCell")
         self.showsHorizontalScrollIndicator = false
     }
     
@@ -62,9 +61,10 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
     
     // MARK: - Cell setup
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? DepartmentCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DepartmentCell", for: indexPath) as? DepartmentCell else {
             return DepartmentCell()
         }
+        cell.collectionViewIdentifier = "CollectionViewIdentifier"
         let department = departments[indexPath.row]
         cell.set(department: department)
         
