@@ -20,6 +20,7 @@ class ContactListViewController: UIViewController {
     // data
     private var contacts = [ContactData]()
     private var filteredContacts = [ContactData]()
+    private var indexPathProperty : IndexPath?
     private var selectedDepartment: Departments = .all
     private var currentSortingType: SortingType = .byBirthday
     
@@ -209,7 +210,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = CustomHeaderView(frame: CGRect.zero)
         headerView.yearLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
-    
+        
         switch currentSortingType {
         case.alphabetically:
             headerView.isHidden = true
@@ -235,23 +236,9 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     // MARK: - Extensions for UICollectionView
     
     func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
+        sortAndFilterEmployeesByDepartment()
+        indexPathProperty  = indexPath
         selectedDepartment = selectedData
-        // фильтрация данных, отображаемых на экране
-        if selectedDepartment == .all {
-            filteredContacts = contacts
-        } else {
-            filteredContacts = contacts.filter { $0.department == selectedDepartment }
-        }
-        // обновление экрана при наличии данных по тому или иному департаменту
-        if  filteredContacts.isEmpty {
-            departmentContactListTableView.isHidden = true
-            errorSearch.isHidden = false
-            print("Нет данных по выбранному фильтру")
-        } else {
-            departmentContactListTableView.isHidden = false
-            errorSearch.isHidden = true
-            departmentContactListTableView.reloadData()
-        }
     }
     
     // MARK: - Extensions for UISearchBar
@@ -287,7 +274,29 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // MARK: - Sorting data
     func applySorting(_ sortingType: SortingType) {
-        switch sortingType {
+        sortAndFilterEmployeesByDepartment()
+        currentSortingType = sortingType
+    }
+    
+    func sortAndFilterEmployeesByDepartment() {
+        // фильтрация данных, отображаемых на экране
+        if selectedDepartment == .all {
+            filteredContacts = contacts
+        } else {
+            filteredContacts = contacts.filter { $0.department == selectedDepartment }
+        }
+        // обновление экрана при наличии данных по тому или иному департаменту
+        if  filteredContacts.isEmpty {
+            departmentContactListTableView.isHidden = true
+            errorSearch.isHidden = false
+            print("Нет данных по выбранному фильтру")
+        } else {
+            departmentContactListTableView.isHidden = false
+            errorSearch.isHidden = true
+            departmentContactListTableView.reloadData()
+        }
+        
+        switch currentSortingType {
         case .alphabetically:
             // Сортировка по алфавиту
             filteredContacts.sort {$0.firstName < $1.firstName}
