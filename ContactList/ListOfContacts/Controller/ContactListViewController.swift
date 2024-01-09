@@ -235,10 +235,9 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // MARK: - Extensions for UICollectionView
     
-    func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
-        sortAndFilterEmployeesByDepartment()
-        indexPathProperty  = indexPath
+    func didSelectFilter(selectedData: Departments) {
         selectedDepartment = selectedData
+        sortAndFilterEmployeesByDepartment()
     }
     
     // MARK: - Extensions for UISearchBar
@@ -274,8 +273,8 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // MARK: - Sorting data
     func applySorting(_ sortingType: SortingType) {
-        sortAndFilterEmployeesByDepartment()
         currentSortingType = sortingType
+        sortAndFilterEmployeesByDepartment()
     }
     
     func sortAndFilterEmployeesByDepartment() {

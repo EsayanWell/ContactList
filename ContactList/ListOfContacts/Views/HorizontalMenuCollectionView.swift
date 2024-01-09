@@ -10,7 +10,7 @@ import UIKit
 
 // протокол, который будет оповещать ваш UITableView о необходимости обновления данных
 protocol FilterDelegate: AnyObject {
-    func didSelectFilter(at indexPath: IndexPath, selectedData: Departments)
+    func didSelectFilter(selectedData: Departments)
 }
 
 class HorizontalMenuCollectionView: UICollectionView {
@@ -98,7 +98,7 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
         // вызов делегата при выборе ячейки
         if let selectedIndexPath = selectedIndexPath {
             let selectedFilter = departments[selectedIndexPath.item]
-            filterDelegate?.didSelectFilter(at: selectedIndexPath, selectedData: selectedFilter)
+            filterDelegate?.didSelectFilter(selectedData: selectedFilter)
         } else {
             print("Delegate not called")
         }
