@@ -11,7 +11,6 @@ import SnapKit
 class DepartmentCell: UICollectionViewCell {
     let departmentNameLabel = UILabel()
     let selectedCellView = UIView()
-    var collectionViewIdentifier: String?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

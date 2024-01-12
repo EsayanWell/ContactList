@@ -20,7 +20,6 @@ class ContactListViewController: UIViewController {
     // data
     private var contacts = [ContactData]()
     private var filteredContacts = [ContactData]()
-    private var indexPathProperty : IndexPath?
     private var selectedDepartment: Departments = .all
     private var currentSortingType: SortingType = .byBirthday
     
@@ -89,6 +88,7 @@ class ContactListViewController: UIViewController {
     // MARK: - Error reload Setup
     private func errorReloadSetup(){
         errorReload.tryRequestButton.addTarget(self, action: #selector(updateRequest), for: .touchUpInside)
+        errorReload.isHidden = false
     }
     
     @objc private func updateRequest() {
@@ -119,7 +119,6 @@ class ContactListViewController: UIViewController {
     // MARK: - Re-fetch API data
     @objc private func didPullToRefresh() {
         fetchContactData()
-        departmentContactListTableView.reloadData()
         dataRefreshControl.endRefreshing()
     }
     
@@ -132,7 +131,7 @@ class ContactListViewController: UIViewController {
                     print("Success")
                     self.contacts = decodedContacts
                     self.dataRefreshControl.endRefreshing()
-                    //self.departmentContactListTableView.reloadData()
+                    self.departmentContactListTableView.reloadData()
                     self.errorReload.isHidden = true
                     self.errorViewToggleVisibility(isHidden: false)
                     self.currentSortingType = .alphabetically
@@ -157,10 +156,11 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // настройка ячейки
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ContactCell", for: indexPath) as! ContactCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ContactCell", for: indexPath) as? ContactCell else {
+            return UITableViewCell()
+        }
         let contact = filteredContacts[indexPath.row]
         cell.configure(contacts: contact)
-        cell.cellIdentifier = "exampleIdentifier"
         // Проверяем, выбран ли фильтр по дате рождения
         // если currentSortingType не равен byBirthday, то true
         cell.dateOfBirthLabel.isHidden = currentSortingType != .byBirthday
@@ -169,10 +169,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // отработка нажатия на ячейку UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! ContactCell
-        if let identifier = cell.cellIdentifier {
-            print("Cell identifier: \(identifier)")
-        }
         // employees - массив сотрудников, indexPath.row - выбранная ячейка
         let selectedContact = filteredContacts[indexPath.row]
         // Создание экземпляра контроллера с карточкой сотрудника
@@ -278,6 +274,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     }
     
     func sortAndFilterEmployeesByDepartment() {
+        
         // фильтрация данных, отображаемых на экране
         if selectedDepartment == .all {
             filteredContacts = contacts

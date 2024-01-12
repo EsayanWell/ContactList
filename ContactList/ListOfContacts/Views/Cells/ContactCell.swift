@@ -14,7 +14,6 @@ class ContactCell: UITableViewCell {
     private let positionLabel = UILabel()
     private let userTagLabel = UILabel()
     var dateOfBirthLabel = UILabel()
-    var cellIdentifier: String?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
