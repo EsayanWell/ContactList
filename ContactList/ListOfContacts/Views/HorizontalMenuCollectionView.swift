@@ -28,8 +28,6 @@ class HorizontalMenuCollectionView: UICollectionView {
         configureCollectionView()
         setCollectionViewDelegates()
         departments = receiveData()
-        // Установить значение выбранной ячейки по умолчанию
-        //selectedIndexPath = IndexPath(item: 0, section: 0)
     }
     
     required init?(coder: NSCoder) {
@@ -100,13 +98,6 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
         // метод для выравнивания выбранной ячейки
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         updateFilterDelegate()
-//        // вызов делегата при выборе ячейки
-//        if let selectedIndexPath = selectedIndexPath {
-//            let selectedFilter = departments[selectedIndexPath.item]
-//            filterDelegate?.didSelectFilter(selectedData: selectedFilter)
-//        } else {
-//            print("Delegate not called")
-//        }
     }
     
     func updateFilterDelegate() {

@@ -132,6 +132,7 @@ class ContactListViewController: UIViewController {
                     self.contacts = decodedContacts
                     self.dataRefreshControl.endRefreshing()
                     self.departmentContactListTableView.reloadData()
+                    self.departmentMenuCollectionView.updateFilterDelegate()
                     self.errorReload.isHidden = true
                     self.errorViewToggleVisibility(isHidden: false)
                     self.currentSortingType = .alphabetically
