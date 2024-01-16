@@ -1,4 +1,9 @@
 # ContactList
+
+![ContactList](https://github.com/EsayanWell/ContactList/assets/98737871/1e23aa6c-7c59-4180-8c7a-da1c8c978107)
+
+
+
 # Декомпозиция проекта:
 
 1 - подготовка (запланированное время 30 минут - фактическое - 30 минут):
