@@ -144,7 +144,6 @@ class ContactListViewController: UIViewController {
             }
         }
     }
-    
 }
 
 // MARK: - Extensions for VerticalContactTableView and DepartmentSearchBar
@@ -231,7 +230,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     }
     
     // MARK: - Extensions for UICollectionView
-    
     func didSelectFilter(selectedData: Departments) {
         selectedDepartment = selectedData
         sortAndFilterEmployeesByDepartment()
@@ -241,34 +239,6 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.searchText = searchText
         sortAndFilterEmployeesByDepartment()
-        
-        
-//        // поиск непосредственно в выбранном департаменте
-//        if  selectedDepartment == selectedDepartment {
-//            filteredContacts = contacts.filter { contact in
-//                // Фильтрация данных только для выбранного департамента
-//                return contact.department == selectedDepartment &&
-//                (contact.firstName.contains(searchText) ||
-//                 contact.lastName.contains(searchText) ||
-//                 contact.userTag.contains(searchText) ||
-//                 contact.phone.contains(searchText))
-//            }
-//        } else {
-//            // Если департамент не выбран, отображаем всех сотрудников без фильтрации
-//            filteredContacts = contacts.filter { contact in
-//                return contact.firstName.contains(searchText) ||
-//                contact.lastName.contains(searchText) ||
-//                contact.userTag.contains(searchText) ||
-//                contact.phone.contains(searchText)
-//            }
-//        }
-//        // Обновление таблицы с отфильтрованными результатами
-//        departmentContactListTableView.reloadData()
-//        // проверка наличия отфильтрованных данных
-//        let isSearchEmpty = departmentSearchBar.searchTextField.state.isEmpty
-//        let isContactListEmpty = filteredContacts.isEmpty
-//        //если таблица пуста или строка ввода не пустая, то показать ошибку ввода
-//        errorSearch.isHidden = isContactListEmpty || !isSearchEmpty ? false : true
     }
     
     // MARK: - searchBarBookmarkButtonClicked (переход на SortingViewController)
@@ -291,66 +261,49 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     }
     
     func sortAndFilterEmployeesByDepartment() {
-
         // фильтрация данных, отображаемых на экране
         if selectedDepartment == .all {
             filteredContacts = contacts
         } else {
             filteredContacts = contacts.filter { $0.department == selectedDepartment }
         }
-        // обновление экрана при наличии данных по тому или иному департаменту
-        if  filteredContacts.isEmpty {
-            departmentContactListTableView.isHidden = true
-            errorSearch.isHidden = false
-            print("Нет данных по выбранному фильтру")
-        } else {
-            departmentContactListTableView.isHidden = false
-            errorSearch.isHidden = true
-            departmentContactListTableView.reloadData()
+        
+        // поиск непосредственно в выбранном департаменте
+        if !searchText.isEmpty {
+            if selectedDepartment != .all {
+                filteredContacts = filteredContacts.filter { contact in
+                    return contact.firstName.lowercased().contains(searchText.lowercased()) ||
+                    contact.lastName.lowercased().contains(searchText.lowercased()) ||
+                    contact.userTag.lowercased().contains(searchText.lowercased()) ||
+                    contact.phone.lowercased().contains(searchText.lowercased())
+                }
+            } else {
+                filteredContacts = contacts.filter { contact in
+                    return contact.firstName.lowercased().contains(searchText.lowercased()) ||
+                    contact.lastName.lowercased().contains(searchText.lowercased()) ||
+                    contact.userTag.lowercased().contains(searchText.lowercased()) ||
+                    contact.phone.lowercased().contains(searchText.lowercased())
+                }
+            }
         }
         
+        // обновление экрана при наличии данных по тому или иному департаменту
+        departmentContactListTableView.isHidden = filteredContacts.isEmpty
+        errorSearch.isHidden = !filteredContacts.isEmpty
+        
+        // сортировка данных в зависимости от выбранного типа сортировки
         switch currentSortingType {
         case .alphabetically:
-            // Сортировка по алфавиту
-            filteredContacts.sort {$0.firstName < $1.firstName}
-            departmentContactListTableView.reloadData()
-            currentSortingType = .alphabetically
+            filteredContacts.sort { $0.firstName < $1.firstName }
         case .byBirthday:
-            // Отсортируем массив людей по ближайшему дню рождения к сегодняшнему дню
             filteredContacts = filteredContacts.sorted {
                 if let date1 = $0.closestBirthday, let date2 = $1.closestBirthday {
                     return date1 < date2
                 }
                 return false
             }
-            currentSortingType = .byBirthday
-            departmentContactListTableView.reloadData()
-        }
-        // поиск непосредственно в выбранном департаменте
-        if  selectedDepartment == selectedDepartment {
-            filteredContacts = contacts.filter { contact in
-                // Фильтрация данных только для выбранного департамента
-                return contact.department == selectedDepartment &&
-                (contact.firstName.contains(searchText) ||
-                 contact.lastName.contains(searchText) ||
-                 contact.userTag.contains(searchText) ||
-                 contact.phone.contains(searchText))
-            }
-        } else {
-            // Если департамент не выбран, отображаем всех сотрудников без фильтрации
-            filteredContacts = contacts.filter { contact in
-                return contact.firstName.contains(searchText) ||
-                contact.lastName.contains(searchText) ||
-                contact.userTag.contains(searchText) ||
-                contact.phone.contains(searchText)
-            }
         }
         // Обновление таблицы с отфильтрованными результатами
         departmentContactListTableView.reloadData()
-        // проверка наличия отфильтрованных данных
-        let isSearchEmpty = departmentSearchBar.searchTextField.state.isEmpty
-        let isContactListEmpty = filteredContacts.isEmpty
-        //если таблица пуста или строка ввода не пустая, то показать ошибку ввода
-        errorSearch.isHidden = isContactListEmpty || !isSearchEmpty ? false : true
     }
 }
