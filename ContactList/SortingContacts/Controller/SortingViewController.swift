@@ -15,7 +15,7 @@ enum SortingType {
     case byBirthday
 }
 
-//протокол для передачи данных между SortingViewController и ContactListViewController
+// протокол для передачи данных между SortingViewController и ContactListViewController
 protocol DataSortingDelegate: AnyObject{
     func applySorting(_ sortingType: SortingType)
 }
@@ -107,14 +107,12 @@ class SortingViewController: UIViewController {
     
     // MARK: - sorting button tapped
     @objc func alphabeticallyButtonTapped(_ sender: UIButton) {
-        print("alphabeticallyButton tapped")
         sortingDelegate?.applySorting(.alphabetically)
         alphabeticallySortingView.selectButton.isSelected = true
         byBirthdaySortingView.selectButton.isSelected = false
     }
     
     @objc func byBirthdayButtonTapped(_ sender: UIButton) {
-        print("byBirthdayButton tapped")
         sortingDelegate?.applySorting(.byBirthday)
         alphabeticallySortingView.selectButton.isSelected = false
         byBirthdaySortingView.selectButton.isSelected = true

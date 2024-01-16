@@ -11,9 +11,6 @@ import SnapKit
 
 class VerticalContactTableView: UITableView {
     
-    // MARK: - Constants
-    private let identifier = "ContactCell"
-    
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: .zero, style: .plain)
         configureTableView()
@@ -27,7 +24,7 @@ class VerticalContactTableView: UITableView {
     private func configureTableView() {
         self.showsVerticalScrollIndicator = false
         self.backgroundColor = .white
-        self.register(ContactCell.self, forCellReuseIdentifier: identifier)
+        self.register(ContactCell.self, forCellReuseIdentifier: "ContactCell")
         self.separatorStyle = .none
     }
 }

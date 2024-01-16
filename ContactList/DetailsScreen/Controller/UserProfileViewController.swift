@@ -92,10 +92,10 @@ class UserProfileViewController: UIViewController {
                                                   localeIdentifier: "ru_RU")
         birthView.dateOfBirthLabel.text = formattedDate
         
-        // отображение возраста
-        let age = DateFormat.calculateAgeFromDate(contactDetail.birthday, format: "yyyy-MM-dd")
         // Проверка для выбора правильного формата строки в зависимости от возраста
         let formatAgeString: String = NSLocalizedString("age_years", comment: "Person's age in plural configuration")
+        // отображение возраста
+        let age = DateFormat.calculateAgeFromDate(contactDetail.birthday, format: "yyyy-MM-dd")
         let resultAgeString = String.localizedStringWithFormat(formatAgeString, age)
         birthView.ageLabel.text = resultAgeString
         
@@ -115,7 +115,6 @@ class UserProfileViewController: UIViewController {
     // обработчик нажатия на cтрелку
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
-        print("нажал!")
     }
     
     private func handlePhoneTap() {

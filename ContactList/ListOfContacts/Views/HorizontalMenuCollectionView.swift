@@ -10,13 +10,12 @@ import UIKit
 
 // протокол, который будет оповещать ваш UITableView о необходимости обновления данных
 protocol FilterDelegate: AnyObject {
-    func didSelectFilter(at indexPath: IndexPath, selectedData: Departments)
+    func didSelectFilter(selectedData: Departments)
 }
 
 class HorizontalMenuCollectionView: UICollectionView {
     
     // MARK: - Constants
-    private let identifier = "DepartmentCell"
     private var departments: [Departments] = []
     private let departmentLayout = UICollectionViewFlowLayout()
     // Индекс выбранной ячейки
@@ -42,8 +41,10 @@ class HorizontalMenuCollectionView: UICollectionView {
         // изменение размера ячейки в зависимости от введенного текста
         departmentLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         self.backgroundColor = .white
-        self.register(DepartmentCell.self, forCellWithReuseIdentifier: identifier)
+        self.register(DepartmentCell.self, forCellWithReuseIdentifier: String(describing: type(of: DepartmentCell.self)))
         self.showsHorizontalScrollIndicator = false
+        selectedIndexPath = IndexPath(item: 0, section: 0)
+        //updateFilterDelegate()
     }
     
     // MARK: - Set delegates
@@ -62,9 +63,10 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
     
     // MARK: - Cell setup
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? DepartmentCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: type(of: DepartmentCell.self)), for: indexPath) as? DepartmentCell else {
             return DepartmentCell()
         }
+        
         let department = departments[indexPath.row]
         cell.set(department: department)
         
@@ -95,10 +97,13 @@ extension HorizontalMenuCollectionView : UICollectionViewDelegate, UICollectionV
         collectionView.reloadItems(at: [indexPath])
         // метод для выравнивания выбранной ячейки
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        // вызов делегата при выборе ячейки
+        updateFilterDelegate()
+    }
+    
+    func updateFilterDelegate() {
         if let selectedIndexPath = selectedIndexPath {
             let selectedFilter = departments[selectedIndexPath.item]
-            filterDelegate?.didSelectFilter(at: selectedIndexPath, selectedData: selectedFilter)
+            filterDelegate?.didSelectFilter(selectedData: selectedFilter)
         } else {
             print("Delegate not called")
         }

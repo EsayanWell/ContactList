@@ -37,20 +37,18 @@ class CustomSearchBar: UISearchBar {
         self.searchTextField.layer.cornerRadius = 16
         // обрезка контента, который выходит за пределы радиуса
         self.searchTextField.clipsToBounds = true
+        self.searchTextField.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
         self.searchTextField.backgroundColor = UIColor(cgColor: CGColor(red: 0.969, green: 0.969, blue: 0.973, alpha: 1))
         // подписка на delegate
         self.delegate = self
         // изменение иконки "лупы" из Figma
-        let searchIcon = UIImage(named: "searchLight")
-        self.setImage(searchIcon, for: .search, state: .normal)
+        self.setImage(UIImage(named: "searchLight"), for: .search, state: .normal)
         // создание иконки "опции" из Figma
-        let filterIcon = UIImage(named: "option")
-        self.setImage(filterIcon, for: .bookmark, state: .normal)
+        self.setImage(UIImage(named: "option"), for: .bookmark, state: .normal)
         // свойства, которое делает кнопку "фильтрация" из Figma видимой
         self.showsBookmarkButton = true
         // изменение кнопки "удалить" из Figma
-        let clearIcon = UIImage(named: "clear")
-        self.setImage(clearIcon, for: .clear, state: .normal)
+        self.setImage(UIImage(named: "clear"), for: .clear, state: .normal)
         // изменение кнопки "cancel" на "отмена" из Figma
         // Настраиваем внешний вид кнопки отмены
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = "Отмена"
@@ -65,6 +63,7 @@ class CustomSearchBar: UISearchBar {
 
 extension CustomSearchBar: UISearchBarDelegate {
     // MARK: - UISearchBarDelegate
+    
     // функция, реагирующая на изменение текста в поисковой строке
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         // вызов делегата

@@ -11,17 +11,18 @@ import SnapKit
 class ContactListViewController: UIViewController {
     
     // MARK: - Constants
-    private let departmentMenuCollectionView = HorizontalMenuCollectionView()
     private let departmentSearchBar = CustomSearchBar()
-    private var contacts = [ContactData]()
-    private let dataRefreshControl = UIRefreshControl()
-    private var filteredContacts = [ContactData]()
+    private let departmentMenuCollectionView = HorizontalMenuCollectionView()
     private let departmentContactListTableView = VerticalContactTableView()
+    private let dataRefreshControl = UIRefreshControl()
     private let errorReload = ErrorLoadView()
     private var errorSearch = ErrorSearchView()
-    private let identifier = "ContactCell"
+    // data
+    private var contacts = [ContactData]()
+    private var filteredContacts = [ContactData]()
     private var selectedDepartment: Departments = .all
     private var currentSortingType: SortingType = .byBirthday
+    private var searchText: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,7 +52,6 @@ class ContactListViewController: UIViewController {
         departmentMenuCollectionView.filterDelegate = self
         departmentSearchBar.searchDelegate = self
         errorSearch.isHidden = true
-        
         // setup UITableView
         departmentContactListTableView.delegate = self
         departmentContactListTableView.dataSource = self
@@ -70,7 +70,7 @@ class ContactListViewController: UIViewController {
             make.height.equalTo(36)
         }
         departmentContactListTableView.snp.makeConstraints { make in
-            make.top.equalTo(departmentMenuCollectionView.snp.bottom).offset(16)
+            make.top.equalTo(departmentMenuCollectionView.snp.bottom)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
             make.bottom.equalToSuperview()
@@ -88,6 +88,7 @@ class ContactListViewController: UIViewController {
     // MARK: - Error reload Setup
     private func errorReloadSetup(){
         errorReload.tryRequestButton.addTarget(self, action: #selector(updateRequest), for: .touchUpInside)
+        errorReload.isHidden = true
     }
     
     @objc private func updateRequest() {
@@ -113,20 +114,16 @@ class ContactListViewController: UIViewController {
     private func pullToRefreshSetup() {
         dataRefreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
         departmentContactListTableView.addSubview(dataRefreshControl)
-        departmentContactListTableView.reloadData()
     }
     
     // MARK: - Re-fetch API data
     @objc private func didPullToRefresh() {
-        print("Start refresh")
         fetchContactData()
         dataRefreshControl.endRefreshing()
     }
     
     // MARK: - Data from API
     private func fetchContactData() {
-        print("Fetching data")
-        
         APIManager.shared.fetchUserData { result in
             DispatchQueue.main.async {
                 switch result {
@@ -135,6 +132,7 @@ class ContactListViewController: UIViewController {
                     self.contacts = decodedContacts
                     self.dataRefreshControl.endRefreshing()
                     self.departmentContactListTableView.reloadData()
+                    self.departmentMenuCollectionView.updateFilterDelegate()
                     self.errorReload.isHidden = true
                     self.errorViewToggleVisibility(isHidden: false)
                     self.currentSortingType = .alphabetically
@@ -158,7 +156,9 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // настройка ячейки
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ContactCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ContactCell", for: indexPath) as? ContactCell else {
+            return UITableViewCell()
+        }
         let contact = filteredContacts[indexPath.row]
         cell.configure(contacts: contact)
         // Проверяем, выбран ли фильтр по дате рождения
@@ -206,9 +206,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = CustomHeaderView(frame: CGRect.zero)
         headerView.yearLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
-        // чтобы header появлялся только в случае выбора сортировки по дате рождения
-        // сомнительно, но оукэй
-        // пока что выглядит так, что лучше и проще будет хедер обычной ячейкой показывать, а не хедером секции
+        
         switch currentSortingType {
         case.alphabetically:
             headerView.isHidden = true
@@ -221,51 +219,26 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     // настройка видимости header
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // Проверяем, что section находится в пределах допустимых значений для массива filteredContacts
-        if section >= filteredContacts.count {
-            return 0 // Если нет, то возвращаем высоту 0
+        if currentSortingType == .alphabetically {
+            return 0
+        } else {
+            if section >= filteredContacts.count {
+                return 0
+            }
+            return 72
         }
-        return 20 // Устанавливаем желаемую высоту заголовка
     }
     
     // MARK: - Extensions for UICollectionView
-    func didSelectFilter(at indexPath: IndexPath, selectedData: Departments) {
+    func didSelectFilter(selectedData: Departments) {
         selectedDepartment = selectedData
-        // фильтрация данных, отображаемых на экране
-        if selectedDepartment == .all {
-            filteredContacts = contacts
-            print("Выбран фильтр Все")
-        } else {
-            filteredContacts = contacts.filter { $0.department == selectedDepartment }
-            print("Выбран фильтр \(selectedDepartment)")
-        }
-        // обновление экрана при наличии данных по тому или иному департаменту
-        if  filteredContacts.isEmpty {
-            departmentContactListTableView.isHidden = true
-            print("Нет данных по выбранному фильтру")
-        } else {
-            departmentContactListTableView.reloadData()
-            departmentContactListTableView.isHidden = false
-            print("Данные по выбранному фильтру есть")
-            errorSearch.isHidden = true
-        }
+        sortAndFilterEmployeesByDepartment()
     }
     
     // MARK: - Extensions for UISearchBar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filteredContacts = contacts.filter { contact in
-            // Проверка на соответствие поисковому тексту
-            return contact.firstName.contains(searchText) ||
-            contact.lastName.contains(searchText) ||
-            contact.userTag.contains(searchText) ||
-            contact.phone.contains(searchText)
-        }
-        // Обновление таблицы с отфильтрованными результатами
-        departmentContactListTableView.reloadData()
-        // проверка наличия отфильтрованных данных
-        let isSearchEmpty = departmentSearchBar.searchTextField.state.isEmpty
-        let isContactListEmpty = filteredContacts.isEmpty
-        //если таблица пуста или строка ввода не пустая, то показать ошибку ввода
-        errorSearch.isHidden = isContactListEmpty || !isSearchEmpty ? false : true
+        self.searchText = searchText
+        sortAndFilterEmployeesByDepartment()
     }
     
     // MARK: - searchBarBookmarkButtonClicked (переход на SortingViewController)
@@ -279,29 +252,58 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
             sheet.detents = [.medium(), .large()]
         }
         navigationController?.present(navVC, animated: true)
-        print ("BookMark is clicked")
     }
     
     // MARK: - Sorting data
     func applySorting(_ sortingType: SortingType) {
-        switch sortingType {
+        currentSortingType = sortingType
+        sortAndFilterEmployeesByDepartment()
+    }
+    
+    func sortAndFilterEmployeesByDepartment() {
+        // фильтрация данных, отображаемых на экране
+        if selectedDepartment == .all {
+            filteredContacts = contacts
+        } else {
+            filteredContacts = contacts.filter { $0.department == selectedDepartment }
+        }
+        
+        // поиск непосредственно в выбранном департаменте
+        if !searchText.isEmpty {
+            if selectedDepartment != .all {
+                filteredContacts = filteredContacts.filter { contact in
+                    return contact.firstName.lowercased().contains(searchText.lowercased()) ||
+                    contact.lastName.lowercased().contains(searchText.lowercased()) ||
+                    contact.userTag.lowercased().contains(searchText.lowercased()) ||
+                    contact.phone.lowercased().contains(searchText.lowercased())
+                }
+            } else {
+                filteredContacts = contacts.filter { contact in
+                    return contact.firstName.lowercased().contains(searchText.lowercased()) ||
+                    contact.lastName.lowercased().contains(searchText.lowercased()) ||
+                    contact.userTag.lowercased().contains(searchText.lowercased()) ||
+                    contact.phone.lowercased().contains(searchText.lowercased())
+                }
+            }
+        }
+        
+        // обновление экрана при наличии данных по тому или иному департаменту
+        departmentContactListTableView.isHidden = filteredContacts.isEmpty
+        errorSearch.isHidden = !filteredContacts.isEmpty
+        
+        // сортировка данных в зависимости от выбранного типа сортировки
+        switch currentSortingType {
         case .alphabetically:
-            // Сортировка по алфавиту
-            filteredContacts.sort {$0.firstName < $1.firstName}
-            departmentContactListTableView.reloadData()
-            currentSortingType = .alphabetically
-            print("sorting data alphabetically")
+            filteredContacts.sort { $0.firstName < $1.firstName }
         case .byBirthday:
-            // Отсортируем массив людей по ближайшему дню рождения к сегодняшнему дню
             filteredContacts = filteredContacts.sorted {
                 if let date1 = $0.closestBirthday, let date2 = $1.closestBirthday {
                     return date1 < date2
                 }
                 return false
             }
-            currentSortingType = .byBirthday
-            departmentContactListTableView.reloadData()
-            print("sorting data byBirthday")
         }
+        // Обновление таблицы с отфильтрованными результатами
+        departmentContactListTableView.reloadData()
     }
 }
