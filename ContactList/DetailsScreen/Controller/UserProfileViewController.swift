@@ -21,9 +21,7 @@ class UserProfileViewController: UIViewController {
         setupViews()
         backButtonSetup()
         // обработчик нажатия на номер телефона
-        phoneNumberView.tapPhoneHandler = {
-            self.handlePhoneTap()
-        }
+        handlePhoneTapNumber()
     }
     
     // сокрытие navigationController
@@ -66,39 +64,45 @@ class UserProfileViewController: UIViewController {
         guard let contactDetail = contactDetail else {
             return
         }
-        // загрузка изображения
+        loadImage(contactDetail)
+        assignData(contactDetail)
+        formatAndDisplayDateOfBirth(contactDetail)
+        displayAge(contactDetail)
+    }
+    
+    // загрузка изображения
+    private func loadImage(_ contactDetail: ContactData) {
         ImageLoader.loadImage(from: contactDetail.avatarURL) { (image) in
             if let image = image {
                 DispatchQueue.main.async {
                     self.profileView.photoImageView.image = image
                 }
             } else {
-                // Обработка ошибки или отсутствия изображения
                 print("Ошибка при загрузке данных")
             }
         }
-        
-        // присвоение данных
+    }
+    
+    // присвоение данных
+    private func assignData(_ contactDetail: ContactData) {
         profileView.nameLabel.text = contactDetail.firstName + " " + contactDetail.lastName
         profileView.userTagLabel.text = contactDetail.userTag
         profileView.positionLabel.text = contactDetail.position
-        birthView.dateOfBirthLabel.text = contactDetail.birthday
         phoneNumberView.numberLabel.text = contactDetail.phone
-        
-        // изменение формата даты для отображения даты рождения
-        let formattedDate = DateFormat.formatDate(contactDetail.birthday,
-                                                  fromFormat: "yyyy-MM-dd",
-                                                  toFormat: "d MMMM yyyy",
-                                                  localeIdentifier: "ru_RU")
+    }
+    
+    // форматирование даты
+    private func formatAndDisplayDateOfBirth(_ contactDetail: ContactData) {
+        let formattedDate = DateFormat.formatDate(contactDetail.birthday, fromFormat: "yyyy-MM-dd", toFormat: "d MMMM yyyy", localeIdentifier: "ru_RU")
         birthView.dateOfBirthLabel.text = formattedDate
-        
-        // Проверка для выбора правильного формата строки в зависимости от возраста
+    }
+    
+    // отображение возраста
+    private func displayAge(_ contactDetail: ContactData) {
         let formatAgeString: String = NSLocalizedString("age_years", comment: "Person's age in plural configuration")
-        // отображение возраста
         let age = DateFormat.calculateAgeFromDate(contactDetail.birthday, format: "yyyy-MM-dd")
         let resultAgeString = String.localizedStringWithFormat(formatAgeString, age)
         birthView.ageLabel.text = resultAgeString
-        
     }
     
     // MARK: - backButtonSetup
@@ -116,6 +120,14 @@ class UserProfileViewController: UIViewController {
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
+    
+    private func handlePhoneTapNumber() {
+        // обработчик нажатия на номер телефона
+        phoneNumberView.tapPhoneHandler = {
+            self.handlePhoneTap()
+        }
+    }
+    
     
     private func handlePhoneTap() {
         // nil для того, чтобы не было дополнительных строк
@@ -135,14 +147,21 @@ class UserProfileViewController: UIViewController {
     }
     
     // MARK: - makeCall
-    private func makeCall() {
-        // проверка, что номер корректный
-        guard let phoneNumber = phoneNumberView.numberLabel.text,
-              let url = URL(string: "tel://\(phoneNumber)") else {
-            print("Некорректный номер телефона")
+    // проверка корректности номера телефона
+    private func validatePhoneNumber() -> String? {
+        guard let phoneNumber = phoneNumberView.numberLabel.text else {
+            return nil
+        }
+        return phoneNumber
+    }
+    
+    // открытие URL для осуществления звонка
+    private func openCallURL(phoneNumber: String) {
+        guard let url = URL(string: "tel://\(phoneNumber)") else {
+            print("URL не может быть создан")
             return
         }
-        // может ли устройство открыть указанный URL
+        
         if UIApplication.shared.canOpenURL(url) {
             // Если устройство может открыть URL, вызывается метод open у объекта UIApplication для начала звонка. Пустой словарь [:] передается в качестве параметра options.
             UIApplication.shared.open(url, options: [:], completionHandler: { success in
@@ -156,5 +175,15 @@ class UserProfileViewController: UIViewController {
             // Если устройство не может открыть URL для звонка
             print("Устройство не может осуществить звонок")
         }
+    }
+    
+    // совершение звонка
+    private func makeCall() {
+        guard let phoneNumber = validatePhoneNumber() else {
+            print("Некорректный номер телефона")
+            return
+        }
+        
+        openCallURL(phoneNumber: phoneNumber)
     }
 }

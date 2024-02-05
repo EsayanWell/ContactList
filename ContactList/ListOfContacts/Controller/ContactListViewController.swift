@@ -23,6 +23,7 @@ class ContactListViewController: UIViewController {
     private var selectedDepartment: Departments = .all
     private var currentSortingType: SortingType = .byBirthday
     private var searchText: String = ""
+    private let cellIdentifier = "ContactCell"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,23 +127,43 @@ class ContactListViewController: UIViewController {
     private func fetchContactData() {
         APIManager.shared.fetchUserData { result in
             DispatchQueue.main.async {
-                switch result {
-                case .success(let decodedContacts):
-                    print("Success")
-                    self.contacts = decodedContacts
-                    self.dataRefreshControl.endRefreshing()
-                    self.departmentContactListTableView.reloadData()
-                    self.departmentMenuCollectionView.updateFilterDelegate()
-                    self.errorReload.isHidden = true
-                    self.errorViewToggleVisibility(isHidden: false)
-                    self.currentSortingType = .alphabetically
-                case .failure(let networkError):
-                    print("Failure: \(networkError)")
-                    self.errorReload.isHidden = false
-                    self.errorViewToggleVisibility(isHidden: true)
-                }
+                self.handleFetchResult(result)
             }
         }
+    }
+
+    // обработка результата в зависимости от получения данных
+    private func handleFetchResult(_ result: Result<[ContactData], NetworkError>) {
+        switch result {
+        case .success(let decodedContacts):
+            print("Success")
+            self.updateContactData(decodedContacts)
+            self.updateUIOnSuccess()
+        case .failure(let networkError):
+            print("Failure: \(networkError)")
+            self.updateUIOnFailure()
+        }
+    }
+
+    // обновление данных
+    private func updateContactData(_ contacts: [ContactData]) {
+        self.contacts = contacts
+    }
+
+    // обновление при успешной загрузке данных
+    private func updateUIOnSuccess() {
+        self.dataRefreshControl.endRefreshing()
+        self.departmentContactListTableView.reloadData()
+        self.departmentMenuCollectionView.updateFilterDelegate()
+        self.errorReload.isHidden = true
+        self.errorViewToggleVisibility(isHidden: false)
+        self.currentSortingType = .alphabetically
+    }
+
+    // обновление при неуспешной загрузке данных
+    private func updateUIOnFailure() {
+        self.errorReload.isHidden = false
+        self.errorViewToggleVisibility(isHidden: true)
     }
 }
 
@@ -156,7 +177,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource,
     
     // настройка ячейки
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ContactCell", for: indexPath) as? ContactCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? ContactCell else {
             return UITableViewCell()
         }
         let contact = filteredContacts[indexPath.row]
